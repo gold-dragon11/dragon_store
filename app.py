@@ -1,5 +1,6 @@
 import csv
 import re
+import requests
 from io import StringIO
 from datetime import datetime
 from pathlib import Path
@@ -27,6 +28,8 @@ SIZE_GUIDE = {
     "shirt": ["S", "M", "L", "XL"],
     "trousers": ["30", "32", "34", "36"],
 }
+TELEGRAM_BOT_TOKEN = "[ВСТАВТЕ_ВАШ_ТОКЕН]"
+TELEGRAM_CHAT_ID = "[ВСТАВТЕ_ВАШ_ID]"
 
 
 class Product(db.Model):
@@ -113,6 +116,25 @@ def get_cart() -> list[dict]:
 
 def save_cart(cart: list[dict]) -> None:
     session["cart"] = cart
+
+
+def send_telegram_message(message: str) -> None:
+    if (
+        not TELEGRAM_BOT_TOKEN
+        or TELEGRAM_BOT_TOKEN == "[ВСТАВТЕ_ВАШ_ТОКЕН]"
+        or not TELEGRAM_CHAT_ID
+        or TELEGRAM_CHAT_ID == "[ВСТАВТЕ_ВАШ_ID]"
+    ):
+        return
+
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message}
+    try:
+        requests.post(url, data=payload, timeout=5)
+    except requests.RequestException:
+        pass
+    except Exception:
+        pass
 
 
 def initialize_app_data() -> None:
@@ -205,6 +227,7 @@ def add_to_cart():
         }
     )
     save_cart(cart)
+    send_telegram_message(f"New potential order! Product: {product.name}, Size: {size}")
     flash(f"{product.name} was added to your cart.", "success")
     return redirect(url_for("index") + "#collection")
 
@@ -249,6 +272,7 @@ def subscribe():
     lead = Lead(email=email)
     db.session.add(lead)
     db.session.commit()
+    send_telegram_message(f"New Waitlist Subscriber: {email}")
     flash("Thank you! You've been added to the waitlist.", "success")
     return redirect(url_for("index") + "#contact")
 
