@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../shadow_thread_export/client"
+		}
+	],
+	"settings": {}
+}

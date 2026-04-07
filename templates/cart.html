@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | Shadow of the Dragon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="site-wrap">
+        <div class="dev-banner">DEVELOPMENT MODE: This is a demo store. Real orders are not processed.</div>
+        <nav class="nav">
+            <div class="container nav-row">
+                <h1 class="brand accent-glow">Shadow of the Dragon</h1>
+                <div class="nav-links">
+                    <a href="{{ url_for('index') }}#collection">COLLECTION</a>
+                    <a href="{{ url_for('index') }}#about">ABOUT</a>
+                    <a href="{{ url_for('index') }}#contact">CONTACT</a>
+                    <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
+                </div>
+            </div>
+        </nav>
+
+        <section class="section cart-section">
+            <div class="container">
+                <h2>Your Cart</h2>
+                <div class="line"></div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alerts">
+                            {% for category, message in messages %}
+                                <div class="alert {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                {% if cart_items %}
+                    <div class="cart-table-wrap">
+                        <table class="cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product</th>
+                                    <th>Size</th>
+                                    <th>Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                    <tr>
+                                        <td>
+                                            <img class="cart-thumb" src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}">
+                                        </td>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.size }}</td>
+                                        <td>{{ "%.2f"|format(item.price) }} UAH</td>
+                                        <td>
+                                            <form method="post" action="{{ url_for('remove_from_cart', index=loop.index0) }}">
+                                                <button type="submit" class="remove-btn">REMOVE</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="cart-total">
+                        <strong>Total: {{ "%.2f"|format(total) }} UAH</strong>
+                    </div>
+                    <form class="checkout-form" method="post" action="{{ url_for('checkout_demo') }}">
+                        <button type="submit" class="btn-premium">PROCEED TO CHECKOUT</button>
+                    </form>
+                {% else %}
+                    <p class="muted">Your cart is currently empty.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</body>
+</html>

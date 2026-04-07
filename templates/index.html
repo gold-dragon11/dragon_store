@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow of the Dragon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="site-wrap">
+        <div class="dev-banner">DEVELOPMENT MODE: This is a demo store. Real orders are not processed.</div>
+        <nav class="nav">
+            <div class="container nav-row">
+                <h1 class="brand accent-glow">Shadow of the Dragon</h1>
+                <div class="nav-links">
+                    <a href="#collection">COLLECTION</a>
+                    <a href="#about">ABOUT</a>
+                    <a href="#contact">CONTACT</a>
+                    <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
+                </div>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-bg">
+                <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663493750158/KSEGtrZgNbWrVFZykRiS8V/hero-background-kY7WYL5xyymwR5eW4qyDgE.webp" alt="Hero Background">
+                <div class="hero-overlay"></div>
+            </div>
+            <div class="container hero-content">
+                <div class="hero-inner fade-in-up">
+                    <h2 class="hero-title">Destined for greatness</h2>
+                    <div class="line"></div>
+                    <p>
+                        Every thread tells a story of meticulous craftsmanship. Our garments are born from the marriage
+                        of dark elegance and premium materials, designed for those who understand that true luxury whispers rather than shouts.
+                    </p>
+                    <a href="#collection" class="btn-premium">EXPLORE COLLECTION</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider-silver"></div>
+
+        <section id="collection" class="section">
+            <div class="container">
+                <h2>The Collection</h2>
+                <div class="line"></div>
+
+                <div class="products-grid">
+                    {% for product in products %}
+                        <article class="product-card fade-in-up">
+                            <div class="product-image-wrap">
+                                <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
+                            </div>
+                            <div class="product-body">
+                                <h3>{{ product.name }}</h3>
+                                <p class="muted product-description">{{ product.description }}</p>
+                                <div class="product-foot">
+                                    <span class="price">{{ "%.2f"|format(product.price) }} UAH</span>
+                                    {% set category_key = 'shirt' if product.category.lower() in ['shirt', 'shirts', 'сорочка', 'сорочки'] else ('trousers' if product.category.lower() in ['trousers', 'pants', 'штани'] else None) %}
+                                    <form action="{{ url_for('add_to_cart') }}" method="post" class="order-form">
+                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                        {% if category_key %}
+                                            <select name="size" class="size-select" required>
+                                                <option value="" disabled selected>Choose size</option>
+                                                {% for size in size_guide[category_key] %}
+                                                    <option value="{{ size }}">{{ size }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% else %}
+                                            <select name="size" class="size-select" disabled>
+                                                <option value="">No sizes</option>
+                                            </select>
+                                        {% endif %}
+                                        <button type="submit" class="link-btn">ORDER</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
+                    {% else %}
+                        <p class="muted">No products available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <div class="divider-silver"></div>
+
+        <section id="about" class="section">
+            <div class="container about-grid">
+                <div class="about-image">
+                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663493750158/KSEGtrZgNbWrVFZykRiS8V/pasted_file_rvatV3_image_c020f487.png" alt="Shadow of the Dragon Logo">
+                </div>
+                <div>
+                    <h2>About Shadow of the Dragon</h2>
+                    <div class="line"></div>
+                    <p>
+                        At Shadow of the Dragon, we are pioneering the concept of an AI-driven atelier, merging cutting-edge
+                        digital design with traditional Made-to-Order craftsmanship.
+                    </p>
+                    <p>
+                        Every piece in our collection is crafted from premium Turkish cotton and rich satin, providing
+                        the perfect matte canvas for our signature large-scale contour embroidery.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider-silver"></div>
+
+        <section id="contact" class="section contact">
+            <div class="container contact-inner">
+                <h2>Stay in the Shadows</h2>
+                <p>Subscribe to receive updates on new collections and exclusive previews.</p>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="alerts newsletter-alerts">
+                            {% for category, message in messages %}
+                                <div class="alert {{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <form class="newsletter-form" action="{{ url_for('subscribe') }}" method="post">
+                    <input type="email" name="email" placeholder="Enter your email" required>
+                    <button type="submit">JOIN THE WAITLIST</button>
+                </form>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container footer-grid">
+                <div>
+                    <h3>SHADOW OF THE DRAGON</h3>
+                    <p class="muted">Premium menswear crafted with intention and precision.</p>
+                </div>
+                <div>
+                    <h4>NAVIGATION</h4>
+                    <ul>
+                        <li><a href="#collection">Collection</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>FOLLOW</h4>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram">IG</a>
+                        <a href="#" aria-label="Facebook">FB</a>
+                        <a href="#" aria-label="Twitter">TW</a>
+                        <a href="#" aria-label="Email">EM</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
