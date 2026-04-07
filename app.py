@@ -28,8 +28,8 @@ SIZE_GUIDE = {
     "shirt": ["S", "M", "L", "XL"],
     "trousers": ["30", "32", "34", "36"],
 }
-TELEGRAM_BOT_TOKEN = "[ВСТАВТЕ_ВАШ_ТОКЕН]"
-TELEGRAM_CHAT_ID = "[ВСТАВТЕ_ВАШ_ID]"
+TELEGRAM_BOT_TOKEN = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ"
+TELEGRAM_CHAT_ID = "1682786328"
 
 
 class Product(db.Model):
@@ -119,21 +119,15 @@ def save_cart(cart: list[dict]) -> None:
 
 
 def send_telegram_message(message: str) -> None:
-    if (
-        not TELEGRAM_BOT_TOKEN
-        or TELEGRAM_BOT_TOKEN == "[ВСТАВТЕ_ВАШ_ТОКЕН]"
-        or not TELEGRAM_CHAT_ID
-        or TELEGRAM_CHAT_ID == "[ВСТАВТЕ_ВАШ_ID]"
-    ):
-        return
-
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": message}
+    telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": message,
+    }
     try:
-        requests.post(url, data=payload, timeout=5)
-    except requests.RequestException:
-        pass
+        requests.post(telegram_url, json=payload, timeout=8)
     except Exception:
+        # Telegram alerts are optional and must not break the site flow.
         pass
 
 
