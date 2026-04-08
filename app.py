@@ -28,8 +28,8 @@ SIZE_GUIDE = {
     "shirt": ["S", "M", "L", "XL"],
     "trousers": ["30", "32", "34", "36"],
 }
-TELEGRAM_BOT_TOKEN = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ"
-TELEGRAM_CHAT_ID = "1682786328"
+TELEGRAM_BOT_TOKEN = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ".strip("[] ")
+TELEGRAM_CHAT_ID = "1682786328".strip("[] ")
 
 
 class Product(db.Model):
@@ -120,12 +120,13 @@ def save_cart(cart: list[dict]) -> None:
 
 def send_telegram_message(message: str) -> None:
     telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": message,
-    }
     try:
-        requests.post(telegram_url, json=payload, timeout=8)
+        response = requests.post(
+            telegram_url,
+            data={"chat_id": TELEGRAM_CHAT_ID, "text": message},
+            timeout=8,
+        )
+        response.raise_for_status()
     except Exception:
         # Telegram alerts are optional and must not break the site flow.
         pass
@@ -172,6 +173,11 @@ def index():
     return render_template("index.html", products=products, size_guide=SIZE_GUIDE)
 
 
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+
 @app.post("/order/<int:product_id>")
 def create_test_order(product_id: int):
     product = Product.query.get_or_404(product_id)
@@ -191,7 +197,7 @@ def create_test_order(product_id: int):
     return redirect(url_for("index"))
 
 
-@app.post("/add_to_cart")
+@app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
     product_id = request.form.get("product_id", "").strip()
     size = request.form.get("size", "").strip()
@@ -223,7 +229,7 @@ def add_to_cart():
     save_cart(cart)
     send_telegram_message(f"New potential order! Product: {product.name}, Size: {size}")
     flash(f"{product.name} was added to your cart.", "success")
-    return redirect(url_for("index") + "#collection")
+    return redirect(url_for("success"))
 
 
 @app.get("/cart")
@@ -251,7 +257,7 @@ def checkout_demo():
     return redirect(url_for("cart"))
 
 
-@app.post("/subscribe")
+@app.route("/subscribe", methods=["POST"])
 def subscribe():
     email = request.form.get("email", "").strip().lower()
     if not email or not is_valid_email(email):
@@ -268,7 +274,7 @@ def subscribe():
     db.session.commit()
     send_telegram_message(f"New Waitlist Subscriber: {email}")
     flash("Thank you! You've been added to the waitlist.", "success")
-    return redirect(url_for("index") + "#contact")
+    return redirect(url_for("success"))
 
 
 @app.route("/admin/login", methods=["GET", "POST"])

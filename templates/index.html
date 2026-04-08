@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <div class="site-wrap">
@@ -51,7 +53,7 @@
 
                 <div class="products-grid">
                     {% for product in products %}
-                        <article class="product-card fade-in-up">
+                    <article class="product-card fade-in-up" data-aos="fade-up">
                             <div class="product-image-wrap">
                                 <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
                             </div>
@@ -157,5 +159,13 @@
             </div>
         </footer>
     </div>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+  AOS.init({
+    duration: 1000, 
+    once: true,
+    offset: 100
+  });
+  </script>
 </body>
 </html>

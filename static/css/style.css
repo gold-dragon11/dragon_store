@@ -459,6 +459,58 @@ h3 {
   justify-content: flex-end;
 }
 
+.success-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px 20px 40px;
+  background:
+    radial-gradient(circle at top, rgba(216, 192, 122, 0.12), transparent 42%),
+    #000;
+}
+
+.success-card {
+  width: min(760px, 100%);
+  border: 1px solid #3a3320;
+  background: rgba(10, 10, 10, 0.92);
+  box-shadow: 0 0 40px rgba(216, 192, 122, 0.16);
+  padding: 46px 34px;
+  text-align: center;
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  border: 1px solid #d8c07a;
+  color: #d8c07a;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.success-card h1 {
+  margin: 0 0 14px;
+  font-family: "Playfair Display", serif;
+  color: #d8c07a;
+  letter-spacing: 0.08em;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+}
+
+.success-card p {
+  max-width: 560px;
+  margin: 0 auto;
+  color: #b8b8b8;
+  font-size: 1rem;
+}
+
+.success-card .btn-premium {
+  margin-top: 28px;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -521,6 +573,10 @@ h3 {
 
   .newsletter-form {
     flex-direction: column;
+  }
+
+  .success-card {
+    padding: 34px 18px;
   }
 }
 
@@ -589,4 +645,51 @@ h3 {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+}
+/* --- НОВІ ПРЕМІАЛЬНІ СТИЛІ --- */
+
+/* 1. Заголовки (логотип, назви секцій) у римському стилі */
+h1, h2, h3, .logo, .nav-link {
+  font-family: 'Cinzel', serif !important;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #d4af37; /* Золотий колір для акцентів */
+}
+
+/* 2. Основний текст — чистий та сучасний */
+body, p, .product-description {
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.6;
+}
+
+/* 3. Картки товарів (ефект об'єму та сяйва) */
+.product-card {
+  background: #111; /* Трохи світліше за загальний фон */
+  border: 1px solid rgba(212, 175, 55, 0.1); /* Ледь помітна рамка */
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Плавність */
+  border-radius: 0; /* Гострі кути виглядають дорожче */
+}
+
+/* Що стається, коли наводиш мишкою на товар */
+.product-card:hover {
+  transform: translateY(-10px); /* Картка підіймається */
+  border-color: #d4af37; /* Рамка стає золотою */
+  box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15); /* Золоте сяйво знизу */
+}
+
+/* 4. Кнопки (стиль "Old Money") */
+.btn-gold {
+  background-color: transparent;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  padding: 12px 25px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: 0.4s;
+  border-radius: 0;
+}
+
+.btn-gold:hover {
+  background-color: #d4af37;
+  color: #000; /* При наведенні стає золотою з чорним текстом */
 }
