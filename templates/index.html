@@ -54,10 +54,12 @@
                 <div class="products-grid">
                     {% for product in products %}
                     <article class="product-card fade-in-up" data-aos="fade-up">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}">
                             <div class="product-image-wrap">
                                 <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
                             </div>
-                            <div class="product-body">
+                        </a>
+                        <div class="product-body">
                                 <h3>{{ product.name }}</h3>
                                 <p class="muted product-description">{{ product.description }}</p>
                                 <div class="product-foot">
