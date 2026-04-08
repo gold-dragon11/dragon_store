@@ -176,7 +176,12 @@ def index():
 @app.route("/success")
 def success():
     return render_template("success.html")
-
+@app.route("/product/<int:product_id>")
+def product_detail(product_id):
+    # Шукаємо товар у базі. Якщо хтось введе неіснуючий ID, сайт видасть помилку 404, а не зламається.
+    product = Product.query.get_or_404(product_id)
+    # Відкриваємо новий шаблон і передаємо туди дані цього товару та розмірну сітку
+    return render_template("product_detail.html", product=product, size_guide=SIZE_GUIDE)
 
 @app.post("/order/<int:product_id>")
 def create_test_order(product_id: int):
