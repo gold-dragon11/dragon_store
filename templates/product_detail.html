@@ -1,47 +1,69 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="container section">
-    <div class="product-detail-grid">
-        <div class="product-detail-image" data-aos="fade-right">
-            <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
-        </div>
-
-        <div class="product-detail-info" data-aos="fade-left">
-            <h1 class="brand" style="margin-bottom: 10px;">{{ product.name }}</h1>
-            <div class="line" style="margin: 0 0 20px 0;"></div>
-            <p class="price-large">{{ "%.2f"|format(product.price) }} UAH</p>
-            
-            <div class="atelier-note">
-                <h4>Digital-to-Order Concept</h4>
-                <p>Цей виріб — цифровий шедевр. Ваша річ буде створена вручну нашими майстрами виключно для вас після оформлення замовлення.</p>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Shadow of the Dragon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body style="background-color: #000; color: #fff; font-family: 'Montserrat', sans-serif;">
+    <div class="site-wrap">
+        <nav class="nav">
+            <div class="container nav-row">
+                <a href="/" style="text-decoration: none;"><h1 class="brand accent-glow">Shadow of the Dragon</h1></a>
+                <div class="nav-links">
+                    <a href="/#collection">COLLECTION</a>
+                    <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
+                </div>
             </div>
+        </nav>
 
-            <p style="margin-bottom: 30px; line-height: 1.8;">{{ product.description }}</p>
+        <section class="section">
+            <div class="container">
+                <div class="product-detail-grid">
+                    <div class="product-detail-image" data-aos="fade-right">
+                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" 
+                             alt="{{ product.name }}" style="width: 100%; border: 1px solid rgba(212, 175, 55, 0.3);">
+                    </div>
 
-            <form action="{{ url_for('add_to_cart') }}" method="post" class="order-form">
-                <input type="hidden" name="product_id" value="{{ product.id }}">
-                
-                {% set category_key = 'shirt' if product.category.lower() in ['shirt', 'shirts', 'сорочка', 'сорочки'] else ('trousers' if product.category.lower() in ['trousers', 'pants', 'штани'] else None) %}
-                
-                {% if category_key %}
-                    <select name="size" class="size-select" style="width: 100%; margin-bottom: 15px; padding: 15px;" required>
-                        <option value="" disabled selected>Оберіть розмір (Atelier Standard)</option>
-                        {% for size in size_guide[category_key] %}
-                            <option value="{{ size }}">{{ size }}</option>
-                        {% endfor %}
-                    </select>
-                {% else %}
-                    <select name="size" class="size-select" style="width: 100%; margin-bottom: 15px; padding: 15px;" disabled>
-                        <option value="">One Size</option>
-                    </select>
-                {% endif %}
-                
-                <button type="submit" class="btn-premium" style="width: 100%;">ADD TO CART</button>
-            </form>
-            
-            <a href="{{ url_for('index') }}" style="display: inline-block; margin-top: 30px; color: #888; text-decoration: none; font-size: 0.9rem;">← Return to Collection</a>
-        </div>
+                    <div class="product-detail-info" data-aos="fade-left" style="padding-left: 20px;">
+                        <h1 class="brand" style="color: #d4af37; font-size: 2.5rem; margin-bottom: 10px;">{{ product.name }}</h1>
+                        <div class="line" style="margin: 0 0 20px 0;"></div>
+                        <p class="price-large" style="font-size: 2rem; color: #d4af37; font-family: 'Cinzel', serif;">{{ "%.2f"|format(product.price) }} UAH</p>
+                        
+                        <div class="atelier-note" style="background: rgba(212, 175, 55, 0.05); padding: 25px; border-left: 2px solid #d4af37; margin: 30px 0;">
+                            <h4 style="color: #d4af37; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;">Digital-to-Order Concept</h4>
+                            <p style="font-size: 0.95rem; margin-top: 12px; line-height: 1.6;">This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.</p>
+                        </div>
+
+                        <p style="line-height: 1.8; margin-bottom: 30px; color: #ccc;">{{ product.description }}</p>
+
+                        <form action="{{ url_for('add_to_cart') }}" method="post">
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            
+                            <select name="size" class="size-select" style="width: 100%; padding: 18px; background: #111; color: #fff; border: 1px solid #d4af37; margin-bottom: 25px; font-size: 1.1rem; text-align-last: center; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;" required>
+                                <option value="" disabled selected>SELECT SIZE (ATELIER STANDARD)</option>
+                                <option value="S">Small (S)</option>
+                                <option value="M">Medium (M)</option>
+                                <option value="L">Large (L)</option>
+                                <option value="XL">Extra Large (XL)</option>
+                            </select>
+                            
+                            <button type="submit" class="btn-gold" style="width: 100%; padding: 22px; cursor: pointer; font-weight: 700; letter-spacing: 2px;">START CRAFTING AND ORDER</button>
+                        </form>
+                        
+                        <a href="/#collection" style="display: inline-block; margin-top: 40px; color: #888; text-decoration: none; font-size: 0.85rem; letter-spacing: 1px;">← RETURN TO COLLECTION</a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-</div>
-{% endblock %}
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({ duration: 1000, once: true });
+    </script>
+</body>
+</html>

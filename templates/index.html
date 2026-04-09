@@ -65,22 +65,7 @@
                                 <div class="product-foot">
                                     <span class="price">{{ "%.2f"|format(product.price) }} UAH</span>
                                     {% set category_key = 'shirt' if product.category.lower() in ['shirt', 'shirts', 'сорочка', 'сорочки'] else ('trousers' if product.category.lower() in ['trousers', 'pants', 'штани'] else None) %}
-                                    <form action="{{ url_for('add_to_cart') }}" method="post" class="order-form">
-                                        <input type="hidden" name="product_id" value="{{ product.id }}">
-                                        {% if category_key %}
-                                            <select name="size" class="size-select" required>
-                                                <option value="" disabled selected>Choose size</option>
-                                                {% for size in size_guide[category_key] %}
-                                                    <option value="{{ size }}">{{ size }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        {% else %}
-                                            <select name="size" class="size-select" disabled>
-                                                <option value="">No sizes</option>
-                                            </select>
-                                        {% endif %}
-                                        <button type="submit" class="link-btn">ORDER</button>
-                                    </form>
+                                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-gold" style="text-decoration: none; padding: 8px 25px; font-size: 0.85rem; letter-spacing: 1px;">VIEW</a>
                                 </div>
                             </div>
                         </article>
