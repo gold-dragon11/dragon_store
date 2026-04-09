@@ -335,3 +335,86 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
   .product-card { width: 100%; flex-basis: 100%; }
   .product-image-wrap { height: 300px; }
 }
+/* =======================================================
+   ВІДНОВЛЕННЯ СТРУКТУРИ (CONTACT ТА FOOTER)
+   ======================================================= */
+   .contact-inner { 
+    max-width: 780px; 
+    margin: 0 auto; 
+    text-align: center; 
+}
+.newsletter-form { 
+    margin-top: 18px; 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+}
+.newsletter-form input { 
+    flex: 1; 
+    min-width: 220px; 
+    max-width: 400px;
+    background: #000; 
+    border: 1px solid rgba(212, 175, 55, 0.5); 
+    color: #e0e0e0; 
+    padding: 12px; 
+}
+.footer { 
+    border-top: 1px solid rgba(212, 175, 55, 0.2); 
+    padding: 44px 0; 
+}
+.footer-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, minmax(0, 1fr)); 
+    gap: 20px; 
+}
+.footer ul { 
+    margin: 0; 
+    padding: 0; 
+    list-style: none; 
+    display: grid; 
+    gap: 8px; 
+}
+.social-icons { 
+    display: flex; 
+    gap: 10px; 
+}
+.social-icons a { 
+    color: #e0e0e0 !important; 
+    border: 1px solid rgba(212, 175, 55, 0.3); 
+    padding: 6px 8px; 
+    font-size: 0.72rem; 
+}
+.social-icons a:hover { 
+    color: #d4af37 !important; 
+    border-color: #d4af37; 
+}
+
+/* Мобільна адаптація для футера */
+@media (max-width: 767px) {
+    .footer-grid { grid-template-columns: 1fr; text-align: center; }
+    .social-icons { justify-content: center; }
+    .newsletter-form { flex-direction: column; align-items: center; }
+}
+
+/* =======================================================
+   ЗОЛОТІ АКЦЕНТИ ДЛЯ СТОРІНКИ ТОВАРУ
+   ======================================================= */
+/* 1. Ціна товару */
+.price-large { 
+    color: #d4af37 !important; 
+}
+
+/* 2. Текст всередині вибору розміру */
+.size-select { 
+    color: #d4af37 !important; 
+}
+
+/* 3. Кнопка Return to collection */
+.product-detail-info a[href="/#collection"] { 
+    color: #d4af37 !important; 
+    transition: 0.3s;
+}
+.product-detail-info a[href="/#collection"]:hover {
+    color: #fff !important; /* При наведенні ставатиме білою */
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
