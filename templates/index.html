@@ -1,22 +1,26 @@
 <!doctype html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shadow of the Dragon</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=11.0">
 </head>
 <body>
     <div class="site-wrap">
         <div class="dev-banner">DEVELOPMENT MODE: This is a demo store. Real orders are not processed.</div>
+        
         <nav class="nav">
             <div class="container nav-row">
-                <h1 class="brand accent-glow">Shadow of the Dragon</h1>
+                <a href="/" style="text-decoration: none;"><h1 class="brand accent-glow">Shadow of the Dragon</h1></a>
                 <div class="nav-links">
                     <a href="#collection">COLLECTION</a>
                     <a href="#about">ABOUT</a>
@@ -60,15 +64,14 @@
                             </div>
                         </a>
                         <div class="product-body">
-                                <h3>{{ product.name }}</h3>
-                                <p class="muted product-description">{{ product.description }}</p>
-                                <div class="product-foot">
-                                    <span class="price">{{ "%.2f"|format(product.price) }} UAH</span>
-                                    {% set category_key = 'shirt' if product.category.lower() in ['shirt', 'shirts', 'сорочка', 'сорочки'] else ('trousers' if product.category.lower() in ['trousers', 'pants', 'штани'] else None) %}
-                                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-gold" style="text-decoration: none; padding: 8px 25px; font-size: 0.85rem; letter-spacing: 1px;">VIEW</a>
-                                </div>
+                            <h3>{{ product.name }}</h3>
+                            <p class="muted product-description">{{ product.description }}</p>
+                            <div class="product-foot">
+                                <span class="price">{{ "%.2f"|format(product.price) }} UAH</span>
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-gold">VIEW</a>
                             </div>
-                        </article>
+                        </div>
+                    </article>
                     {% else %}
                         <p class="muted">No products available.</p>
                     {% endfor %}
@@ -81,9 +84,9 @@
         <section id="about" class="section">
             <div class="container about-grid">
                 <div class="about-image">
-                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663493750158/KSEGtrZgNbWrVFZykRiS8V/pasted_file_rvatV3_image_c020f487.png" alt="Shadow of the Dragon Logo"
-                    alt="Dragon Logo" 
-         style="mix-blend-mode: screen; filter: brightness(1.2) contrast(1.1);">
+                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663493750158/KSEGtrZgNbWrVFZykRiS8V/pasted_file_rvatV3_image_c020f487.png" 
+                         alt="Shadow of the Dragon Logo" 
+                         style="mix-blend-mode: screen; filter: brightness(1.2) contrast(1.1);">
                 </div>
                 <div>
                     <h2>About Shadow of the Dragon</h2>
@@ -117,7 +120,7 @@
                 {% endwith %}
                 <form class="newsletter-form" action="{{ url_for('subscribe') }}" method="post">
                     <input type="email" name="email" placeholder="Enter your email" required>
-                    <button type="submit">JOIN THE WAITLIST</button>
+                    <button type="submit" class="btn-gold" style="border-radius: 0;">JOIN THE WAITLIST</button>
                 </form>
             </div>
         </section>
@@ -125,7 +128,7 @@
         <footer class="footer">
             <div class="container footer-grid">
                 <div>
-                    <h3>SHADOW OF THE DRAGON</h3>
+                    <h3 style="font-size: 1.2rem;">SHADOW OF THE DRAGON</h3>
                     <p class="muted">Premium menswear crafted with intention and precision.</p>
                 </div>
                 <div>
@@ -148,13 +151,14 @@
             </div>
         </footer>
     </div>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-  AOS.init({
-    duration: 1000, 
-    once: true,
-    offset: 100
-  });
-  </script>
+    <script>
+      AOS.init({
+        duration: 1000, 
+        once: true,
+        offset: 100
+      });
+    </script>
 </body>
 </html>

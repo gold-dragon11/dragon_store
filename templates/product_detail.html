@@ -4,30 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=8.0">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        /* --- ЕКСТРЕНЕ ПЕРЕКРИТТЯ КЕШУ --- */
-        body, div, span, p, label, a { 
-            color: #e0e0e0 !important; 
-        }
-        h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold { 
-            color: #d4af37 !important; 
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
-        }
-        .size-select {
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>') !important;
-            background-repeat: no-repeat !important;
-            background-position: right 20px center !important;
-            background-size: 20px !important;
-            padding-right: 50px !important;
-        }
-      </style>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=11.0">
 </head>
-<body style="background-color: #000; color: #fff; font-family: 'Montserrat', sans-serif;">
+<body>
     <div class="site-wrap">
         <nav class="nav">
             <div class="container nav-row">
@@ -44,25 +31,25 @@
                 <div class="product-detail-grid">
                     <div class="product-detail-image" data-aos="fade-right">
                         <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" 
-                             alt="{{ product.name }}" style="width: 100%; border: 1px solid rgba(212, 175, 55, 0.3);">
+                             alt="{{ product.name }}">
                     </div>
 
-                    <div class="product-detail-info" data-aos="fade-left" style="padding-left: 20px;">
-                        <h1 class="brand" style="color: #d4af37; font-size: 2.5rem; margin-bottom: 10px;">{{ product.name }}</h1>
+                    <div class="product-detail-info" data-aos="fade-left">
+                        <h1 class="brand" style="font-size: 2.5rem; margin-bottom: 10px;">{{ product.name }}</h1>
                         <div class="line" style="margin: 0 0 20px 0;"></div>
-                        <p class="price-large" style="font-size: 2rem; color: #d4af37; font-family: 'Cinzel', serif;">{{ "%.2f"|format(product.price) }} UAH</p>
+                        <p class="price-large">{{ "%.2f"|format(product.price) }} UAH</p>
                         
-                        <div class="atelier-note" style="background: rgba(212, 175, 55, 0.05); padding: 25px; border-left: 2px solid #d4af37; margin: 30px 0;">
-                            <h4 style="color: #d4af37; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem;">Digital-to-Order Concept</h4>
-                            <p style="font-size: 0.95rem; margin-top: 12px; line-height: 1.6;">This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.</p>
+                        <div class="atelier-note">
+                            <h4>Digital-to-Order Concept</h4>
+                            <p>This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.</p>
                         </div>
 
-                        <p style="line-height: 1.8; margin-bottom: 30px; color: #ccc;">{{ product.description }}</p>
+                        <p class="product-description" style="margin-bottom: 30px;">{{ product.description }}</p>
 
                         <form action="{{ url_for('add_to_cart') }}" method="post">
                             <input type="hidden" name="product_id" value="{{ product.id }}">
                             
-                            <select name="size" class="size-select" style="width: 100%; padding: 18px; background: #111; color: #fff; border: 1px solid #d4af37; margin-bottom: 25px; font-size: 1.1rem; text-align-last: center; text-transform: uppercase; letter-spacing: 1px; cursor: pointer;" required>
+                            <select name="size" class="size-select" style="width: 100%; margin-bottom: 25px; text-align-last: center;" required>
                                 <option value="" disabled selected>SELECT SIZE (ATELIER STANDARD)</option>
                                 <option value="S">Small (S)</option>
                                 <option value="M">Medium (M)</option>
@@ -70,10 +57,10 @@
                                 <option value="XL">Extra Large (XL)</option>
                             </select>
                             
-                            <button type="submit" class="btn-gold" style="width: 100%; padding: 22px; cursor: pointer; font-weight: 700; letter-spacing: 2px;">START CRAFTING AND ORDER</button>
+                            <button type="submit" class="btn-gold" style="width: 100%; padding: 22px; font-weight: 700; letter-spacing: 2px;">START CRAFTING AND ORDER</button>
                         </form>
                         
-                        <a href="/#collection" style="display: inline-block; margin-top: 40px; color: #888; text-decoration: none; font-size: 0.85rem; letter-spacing: 1px;">← RETURN TO COLLECTION</a>
+                        <a href="/#collection" style="display: inline-block; margin-top: 40px; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">← RETURN TO COLLECTION</a>
                     </div>
                 </div>
             </div>
