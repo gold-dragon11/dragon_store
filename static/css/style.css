@@ -736,3 +736,31 @@ body, p, .product-description {
       gap: 30px;
   }
 }
+/* Робимо весь текст на сайті золотим */
+body, p, span, div, label, input, select, textarea {
+  color: #d4af37 !important;
+}
+
+/* Робимо всі посилання та пункти меню золотими */
+a, .nav-link, .nav a, .footer a {
+  color: #d4af37 !important;
+  text-decoration: none;
+}
+
+/* Додаємо легке сяйво для заголовків, щоб вони виділялися */
+h1, h2, h3, h4, .brand {
+  color: #d4af37 !important;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+.size-select {
+  appearance: none; /* Прибираємо стандартну стрілку */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  
+  /* Додаємо свою велику золоту стрілку через SVG */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>') !important;
+  background-repeat: no-repeat !important;
+  background-position: right 20px center !important;
+  background-size: 20px !important; /* Ось тут ми регулюємо розмір стрілки */
+  padding-right: 50px !important; /* Щоб текст не налізав на стрілку */
+}
