@@ -343,48 +343,73 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     margin: 0 auto; 
     text-align: center; 
 }
-/* --- ВИПРАВЛЕНА ФОРМА ПІДПИСКИ --- */
+/* --- ГАРАНТОВАНЕ ВИРІВНЮВАННЯ ФОРМИ --- */
 .newsletter-form {
-  margin-top: 25px;
+  margin-top: 30px;
   display: flex;
-  gap: 0; /* Прибираємо проміжок, щоб вони злилися в одну лінію, або постав 10px як було */
   justify-content: center;
-  align-items: stretch; /* Змушує елементи мати однакову висоту */
+  align-items: center; /* Центрування по вертикалі */
+  gap: 0; /* Робимо їх одним цілим */
 }
 
 .newsletter-form input {
-  flex: 1;
-  min-width: 220px;
-  max-width: 400px;
+  width: 300px;
+  height: 50px; /* Чітко фіксуємо висоту */
   background: #000;
   border: 1px solid rgba(212, 175, 55, 0.5);
-  border-right: none; /* Прибираємо праву рамку, щоб плавно переходило в кнопку */
+  border-right: none; /* Прибираємо рамку між ними */
   color: #e0e0e0;
-  padding: 0 20px;
-  height: 55px; /* Фіксована однакова висота */
+  padding: 0 15px;
   font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
   outline: none;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.newsletter-form .btn-gold {
-  height: 55px; /* Така ж сама висота, як у інпуту */
-  padding: 0 30px;
+/* Таргетуємо кнопку всередині форми, навіть якщо в неї немає класу */
+.newsletter-form button {
+  height: 50px; /* Така сама висота, як в інпуту */
+  background: transparent;
+  border: 1px solid #d4af37;
+  color: #d4af37;
+  padding: 0 25px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #d4af37;
-  margin: 0; /* Прибираємо зайві відступи */
-  white-space: nowrap;
 }
 
-/* Мобільна версія: ставимо їх один під одним, якщо екран малий */
-@media (max-width: 600px) {
+.newsletter-form button:hover {
+  background: #d4af37;
+  color: #000;
+}
+
+/* Ремонт футера (щоб не з'їжджав) */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
   .newsletter-form {
       flex-direction: column;
-      gap: 10px;
   }
-  .newsletter-form input {
-      border-right: 1px solid rgba(212, 175, 55, 0.5);
+  .newsletter-form input, 
+  .newsletter-form button {
       width: 100%;
+      border-right: 1px solid rgba(212, 175, 55, 0.5);
+  }
+  .footer-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
   }
 }
