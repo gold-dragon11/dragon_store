@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=8.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* --- ЕКСТРЕНЕ ПЕРЕКРИТТЯ КЕШУ --- */
+        body, div, span, p, label, a { 
+            color: #e0e0e0 !important; 
+        }
+        h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold { 
+            color: #d4af37 !important; 
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
+        }
+        .size-select {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>') !important;
+            background-repeat: no-repeat !important;
+            background-position: right 20px center !important;
+            background-size: 20px !important;
+            padding-right: 50px !important;
+        }
+      </style>
 </head>
 <body style="background-color: #000; color: #fff; font-family: 'Montserrat', sans-serif;">
     <div class="site-wrap">
