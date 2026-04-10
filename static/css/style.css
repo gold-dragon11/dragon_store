@@ -329,3 +329,49 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     .nav-row { flex-direction: column; gap: 15px; padding: 15px 0; }
     .nav { top: 0; } /* На мобільних забираємо відступ від банера */
 }
+/* =========================================
+   МОБІЛЬНА АДАПТАЦІЯ (TELEPHONE OPTIMIZATION)
+   ========================================= */
+   @media (max-width: 768px) {
+    /* Робимо шапку компактною: елементи в стовпчик */
+    .nav .container, .nav-row {
+        flex-direction: column !important;
+        padding: 15px 10px !important;
+        gap: 12px !important;
+    }
+
+    /* Логотип: зменшуємо шрифт і забороняємо переноситися на 2 рядки */
+    .nav h1, .nav .brand {
+        font-size: 1.1rem !important;
+        letter-spacing: 2px !important;
+        margin: 0 !important;
+        text-align: center;
+        white-space: nowrap !important;
+    }
+
+    /* Посилання: вирівнюємо по центру, зменшуємо відступи */
+    .nav-links {
+        display: flex !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 15px !important;
+    }
+
+    .nav-links a {
+        font-size: 0.65rem !important;
+        letter-spacing: 1.5px !important;
+        margin: 0 !important; /* Прибираємо старий margin-left */
+    }
+
+    /* Опускаємо весь контент сайту вниз, щоб шапка його не перекривала */
+    .site-wrap section:first-of-type, 
+    section {
+        padding-top: 150px !important; 
+    }
+    
+    /* Зменшуємо гігантський текст WHERE DIGITAL, щоб він гарно влазив у телефон */
+    h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.3 !important;
+    }
+}
