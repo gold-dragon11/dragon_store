@@ -9,29 +9,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=21.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=22.0">
 </head>
-<body style="background: #000; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden;">
+<body style="background: #000; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; font-family: 'Montserrat', sans-serif;">
     
-    <div class="site-wrap" style="text-align: center; padding: 20px;">
+    <div class="site-wrap" style="text-align: center; padding: 20px; width: 100%;">
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
 
-        <div data-aos="fade-up">
-            <div style="width: 80px; height: 80px; border: 1px solid #d4af37; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; transform: rotate(45deg);">
-                <div style="transform: rotate(-45deg); font-family: 'Cinzel'; color: #d4af37; font-size: 2rem;">S</div>
+        <div class="fade-in-up">
+            <div style="width: 80px; height: 80px; border: 1px solid #d4af37; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; transform: rotate(45deg); box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);">
+                <div style="transform: rotate(-45deg); font-family: 'Cinzel', serif; color: #d4af37; font-size: 2.2rem; font-weight: 700;">S</div>
             </div>
 
-            <h1 class="brand" style="font-size: clamp(1.8rem, 5vw, 3rem); color: #d4af37; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px;">
+            <h1 class="brand" style="font-size: clamp(1.8rem, 5vw, 3rem); color: #d4af37; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);">
                 You are in the Shadows
             </h1>
             
-            <div class="line" style="margin: 0 auto 30px; background: #d4af37; height: 1px; width: 60px;"></div>
+            <div style="margin: 0 auto 30px; background: #d4af37; height: 1px; width: 60px;"></div>
             
-            <p style="font-family: 'Montserrat', sans-serif; color: #e0e0e0; font-weight: 300; max-width: 500px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 1px;">
+            <p style="color: #e0e0e0; font-weight: 300; max-width: 540px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 1px; font-size: 0.95rem;">
                 Your request has been digitally processed. Our master tailors and AI agents are preparing something exceptional for your archive. Expect the silence to be broken soon.
             </p>
 
-            <a href="/#collection" class="btn-gold" style="padding: 18px 45px; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">
+            <a href="/#collection" class="btn-gold" style="padding: 18px 45px; text-decoration: none; display: inline-block;">
                 RETURN TO COLLECTION
             </a>
         </div>
