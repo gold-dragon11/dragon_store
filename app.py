@@ -9,6 +9,7 @@ from uuid import uuid4
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.secret_key = "dragon_secret_shield_2026_key"
