@@ -220,8 +220,10 @@ def admin_logout():
 def inject_cart_count():
     return {"cart_count": len(get_cart())}
 
+# --- ЗАПУСК ---
+with app.app_context():
+    UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+    db.create_all()
+
 if __name__ == "__main__":
-    with app.app_context():
-        UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
-        db.create_all()
     app.run(debug=True)
