@@ -140,13 +140,16 @@
                     <tr>
                         <th>Email Identity</th>
                         <th>Joined Date</th>
-                    </tr>
+                        <th>Action</th> </tr>
                 </thead>
                 <tbody>
                     {% for lead in leads %}
                     <tr>
                         <td style="color: #d4af37;">{{ lead.email }}</td>
                         <td style="color: #666;">{{ lead.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <a href="{{ url_for('admin_delete_lead', lead_id=lead.id) }}" class="btn-del" onclick="return confirm('Delete this email from waitlist?')">DELETE</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

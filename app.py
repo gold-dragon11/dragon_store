@@ -223,6 +223,14 @@ def admin_delete_order(order_id):
     db.session.commit()
     return redirect(url_for("admin_panel"))
 
+@app.route("/admin/lead/delete/<int:lead_id>")
+def admin_delete_lead(lead_id):
+    if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
+    lead = Lead.query.get_or_404(lead_id)
+    db.session.delete(lead)
+    db.session.commit()
+    return redirect(url_for("admin_panel"))
+
 @app.route("/admin/logout")
 def admin_logout():
     session.pop("admin_logged_in", None); return redirect(url_for("admin_login"))
