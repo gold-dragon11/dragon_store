@@ -222,6 +222,10 @@ def success():
 @app.context_processor
 def inject_cart_count():
     return {"cart_count": len(get_cart())}
+    @app.post("/cart/checkout")
+def checkout_demo():
+    flash("Thank you for testing! Checkout is disabled in demo mode.", "info")
+    return redirect(url_for("cart"))
 
 # --- ADMIN ROUTES ---
 @app.route("/admin/login", methods=["GET", "POST"])
