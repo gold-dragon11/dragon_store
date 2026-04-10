@@ -67,10 +67,8 @@ def is_valid_email(email: str) -> bool:
 
 def send_telegram_message(message: str) -> None:
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    try:
-        requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, timeout=8)
-    except:
-        pass
+    try: requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, timeout=8)
+    except: pass
 
 def get_cart() -> list[dict]:
     cart = session.get("cart")
@@ -129,24 +127,27 @@ def checkout():
     total = sum(item.get("price", 0) for item in cart_items)
 
     if request.method == "POST":
-        name = request.form.get("name", "").strip()
-        phone = request.form.get("phone", "").strip()
-        city = request.form.get("city", "").strip()
-        np = request.form.get("nova_poshta", "").strip()
+        try:
+            name = request.form.get("name", "").strip()
+            phone = request.form.get("phone", "").strip()
+            city = request.form.get("city", "").strip()
+            np = request.form.get("nova_poshta", "").strip()
 
-        items_summary = "\n".join([f"- {i.get('name')} (Size: {i.get('size')})" for i in cart_items])
-        new_order = Order(customer_name=name, customer_phone=phone, city=city, nova_poshta=np, items_summary=items_summary, total_price=total)
-        
-        db.session.add(new_order)
-        db.session.commit()
+            items_summary = "\n".join([f"- {i.get('name')} (Size: {i.get('size')})" for i in cart_items])
+            new_order = Order(customer_name=name, customer_phone=phone, city=city, nova_poshta=np, items_summary=items_summary, total_price=total)
+            
+            db.session.add(new_order)
+            db.session.commit()
 
-        send_telegram_message(f"🔥 ЗАМОВЛЕННЯ 🔥\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {np}\n🛍 Товари:\n{items_summary}\n💰 {total} UAH")
-        session.pop("cart", None)
-        return redirect(url_for("success"))
+            send_telegram_message(f"🔥 ЗАМОВЛЕННЯ 🔥\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {np}\n🛍 Товари:\n{items_summary}\n💰 {total} UAH")
+            session.pop("cart", None)
+            return redirect(url_for("success"))
+        except Exception as e:
+            # РАДАР ПОМИЛОК: Виведе помилку прямо на екран
+            return f"<div style='background:#000; color:#ff4444; padding:50px; font-family:monospace;'><h2>CRITICAL SYSTEM ERROR:</h2><p>{str(e)}</p><p>Please send this exact text to the assistant.</p></div>"
 
     return render_template("checkout.html", total=total)
 
-# ВІДНОВЛЕНО: Функція підписки
 @app.route("/subscribe", methods=["POST"])
 def subscribe():
     email = request.form.get("email", "").strip().lower()
@@ -219,7 +220,6 @@ def admin_logout():
 def inject_cart_count():
     return {"cart_count": len(get_cart())}
 
-# --- ЗАПУСК ---
 if __name__ == "__main__":
     with app.app_context():
         UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
