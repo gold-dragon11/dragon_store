@@ -61,7 +61,7 @@ class Lead(db.Model):
 
 
 def seed_products() -> None:
-    """Заповнюємо базу даних преміальними товарами з легендою"""
+    """Заповнюємо базу даних преміальними товарами. Image filenames set to None for placeholders."""
     if Product.query.count() == 0:
         demo_items = [
             Product(
@@ -70,7 +70,7 @@ def seed_products() -> None:
                 price=3300.0,
                 stock=13,
                 description="A digital masterpiece born from 40,000 stitches of gold-threaded contouring. High-grade silk meets liquid gold logic. Strictly Made-to-Order.",
-                image_filename="imperial_dragon.webp"
+                image_filename=None # No real image yet
             ),
             Product(
                 name="Void Wave Trousers",
@@ -78,7 +78,7 @@ def seed_products() -> None:
                 price=3000.0,
                 stock=13,
                 description="Structural minimalism designed by algorithms. Premium black wool-blend with delicate gold wave embroidery, symbolizing the fluidity of power.",
-                image_filename="void_wave.webp"
+                image_filename=None # No real image yet
             ),
             Product(
                 name="Minimalist Gold Thread",
@@ -86,7 +86,7 @@ def seed_products() -> None:
                 price=2500.0,
                 stock=13,
                 description="Elegant simplicity meets high-tech luxury. Subtle gold line work creates understated sophistication for the discerning digital collector.",
-                image_filename="minimalist_gold.webp"
+                image_filename=None # No real image yet
             ),
         ]
         db.session.add_all(demo_items)
@@ -177,7 +177,7 @@ def add_to_cart():
         "name": product.name,
         "price": float(product.price),
         "size": size,
-        "image": product.image_filename or "placeholder.svg",
+        "image": product.image_filename or "placeholder.svg", # Use placeholder if no image
     })
     save_cart(cart)
     send_telegram_message(f"🔥 New Item in Cart: {product.name} (Size: {size})")
@@ -223,7 +223,7 @@ def success():
 def inject_cart_count():
     return {"cart_count": len(get_cart())}
 
-# --- ADMIN ROUTES (Залишено без змін для функціоналу) ---
+# --- ADMIN ROUTES ---
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
     if session.get("admin_logged_in"): return redirect(url_for("admin_panel"))
