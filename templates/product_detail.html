@@ -72,10 +72,12 @@
 <body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif; margin: 0;">
     <div class="site-wrap">
         
-        <nav style="position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); border-bottom: 1px solid #222; z-index: 100; padding: 20px 0;">
-            <div class="container" style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
-                <a href="/" style="text-decoration: none;"><h1 style="color: #d4af37; font-family: 'Cinzel', serif; font-size: 1.2rem; margin: 0;">Shadow of the Dragon</h1></a>
-                <div style="display: flex; gap: 20px;">
+        <nav class="nav" style="position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); border-bottom: 1px solid #222; z-index: 100;">
+            <div class="container nav-row" style="max-width: 1240px; margin: 0 auto; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <a href="/" style="text-decoration: none;">
+                    <h1 class="brand" style="color: #d4af37; font-family: 'Cinzel', serif; font-size: 1.2rem; margin: 0; white-space: nowrap;">SHADOW OF THE DRAGON</h1>
+                </a>
+                <div class="nav-links" style="display: flex; gap: 20px;">
                     <a href="/#collection" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">COLLECTION</a>
                     <a href="{{ url_for('cart') }}" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">CART ({{ cart_count }})</a>
                 </div>
