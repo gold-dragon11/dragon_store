@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow of the Dragon</title>
+    <title>Shadow of the Dragon | Digital-to-Order Atelier</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,20 +11,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=14.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=15.0">
 </head>
 <body>
     <div class="site-wrap">
-        <div class="dev-banner">DEVELOPMENT MODE: This is a demo store. Real orders are not processed.</div>
+        <div class="dev-banner">STRICTLY MADE-TO-ORDER | AI-DRIVEN DESIGN ATELIER</div>
         
         <nav class="nav">
             <div class="container nav-row">
                 <a href="/" style="text-decoration: none;"><h1 class="brand accent-glow">Shadow of the Dragon</h1></a>
                 <div class="nav-links">
                     <a href="#collection">COLLECTION</a>
-                    <a href="#about">ABOUT</a>
-                    <a href="#contact">CONTACT</a>
+                    <a href="#about">THE LEGEND</a>
+                    <a href="#contact">WAITLIST</a>
                     <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
                 </div>
             </div>
@@ -37,13 +36,14 @@
             </div>
             <div class="container hero-content">
                 <div class="hero-inner fade-in-up">
-                    <h2 class="hero-title">Destined for greatness</h2>
+                    <h2 class="hero-title">Where Digital Precision Meets Ancestral Power</h2>
                     <div class="line"></div>
                     <p>
-                        Every thread tells a story of meticulous craftsmanship. Our garments are born from the marriage
-                        of dark elegance and premium materials, designed for those who understand that true luxury whispers rather than shouts.
+                        Our garments are algorithms of elegance, crafted for those who don’t seek attention, but command it. 
+                        Every thread is a calculated masterpiece, merging dark luxury with the sterile accuracy of AI. 
+                        Welcome to the era of the Digital-to-Order Atelier.
                     </p>
-                    <a href="#collection" class="btn-premium">EXPLORE COLLECTION</a>
+                    <a href="#collection" class="btn-premium">EXPLORE THE ARCHIVE</a>
                 </div>
             </div>
         </section>
@@ -52,7 +52,7 @@
 
         <section id="collection" class="section">
             <div class="container">
-                <h2>The Collection</h2>
+                <h2>The Current Collection</h2>
                 <div class="line"></div>
 
                 <div class="products-grid">
@@ -68,12 +68,12 @@
                             <p class="muted product-description">{{ product.description }}</p>
                             <div class="product-foot">
                                 <span class="price">{{ "%.2f"|format(product.price) }} UAH</span>
-                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-gold">VIEW</a>
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-gold">DETAILS</a>
                             </div>
                         </div>
                     </article>
                     {% else %}
-                        <p class="muted">No products available.</p>
+                        <p class="muted">The archive is currently empty.</p>
                     {% endfor %}
                 </div>
             </div>
@@ -89,15 +89,16 @@
                          style="mix-blend-mode: screen; filter: brightness(1.2) contrast(1.1);">
                 </div>
                 <div>
-                    <h2>About Shadow of the Dragon</h2>
+                    <h2>The Shadow Legend</h2>
                     <div class="line"></div>
                     <p>
-                        At Shadow of the Dragon, we are pioneering the concept of an AI-driven atelier, merging cutting-edge
-                        digital design with traditional Made-to-Order craftsmanship.
+                        Shadow of the Dragon is not a brand; it’s a silent revolution. We use proprietary AI agents to calculate 
+                        the perfect silhouette, inspired by the fluid strength of the imperial dragon. 
                     </p>
                     <p>
-                        Every piece in our collection is crafted from premium Turkish cotton and rich satin, providing
-                        the perfect matte canvas for our signature large-scale contour embroidery.
+                        Every piece is a physical manifestation of a digital blueprint, crafted from premium Turkish fabrics. 
+                        We don't believe in overproduction. We believe in the "Made-to-Order" philosophy, where your garment 
+                        starts its life only after you've claimed it.
                     </p>
                 </div>
             </div>
@@ -107,8 +108,8 @@
 
         <section id="contact" class="section contact">
             <div class="container contact-inner">
-                <h2>Stay in the Shadows</h2>
-                <p>Subscribe to receive updates on new collections and exclusive previews.</p>
+                <h2>Join the Shadows</h2>
+                <p>We don't send emails. We send invitations to the future of fashion. Join the waitlist for exclusive drops.</p>
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         <div class="alerts newsletter-alerts">
@@ -119,8 +120,8 @@
                     {% endif %}
                 {% endwith %}
                 <form class="newsletter-form" action="{{ url_for('subscribe') }}" method="post">
-                    <input type="email" name="email" placeholder="Enter your email" required>
-                    <button type="submit" class="btn-gold" style="border-radius: 0;">JOIN THE WAITLIST</button>
+                    <input type="email" name="email" placeholder="Enter your digital identity (email)" required>
+                    <button type="submit" class="btn-gold">SECURE ACCESS</button>
                 </form>
             </div>
         </section>
@@ -129,18 +130,18 @@
             <div class="container footer-grid">
                 <div>
                     <h3 style="font-size: 1.2rem;">SHADOW OF THE DRAGON</h3>
-                    <p class="muted">Premium menswear crafted with intention and precision.</p>
+                    <p class="muted">Digital precision. Ancestral soul. Premium menswear crafted for the elite.</p>
                 </div>
                 <div>
-                    <h4>NAVIGATION</h4>
+                    <h4>THE ARCHIVE</h4>
                     <ul>
                         <li><a href="#collection">Collection</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#about">Legend</a></li>
+                        <li><a href="#contact">Waitlist</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4>FOLLOW</h4>
+                    <h4>FOLLOW THE SHADOW</h4>
                     <div class="social-icons">
                         <a href="#" aria-label="Instagram">IG</a>
                         <a href="#" aria-label="Facebook">FB</a>
