@@ -2,14 +2,14 @@
    ОСНОВНІ НАЛАШТУВАННЯ ТА ПЛАВНИЙ ПЕРЕХІД
    ======================================================= */
    html {
-    scroll-behavior: smooth; /* Твій головний фікс для плавного переходу */
-  }
-  
-  * {
+    scroll-behavior: smooth;
+}
+
+* {
     box-sizing: border-box;
-  }
-  
-  body {
+}
+
+body {
     margin: 0;
     padding: 0;
     background: #000;
@@ -17,59 +17,55 @@
     font-family: "Montserrat", "IBM Plex Sans", sans-serif;
     overflow-x: hidden;
     line-height: 1.6;
-  }
-  
-  img {
+}
+
+img {
     max-width: 100%;
     display: block;
-  }
-  
-  a {
+}
+
+a {
     color: inherit;
     text-decoration: none;
-  }
-  
-  /* =======================================================
-     ГЛОБАЛЬНІ ПРЕМІАЛЬНІ КОЛЬОРИ (ЗОЛОТО)
-     ======================================================= */
-  h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
+}
+
+/* =======================================================
+   ГЛОБАЛЬНІ ПРЕМІАЛЬНІ КОЛЬОРИ (ЗОЛОТО)
+   ======================================================= */
+h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     font-family: 'Cinzel', serif !important;
     color: #d4af37 !important; 
     text-transform: uppercase;
     letter-spacing: 2px;
     margin: 0 0 10px;
-  }
-  
-  /* Легке сяйво для головних елементів */
-  .brand, .price-large {
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3) !important;
-  }
-  
-  /* =======================================================
-     ГЛОБАЛЬНІ ПРЕМІАЛЬНІ КОЛЬОРИ (БІЛИЙ/СІРИЙ ТЕКСТ)
-     ======================================================= */
-  .nav-links a,
-  .hero-content p,
-  .product-description,
-  #about p,
-  .atelier-note p,
-  .product-detail-info p,
-  .muted {
+}
+
+.brand, .price-large {
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* Сріблясто-білий текст для читабельності */
+.nav-links a,
+.hero-content p,
+.product-description,
+#about p,
+.atelier-note p,
+.product-detail-info p,
+.muted {
     color: #e0e0e0 !important;
     font-family: "Montserrat", sans-serif;
     font-weight: 300;
-    text-shadow: none !important;
-  }
-  
-  /* =======================================================
-     СТРУКТУРА ТА МАКЕТ
-     ======================================================= */
-  .site-wrap {
+}
+
+/* =======================================================
+   СТРУКТУРА ТА МАКЕТ
+   ======================================================= */
+.site-wrap {
     min-height: 100vh;
     background: #000;
-  }
-  
-  .dev-banner {
+}
+
+.dev-banner {
     position: fixed;
     top: 0;
     left: 0;
@@ -82,109 +78,108 @@
     letter-spacing: 0.08em;
     text-align: center;
     padding: 7px 10px;
-  }
-  
-  .container {
+}
+
+.container {
     width: 100%;
     max-width: 1240px;
     margin: 0 auto;
     padding: 0 20px;
-  }
-  
-  /* --- НАВІГАЦІЯ --- */
-  .nav {
+}
+
+.nav {
     position: fixed;
     top: 32px;
     left: 0;
     right: 0;
     z-index: 20;
-    background: rgba(0, 0, 0, 0.84);
+    background: rgba(0, 0, 0, 0.9);
     border-bottom: 1px solid #2a2a2a;
-    backdrop-filter: blur(6px);
-  }
-  
-  .nav-row {
+    backdrop-filter: blur(8px);
+}
+
+.nav-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: 72px;
-  }
-  
-  .nav-links {
+}
+
+.nav-links {
     display: flex;
     gap: 22px;
     font-size: 0.76rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-  }
-  
-  .nav-links a:hover {
+}
+
+.nav-links a:hover {
     color: #d4af37 !important;
-  }
-  
-  /* --- HERO СЕКЦІЯ --- */
-  .hero {
+}
+
+/* --- HERO СЕКЦІЯ --- */
+.hero {
     position: relative;
     min-height: 100vh;
     display: flex;
     align-items: center;
     padding-top: 104px;
-  }
-  
-  .hero-bg {
+}
+
+.hero-bg {
     position: absolute;
     inset: 0;
-  }
-  
-  .hero-bg img {
+}
+
+.hero-bg img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  
-  .hero-overlay {
+}
+
+.hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.62);
-  }
-  
-  .hero-content {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.hero-content {
     position: relative;
     z-index: 1;
-  }
-  
-  .hero-inner {
+}
+
+.hero-inner {
     max-width: 740px;
-  }
-  
-  .hero-title {
-    font-size: clamp(2rem, 7vw, 4rem);
+}
+
+.hero-title {
+    font-size: clamp(2.2rem, 7vw, 4rem);
     color: #d4af37;
-  }
-  
-  .line {
+}
+
+.line {
     width: 70px;
     height: 2px;
     margin-bottom: 18px;
     background: linear-gradient(90deg, #d4af37, transparent);
-  }
-  
-  .section {
-    padding: 64px 0;
-  }
-  
-  .divider-silver {
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.divider-silver {
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.3), transparent);
-  }
-  
-  /* --- КНОПКИ --- */
-  .btn-gold, .btn-premium {
+}
+
+/* --- КНОПКИ --- */
+.btn-gold, .btn-premium {
     display: inline-block;
     background-color: transparent;
     border: 1px solid #d4af37;
     color: #d4af37 !important;
-    padding: 12px 28px;
+    padding: 14px 32px;
     font-size: 0.85rem;
     text-transform: uppercase;
     font-weight: 600;
@@ -193,177 +188,102 @@
     border-radius: 0;
     cursor: pointer;
     text-align: center;
-  }
-  
-  .btn-gold:hover, .btn-premium:hover {
+}
+
+.btn-gold:hover, .btn-premium:hover {
     background-color: #d4af37;
     color: #000 !important;
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.35);
-  }
-  
-  /* --- СІТКА ТОВАРІВ --- */
-  .products-grid {
-    margin-top: 28px;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+}
+
+/* --- СІТКА ТОВАРІВ --- */
+.products-grid {
+    margin-top: 40px;
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
-  }
-  
-  .product-card {
+    gap: 30px;
+}
+
+.product-card {
     background: #0a0a0a;
     border: 1px solid rgba(212, 175, 55, 0.1);
     display: flex;
     flex-direction: column;
-    flex: 1 1 calc(33.333% - 16px);
+    flex: 1 1 calc(33.333% - 20px);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 0;
-  }
-  
-  .product-card:hover {
-    transform: translateY(-10px);
+}
+
+.product-card:hover {
+    transform: translateY(-12px);
     border-color: #d4af37;
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15);
-  }
-  
-  .product-image-wrap {
-    height: 380px;
+    box-shadow: 0 15px 45px rgba(212, 175, 55, 0.15);
+}
+
+.product-image-wrap {
+    height: 420px;
     background: #050505;
     overflow: hidden;
-  }
-  
-  .product-image-wrap img {
+}
+
+.product-image-wrap img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-  }
-  
-  .product-body {
+    transition: transform 0.8s ease;
+}
+
+.product-card:hover .product-image-wrap img {
+    transform: scale(1.05);
+}
+
+.product-body {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding: 20px;
-    min-height: 200px;
+    padding: 25px;
     flex: 1;
-  }
-  
-  .product-description {
-    flex-grow: 1;
-    font-size: 0.9rem;
-  }
-  
-  .product-foot {
+}
+
+.product-foot {
     margin-top: auto;
-    border-top: 1px solid rgba(212, 175, 55, 0.2);
-    padding-top: 14px;
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
+    padding-top: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-  
-  /* --- СТОРІНКА ОДНОГО ТОВАРУ --- */
-  .product-detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: start;
-    margin-top: 50px;
-  }
-  
-  .product-detail-image img {
-    width: 100%;
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-  }
-  
-  .atelier-note {
-    background: rgba(212, 175, 55, 0.05);
-    padding: 20px;
-    border-left: 2px solid #d4af37;
-    margin-bottom: 30px;
-  }
-  
-  .atelier-note h4 {
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-  }
-  
-  /* --- SELECT (ЗОЛОТА СТРІЛОЧКА) --- */
-  .size-select {
-    background: #111;
-    border: 1px solid #d4af37;
-    color: #e0e0e0 !important;
-    padding: 15px 18px;
-    font-size: 1.1rem;
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>') !important;
-    background-repeat: no-repeat !important;
-    background-position: right 20px center !important;
-    background-size: 20px !important;
-    padding-right: 50px !important;
-    cursor: pointer;
-  }
-  
-  /* --- ABOUT & CONTACT --- */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-    align-items: center;
-  }
-  
-  .about-image {
-    background: #050505;
-    min-height: 320px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .about-image img {
-    width: 72%;
-    height: 72%;
-    object-fit: contain;
-  }
-  
-  .contact-inner { 
-    max-width: 780px; 
-    margin: 0 auto; 
-    text-align: center; 
-  }
-  
-  /* --- ФОРМА ПІДПИСКИ (РІВНІ КНОПКИ) --- */
-  .newsletter-form {
-    margin-top: 30px;
+}
+
+/* --- ФОРМА ПІДПИСКИ (ІДЕАЛЬНЕ ВИРІВНЮВАННЯ) --- */
+.newsletter-form {
+    margin-top: 35px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch; /* Важливо: однакова висота */
     gap: 0;
-  }
-  
-  .newsletter-form input {
-    width: 300px;
-    height: 50px;
+}
+
+.newsletter-form input {
+    width: 350px;
+    height: 55px; /* Фіксована висота */
     background: #000;
-    border: 1px solid rgba(212, 175, 55, 0.5);
-    border-right: none;
+    border: 1px solid #d4af37;
+    border-right: none; /* Прибираємо подвійну рамку */
     color: #e0e0e0;
-    padding: 0 15px;
+    padding: 0 20px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     outline: none;
     box-sizing: border-box;
-  }
-  
-  .newsletter-form button {
-    height: 50px;
+}
+
+.newsletter-form button {
+    height: 55px; /* Така ж висота як в інпуту */
     background: transparent;
     border: 1px solid #d4af37;
     color: #d4af37;
-    padding: 0 25px;
+    padding: 0 30px;
     font-family: 'Cinzel', serif;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -371,35 +291,41 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .newsletter-form button:hover {
+}
+
+.newsletter-form button:hover {
     background: #d4af37;
     color: #000;
-  }
-  
-  /* --- ФУТЕР --- */
-  .footer-grid {
+}
+
+/* --- ФУТЕР --- */
+.footer-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    margin-top: 40px;
-  }
-  
-  /* --- АДАПТИВНІСТЬ --- */
-  @media (max-width: 920px) {
-    .product-card { flex-basis: calc(50% - 9px); }
+    gap: 60px;
+    margin-top: 60px;
+}
+
+/* --- АДАПТИВНІСТЬ --- */
+@media (max-width: 920px) {
+    .product-card { flex-basis: calc(50% - 15px); }
     .about-grid { grid-template-columns: 1fr; }
-  }
-  
-  @media (max-width: 768px) {
-    .newsletter-form { flex-direction: column; }
-    .newsletter-form input, 
+}
+
+@media (max-width: 768px) {
+    .newsletter-form {
+        flex-direction: column;
+        align-items: center;
+    }
+    .newsletter-form input {
+        width: 100%;
+        border-right: 1px solid #d4af37;
+        margin-bottom: 10px;
+    }
     .newsletter-form button {
         width: 100%;
-        border-right: 1px solid rgba(212, 175, 55, 0.5);
     }
     .footer-grid { grid-template-columns: 1fr; text-align: center; }
-    .nav-row { flex-direction: column; gap: 10px; padding: 10px 0; }
-    .nav-links { width: 100%; justify-content: center; gap: 14px; }
-  }
+    .nav-row { flex-direction: column; gap: 15px; padding: 15px 0; }
+    .nav { top: 0; } /* На мобільних забираємо відступ від банера */
+}
