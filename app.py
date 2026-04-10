@@ -75,12 +75,6 @@ def seed_products() -> None:
 def is_valid_email(email: str) -> bool:
     return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email))
 
-def normalize_category(category: str) -> str | None:
-    category_value = (category or "").strip().lower()
-    if category_value in {"shirt", "shirts", "сорочка", "сорочки"}: return "shirt"
-    if category_value in {"trousers", "pants", "штани"}: return "trousers"
-    return None
-
 def get_cart() -> list[dict]:
     cart = session.get("cart")
     return cart if isinstance(cart, list) else []
@@ -108,7 +102,7 @@ def product_detail(product_id):
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
     p_id = request.form.get("product_id", "")
-    size = request.form.get("size", "")
+    size = request.form.get("size", "Standard") # Безпечне додавання розміру
     if not p_id.isdigit(): return redirect(url_for("index"))
     product = Product.query.get_or_404(int(p_id))
     cart = get_cart()
@@ -152,7 +146,9 @@ def checkout():
             flash("All fields are required.", "danger")
             return redirect(url_for("checkout"))
 
-        items_summary = "\n".join([f"- {item['name']} (Size: {item['size']})" for item in cart_items])
+        # ВИПРАВЛЕНО: Безпечне отримання ключів з кошика, щоб не було KeyError
+        items_summary = "\n".join([f"- {item.get('name', 'Product')} (Size: {item.get('size', 'Standard')})" for item in cart_items])
+        
         new_order = Order(
             customer_name=name, customer_phone=phone, city=city,
             nova_poshta=nova_poshta, items_summary=items_summary, total_price=total
@@ -162,6 +158,7 @@ def checkout():
 
         tg_msg = f"🔥 НОВЕ ЗАМОВЛЕННЯ 🔥\n\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {nova_poshta}\n\n🛍 Товари:\n{items_summary}\n\n💰 Сума: {total} UAH"
         send_telegram_message(tg_msg)
+        
         session.pop("cart", None)
         return redirect(url_for("success"))
 

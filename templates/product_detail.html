@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=27.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=28.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* БРОНЬОВАНИЙ МАКЕТ: Працюватиме завжди, незалежно від кешу */
         .armor-layout {
             display: flex;
             flex-wrap: wrap;
@@ -30,20 +29,25 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
         
-        /* Стиль для випадаючого списку */
+        /* СТИЛЬ СЕЛЕКТОРА: Тепер з центруванням */
         .select-premium {
             width: 100%; 
             background: #0a0a0a; 
             border: 1px solid #d4af37; 
-            color: #e0e0e0; 
+            color: #d4af37; 
             padding: 18px; 
-            font-size: 1rem; 
+            font-size: 0.9rem; 
             font-family: 'Montserrat', sans-serif; 
             outline: none; 
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            /* ЦЕНТРУВАННЯ ТЕКСТУ */
+            text-align: center;
+            text-align-last: center; 
+            appearance: none; /* Прибираємо стандартну стрілку для кращого центрування */
         }
         
-        /* Стиль кнопки */
         .btn-craft {
             width: 100%; 
             background: transparent; 
@@ -57,6 +61,7 @@
             cursor: pointer; 
             text-transform: uppercase; 
             transition: 0.3s;
+            margin-top: 10px;
         }
         .btn-craft:hover {
             background: #d4af37;
@@ -108,7 +113,7 @@
                         <form action="{{ url_for('add_to_cart') }}" method="post">
                             <input type="hidden" name="product_id" value="{{ product.id }}">
                             
-                            <div style="margin-bottom: 35px;">
+                            <div style="margin-bottom: 35px; text-align: center;">
                                 <label style="display: block; color: #d4af37; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase;">
                                     Select Your Size
                                 </label>
