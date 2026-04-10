@@ -4,64 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=25.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=26.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif;">
+<body style="background: #000; color: #e0e0e0;">
     <div class="site-wrap">
         <nav class="nav">
             <div class="container nav-row" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
-                <a href="/" style="text-decoration: none;"><h1 style="color: #d4af37; font-family: 'Cinzel'; font-size: 1.2rem;">Shadow of the Dragon</h1></a>
+                <a href="/" style="text-decoration: none;"><h1 class="brand" style="font-size: 1.2rem;">Shadow of the Dragon</h1></a>
                 <div class="nav-links">
-                    <a href="/#collection" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">COLLECTION</a>
-                    <a href="{{ url_for('cart') }}" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px; margin-left: 20px;">CART ({{ cart_count }})</a>
+                    <a href="/#collection">COLLECTION</a>
+                    <a href="{{ url_for('cart') }}" style="margin-left: 20px;">CART ({{ cart_count }})</a>
                 </div>
             </div>
         </nav>
 
-        <section class="section" style="padding-top: 140px;">
+        <section class="section" style="padding-top: 160px;">
             <div class="container">
                 <div class="product-detail-grid">
                     
                     <div class="product-detail-image">
-                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
+                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" 
+                             alt="{{ product.name }}" 
+                             style="width: 100%; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
                     </div>
 
                     <div class="product-detail-info">
-                        <h1 class="brand" style="font-size: 2.5rem; margin-bottom: 10px;">{{ product.name }}</h1>
-                        <div class="line"></div>
+                        <h1 class="brand" style="font-size: 2.8rem; line-height: 1.2; margin-bottom: 10px;">{{ product.name }}</h1>
+                        <div class="line" style="width: 80px; background: #d4af37; height: 2px; margin-bottom: 25px;"></div>
                         
-                        <p class="price-large" style="font-size: 1.5rem; margin-bottom: 30px;">{{ "%.2f"|format(product.price) }} UAH</p>
+                        <p class="price-large" style="font-size: 1.8rem; color: #d4af37; margin-bottom: 30px; font-weight: 700;">
+                            {{ "%.2f"|format(product.price) }} UAH
+                        </p>
                         
-                        <div class="atelier-note">
-                            <h4 style="margin: 0 0 5px 0;">DIGITAL-TO-ORDER CONCEPT</h4>
-                            <p style="margin: 0; font-size: 0.85rem; color: #888;">This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship.</p>
+                        <div class="atelier-note" style="background: rgba(212, 175, 55, 0.05); border-left: 3px solid #d4af37; padding: 20px; margin-bottom: 35px;">
+                            <h4 style="color: #d4af37; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 10px;">DIGITAL-TO-ORDER ATELIER</h4>
+                            <p style="font-size: 0.85rem; color: #aaa; margin: 0; line-height: 1.6;">
+                                This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.
+                            </p>
                         </div>
 
-                        <p class="product-description" style="margin-bottom: 40px; line-height: 1.8; color: #ccc;">
+                        <p style="font-size: 0.95rem; line-height: 1.8; color: #ccc; margin-bottom: 45px; font-weight: 300;">
                             {{ product.description }}
                         </p>
 
                         <form action="{{ url_for('add_to_cart') }}" method="post">
                             <input type="hidden" name="product_id" value="{{ product.id }}">
                             
-                            <div style="margin-bottom: 30px;">
-                                <label style="display: block; color: #d4af37; font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 10px;">SELECT SIZE (ATELIER STANDARD)</label>
+                            <div style="margin-bottom: 35px;">
+                                <label style="display: block; color: #d4af37; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase;">
+                                    Select Your Size
+                                </label>
                                 <select name="size" class="size-select" style="width: 100%;" required>
-                                    <option value="" disabled selected>CHOOSE YOUR SIZE</option>
-                                    <option value="S">S - SMALL</option>
-                                    <option value="M">M - MEDIUM</option>
-                                    <option value="L">L - LARGE</option>
-                                    <option value="XL">XL - EXTRA LARGE</option>
+                                    <option value="" disabled selected>CHOOSE ARCHIVE SIZE</option>
+                                    <option value="S">S — SMALL</option>
+                                    <option value="M">M — MEDIUM</option>
+                                    <option value="L">L — LARGE</option>
+                                    <option value="XL">XL — EXTRA LARGE</option>
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn-gold" style="width: 100%; padding: 20px; font-size: 1rem; letter-spacing: 3px;">
+                            <button type="submit" class="btn-gold" style="width: 100%; padding: 22px; font-size: 1rem; letter-spacing: 3px; font-weight: 700;">
                                 START CRAFTING AND ORDER
                             </button>
                         </form>
 
-                        <a href="/#collection" style="display: block; margin-top: 30px; color: #555; font-size: 0.7rem; letter-spacing: 1px; text-decoration: none;">← RETURN TO COLLECTION</a>
+                        <a href="/#collection" style="display: inline-block; margin-top: 40px; color: #666; font-size: 0.75rem; letter-spacing: 1px; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s;" onmouseover="this.style.color='#d4af37'" onmouseout="this.style.color='#666'">
+                            ← RETURN TO COLLECTION
+                        </a>
                     </div>
                 </div>
             </div>
