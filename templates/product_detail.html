@@ -4,72 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - Shadow of the Dragon</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=25.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=16.0">
 </head>
-<body>
+<body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif;">
     <div class="site-wrap">
         <nav class="nav">
-            <div class="container nav-row">
-                <a href="/" style="text-decoration: none;"><h1 class="brand accent-glow">Shadow of the Dragon</h1></a>
+            <div class="container nav-row" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
+                <a href="/" style="text-decoration: none;"><h1 style="color: #d4af37; font-family: 'Cinzel'; font-size: 1.2rem;">Shadow of the Dragon</h1></a>
                 <div class="nav-links">
-                    <a href="/#collection">COLLECTION</a>
-                    <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
+                    <a href="/#collection" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">COLLECTION</a>
+                    <a href="{{ url_for('cart') }}" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px; margin-left: 20px;">CART ({{ cart_count }})</a>
                 </div>
             </div>
         </nav>
 
-        <section class="section">
+        <section class="section" style="padding-top: 140px;">
             <div class="container">
                 <div class="product-detail-grid">
-                    <div class="product-detail-image" data-aos="fade-right">
-                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" 
-                             alt="{{ product.name }}">
+                    
+                    <div class="product-detail-image">
+                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
                     </div>
 
-                    <div class="product-detail-info" data-aos="fade-left">
+                    <div class="product-detail-info">
                         <h1 class="brand" style="font-size: 2.5rem; margin-bottom: 10px;">{{ product.name }}</h1>
-                        <div class="line" style="margin: 0 0 20px 0;"></div>
-                        <p class="price-large">{{ "%.2f"|format(product.price) }} UAH</p>
+                        <div class="line"></div>
+                        
+                        <p class="price-large" style="font-size: 1.5rem; margin-bottom: 30px;">{{ "%.2f"|format(product.price) }} UAH</p>
                         
                         <div class="atelier-note">
-                            <h4>Digital-to-Order Concept</h4>
-                            <p>This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.</p>
+                            <h4 style="margin: 0 0 5px 0;">DIGITAL-TO-ORDER CONCEPT</h4>
+                            <p style="margin: 0; font-size: 0.85rem; color: #888;">This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship.</p>
                         </div>
 
-                        <p class="product-description" style="margin-bottom: 30px;">{{ product.description }}</p>
+                        <p class="product-description" style="margin-bottom: 40px; line-height: 1.8; color: #ccc;">
+                            {{ product.description }}
+                        </p>
 
                         <form action="{{ url_for('add_to_cart') }}" method="post">
                             <input type="hidden" name="product_id" value="{{ product.id }}">
                             
-                            <select name="size" class="size-select" style="width: 100%; margin-bottom: 25px; text-align-last: center;" required>
-                                <option value="" disabled selected>SELECT SIZE (ATELIER STANDARD)</option>
-                                <option value="S">Small (S)</option>
-                                <option value="M">Medium (M)</option>
-                                <option value="L">Large (L)</option>
-                                <option value="XL">Extra Large (XL)</option>
-                            </select>
-                            
-                            <button type="submit" class="btn-gold" style="width: 100%; padding: 22px; font-weight: 700; letter-spacing: 2px;">START CRAFTING AND ORDER</button>
+                            <div style="margin-bottom: 30px;">
+                                <label style="display: block; color: #d4af37; font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 10px;">SELECT SIZE (ATELIER STANDARD)</label>
+                                <select name="size" class="size-select" style="width: 100%;" required>
+                                    <option value="" disabled selected>CHOOSE YOUR SIZE</option>
+                                    <option value="S">S - SMALL</option>
+                                    <option value="M">M - MEDIUM</option>
+                                    <option value="L">L - LARGE</option>
+                                    <option value="XL">XL - EXTRA LARGE</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn-gold" style="width: 100%; padding: 20px; font-size: 1rem; letter-spacing: 3px;">
+                                START CRAFTING AND ORDER
+                            </button>
                         </form>
-                        
-                        <a href="/#collection" style="display: inline-block; margin-top: 40px; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">← RETURN TO COLLECTION</a>
+
+                        <a href="/#collection" style="display: block; margin-top: 30px; color: #555; font-size: 0.7rem; letter-spacing: 1px; text-decoration: none;">← RETURN TO COLLECTION</a>
                     </div>
                 </div>
             </div>
         </section>
     </div>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init({ duration: 1000, once: true });
-    </script>
 </body>
 </html>
