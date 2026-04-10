@@ -1,196 +1,90 @@
 <!doctype html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Адмін-панель | Shadow of the Dragon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Admin Panel - Shadow of the Dragon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=25.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background: #050505; }
+        .admin-container { padding: 120px 20px 50px; max-width: 1200px; margin: 0 auto; }
+        .admin-card { background: #0a0a0a; border: 1px solid rgba(212, 175, 55, 0.2); padding: 30px; margin-bottom: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
+        th { text-align: left; color: #d4af37; border-bottom: 1px solid #d4af37; padding: 15px 10px; text-transform: uppercase; }
+        td { padding: 15px 10px; border-bottom: 1px solid #222; vertical-align: top; }
+        .status-badge { background: #d4af37; color: #000; padding: 3px 8px; font-size: 0.7rem; font-weight: 700; }
+        .items-list { font-size: 0.8rem; color: #888; white-space: pre-line; }
+        .btn-logout { font-size: 0.7rem; color: #ff4444; text-decoration: underline; }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3 mb-0">Адмін-панель</h1>
-            <div>
-                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm">На сайт</a>
-                <a href="{{ url_for('admin_logout') }}" class="btn btn-outline-danger btn-sm">Вийти (Logout)</a>
-            </div>
+<body>
+    <div class="admin-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 class="brand" style="margin: 0;">Control Center</h1>
+            <a href="{{ url_for('admin_logout') }}" class="btn-logout">TERMINATE SESSION</a>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
+        <div class="admin-card">
+            <h2 class="brand" style="font-size: 1.2rem;">Incoming Orders</h2>
+            {% if orders %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Contact & Shipping</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td style="color: #666;">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td><strong>{{ order.customer_name }}</strong></td>
+                        <td>
+                            <div style="color: #d4af37;">{{ order.customer_phone }}</div>
+                            <div style="font-size: 0.75rem;">{{ order.city }}, {{ order.nova_poshta }}</div>
+                        </td>
+                        <td class="items-list">{{ order.items_summary }}</td>
+                        <td style="color: #d4af37; font-weight: 600;">{{ order.total_price }} UAH</td>
+                        <td><span class="status-badge">{{ order.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p style="color: #555; margin-top: 20px;">No orders found in the archive.</p>
             {% endif %}
-        {% endwith %}
+        </div>
 
-        <section class="mb-5">
-            <h2 class="h4 mb-3">Управління товарами</h2>
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Назва</th>
-                                    <th>Категорія</th>
-                                    <th>Опис</th>
-                                    <th>Ціна</th>
-                                    <th>Кількість</th>
-                                    <th>Дія</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for product in products %}
-                                    <tr>
-                                        <td>{{ product.id }}</td>
-                                        <td>{{ product.name }}</td>
-                                        <td>{{ product.category }}</td>
-                                        <td>{{ product.description }}</td>
-                                        <td>{{ "%.2f"|format(product.price) }} грн</td>
-                                        <td>{{ product.stock }}</td>
-                                        <td>
-                                            <form action="{{ url_for('delete_product', product_id=product.id) }}" method="post" onsubmit="return confirm('Видалити цей товар?');">
-                                                <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td colspan="7" class="text-center text-muted">Товари відсутні</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="h5 mb-3">Додати новий одяг</h3>
-                    <form action="{{ url_for('add_product') }}" method="post" enctype="multipart/form-data" class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Назва</label>
-                            <input type="text" name="name" class="form-control" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Категорія</label>
-                            <input type="text" name="category" class="form-control" required>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label">Опис</label>
-                            <textarea name="description" class="form-control" rows="3" required></textarea>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Ціна</label>
-                            <input type="number" step="0.01" min="0" name="price" class="form-control" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">Кількість</label>
-                            <input type="number" min="0" name="stock" class="form-control" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Фото товару</label>
-                            <input type="file" name="image" class="form-control" accept=".png,.jpg,.jpeg,.webp,.gif,.svg">
-                        </div>
-                        <div class="col-md-12 d-flex align-items-end">
-                            <button type="submit" class="btn btn-dark w-100">Додати</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <h2 class="h4 mb-3">Замовлення</h2>
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Клієнт</th>
-                                    <th>Email</th>
-                                    <th>Товар</th>
-                                    <th>Статус</th>
-                                    <th>Створено</th>
-                                    <th>Дія</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for order in orders %}
-                                    <tr>
-                                        <td>{{ order.id }}</td>
-                                        <td>{{ order.customer_name }}</td>
-                                        <td>{{ order.customer_email }}</td>
-                                        <td>{{ order.product.name }}</td>
-                                        <td>
-                                            {% if order.status == "Новий" %}
-                                                <span class="badge text-bg-warning">Новий</span>
-                                            {% else %}
-                                                <span class="badge text-bg-success">{{ order.status }}</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ order.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
-                                        <td>
-                                            {% if order.status == "Новий" %}
-                                                <form action="{{ url_for('mark_order_shipped', order_id=order.id) }}" method="post">
-                                                    <button type="submit" class="btn btn-sm btn-primary">Позначити як відправлене</button>
-                                                </form>
-                                            {% else %}
-                                                <span class="text-muted">—</span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td colspan="7" class="text-center text-muted">Замовлень поки немає</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h4 mb-0">Waitlist (Leads)</h2>
-                <a href="{{ url_for('export_leads_csv') }}" class="btn btn-outline-success btn-sm">Export to CSV</a>
-            </div>
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Email</th>
-                                    <th>Signed Up At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for lead in leads %}
-                                    <tr>
-                                        <td>{{ lead.id }}</td>
-                                        <td>{{ lead.email }}</td>
-                                        <td>{{ lead.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted">No leads yet.</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="admin-card">
+            <h2 class="brand" style="font-size: 1.2rem;">Waitlist Members</h2>
+            {% if leads %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email Identity</th>
+                        <th>Joined Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in leads %}
+                    <tr>
+                        <td style="color: #d4af37;">{{ lead.email }}</td>
+                        <td style="color: #666;">{{ lead.created_at.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p style="color: #555; margin-top: 20px;">The waitlist is currently empty.</p>
+            {% endif %}
+        </div>
+        
+        <a href="/" class="btn-gold" style="font-size: 0.7rem; padding: 10px 20px;">BACK TO FRONTEND</a>
     </div>
 </body>
 </html>
