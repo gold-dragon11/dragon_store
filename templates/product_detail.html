@@ -4,41 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=26.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=27.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* БРОНЬОВАНИЙ МАКЕТ: Працюватиме завжди, незалежно від кешу */
+        .armor-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 60px;
+            margin-top: 20px;
+            align-items: flex-start;
+        }
+        .armor-left {
+            flex: 1 1 45%;
+            min-width: 320px;
+        }
+        .armor-right {
+            flex: 1 1 45%;
+            min-width: 320px;
+        }
+        .armor-left img {
+            width: 100%;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+        
+        /* Стиль для випадаючого списку */
+        .select-premium {
+            width: 100%; 
+            background: #0a0a0a; 
+            border: 1px solid #d4af37; 
+            color: #e0e0e0; 
+            padding: 18px; 
+            font-size: 1rem; 
+            font-family: 'Montserrat', sans-serif; 
+            outline: none; 
+            cursor: pointer;
+        }
+        
+        /* Стиль кнопки */
+        .btn-craft {
+            width: 100%; 
+            background: transparent; 
+            border: 1px solid #d4af37; 
+            color: #d4af37; 
+            padding: 22px; 
+            font-size: 1rem; 
+            font-family: 'Cinzel', serif; 
+            font-weight: 700; 
+            letter-spacing: 3px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            transition: 0.3s;
+        }
+        .btn-craft:hover {
+            background: #d4af37;
+            color: #000;
+        }
+    </style>
 </head>
-<body style="background: #000; color: #e0e0e0;">
+<body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif; margin: 0;">
     <div class="site-wrap">
-        <nav class="nav">
-            <div class="container nav-row" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
-                <a href="/" style="text-decoration: none;"><h1 class="brand" style="font-size: 1.2rem;">Shadow of the Dragon</h1></a>
-                <div class="nav-links">
-                    <a href="/#collection">COLLECTION</a>
-                    <a href="{{ url_for('cart') }}" style="margin-left: 20px;">CART ({{ cart_count }})</a>
+        
+        <nav style="position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); border-bottom: 1px solid #222; z-index: 100; padding: 20px 0;">
+            <div class="container" style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+                <a href="/" style="text-decoration: none;"><h1 style="color: #d4af37; font-family: 'Cinzel', serif; font-size: 1.2rem; margin: 0;">Shadow of the Dragon</h1></a>
+                <div style="display: flex; gap: 20px;">
+                    <a href="/#collection" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">COLLECTION</a>
+                    <a href="{{ url_for('cart') }}" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">CART ({{ cart_count }})</a>
                 </div>
             </div>
         </nav>
 
-        <section class="section" style="padding-top: 160px;">
-            <div class="container">
-                <div class="product-detail-grid">
+        <section style="padding-top: 140px; padding-bottom: 80px;">
+            <div class="container" style="max-width: 1240px; margin: 0 auto; padding: 0 20px;">
+                
+                <div class="armor-layout">
                     
-                    <div class="product-detail-image">
-                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" 
-                             alt="{{ product.name }}" 
-                             style="width: 100%; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+                    <div class="armor-left">
+                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
                     </div>
 
-                    <div class="product-detail-info">
-                        <h1 class="brand" style="font-size: 2.8rem; line-height: 1.2; margin-bottom: 10px;">{{ product.name }}</h1>
-                        <div class="line" style="width: 80px; background: #d4af37; height: 2px; margin-bottom: 25px;"></div>
+                    <div class="armor-right">
+                        <h1 style="font-family: 'Cinzel', serif; font-size: 2.8rem; color: #d4af37; margin: 0 0 10px 0; line-height: 1.2; text-transform: uppercase;">{{ product.name }}</h1>
+                        <div style="width: 80px; height: 2px; background: #d4af37; margin-bottom: 25px;"></div>
                         
-                        <p class="price-large" style="font-size: 1.8rem; color: #d4af37; margin-bottom: 30px; font-weight: 700;">
+                        <p style="font-family: 'Cinzel', serif; font-size: 1.8rem; color: #d4af37; font-weight: 700; margin: 0 0 30px 0;">
                             {{ "%.2f"|format(product.price) }} UAH
                         </p>
                         
-                        <div class="atelier-note" style="background: rgba(212, 175, 55, 0.05); border-left: 3px solid #d4af37; padding: 20px; margin-bottom: 35px;">
-                            <h4 style="color: #d4af37; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 10px;">DIGITAL-TO-ORDER ATELIER</h4>
+                        <div style="background: rgba(212, 175, 55, 0.05); border-left: 3px solid #d4af37; padding: 20px; margin-bottom: 35px;">
+                            <h4 style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 0.85rem; letter-spacing: 2px; margin: 0 0 10px 0;">DIGITAL-TO-ORDER ATELIER</h4>
                             <p style="font-size: 0.85rem; color: #aaa; margin: 0; line-height: 1.6;">
                                 This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.
                             </p>
@@ -55,7 +112,7 @@
                                 <label style="display: block; color: #d4af37; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase;">
                                     Select Your Size
                                 </label>
-                                <select name="size" class="size-select" style="width: 100%;" required>
+                                <select name="size" class="select-premium" required>
                                     <option value="" disabled selected>CHOOSE ARCHIVE SIZE</option>
                                     <option value="S">S — SMALL</option>
                                     <option value="M">M — MEDIUM</option>
@@ -64,16 +121,17 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn-gold" style="width: 100%; padding: 22px; font-size: 1rem; letter-spacing: 3px; font-weight: 700;">
+                            <button type="submit" class="btn-craft">
                                 START CRAFTING AND ORDER
                             </button>
                         </form>
 
-                        <a href="/#collection" style="display: inline-block; margin-top: 40px; color: #666; font-size: 0.75rem; letter-spacing: 1px; text-decoration: none; border-bottom: 1px solid transparent; transition: 0.3s;" onmouseover="this.style.color='#d4af37'" onmouseout="this.style.color='#666'">
+                        <a href="/#collection" style="display: inline-block; margin-top: 40px; color: #666; font-size: 0.75rem; letter-spacing: 1px; text-decoration: none; transition: 0.3s;" onmouseover="this.style.color='#d4af37'" onmouseout="this.style.color='#666'">
                             ← RETURN TO COLLECTION
                         </a>
                     </div>
                 </div>
+                
             </div>
         </section>
     </div>
