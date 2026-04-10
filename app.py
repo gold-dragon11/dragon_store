@@ -1,6 +1,7 @@
 import os
 import re
 import requests
+import time
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
@@ -77,6 +78,25 @@ def send_telegram_message(message):
     token = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ"
     chat_id = "1682786328"
     url = f"https://api.telegram.org/bot{token}/sendMessage"
+    
+    proxies = {
+        'http': 'http://proxy.server:3128',
+        'https': 'http://proxy.server:3128',
+    }
+    
+    # Робимо 3 спроби відправити повідомлення з інтервалом в 1 секунду
+    for attempt in range(3):
+        try:
+            response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=10)
+            if response.status_code == 200:
+                break  # Успіх! Повідомлення доставлено, виходимо з циклу
+            else:
+                print(f"Telegram Error (Спроба {attempt + 1}): {response.text}")
+        except Exception as e:
+            print(f"Connection Error (Спроба {attempt + 1}): {e}")
+        
+        # Якщо сталася помилка, чекаємо 1 секунду перед наступною спробою
+        time.sleep(1)
     
     # Налаштування проксі для безкоштовних акаунтів PythonAnywhere
     proxies = {
