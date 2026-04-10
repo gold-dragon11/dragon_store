@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=25.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=31.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { background: #050505; }
@@ -12,10 +12,19 @@
         .admin-card { background: #0a0a0a; border: 1px solid rgba(212, 175, 55, 0.2); padding: 30px; margin-bottom: 40px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
         th { text-align: left; color: #d4af37; border-bottom: 1px solid #d4af37; padding: 15px 10px; text-transform: uppercase; }
-        td { padding: 15px 10px; border-bottom: 1px solid #222; vertical-align: top; }
+        td { padding: 15px 10px; border-bottom: 1px solid #222; vertical-align: middle; }
         .status-badge { background: #d4af37; color: #000; padding: 3px 8px; font-size: 0.7rem; font-weight: 700; }
         .items-list { font-size: 0.8rem; color: #888; white-space: pre-line; }
         .btn-logout { font-size: 0.7rem; color: #ff4444; text-decoration: underline; }
+        
+        /* Додаткові стилі для нової форми та списку товарів */
+        input, textarea, select { 
+            background: #000; border: 1px solid #d4af37; color: #e0e0e0; 
+            padding: 12px; width: 100%; margin-bottom: 15px; 
+            font-family: 'Montserrat', sans-serif; box-sizing: border-box; outline: none;
+        }
+        .btn-del { color: #ff4444; font-size: 0.75rem; text-decoration: underline; cursor: pointer; letter-spacing: 1px; }
+        .btn-del:hover { color: #ff0000; }
     </style>
 </head>
 <body>
@@ -23,6 +32,66 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h1 class="brand" style="margin: 0;">Control Center</h1>
             <a href="{{ url_for('admin_logout') }}" class="btn-logout">TERMINATE SESSION</a>
+        </div>
+
+        <div class="admin-card">
+            <h2 class="brand" style="font-size: 1.2rem; margin-bottom: 20px;">Deploy New Creation</h2>
+            <form action="{{ url_for('admin_add_product') }}" method="post" enctype="multipart/form-data">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        <input type="text" name="name" placeholder="PRODUCT NAME" required>
+                        <input type="number" step="0.01" name="price" placeholder="PRICE (UAH)" required>
+                        <select name="category" required>
+                            <option value="" disabled selected>SELECT CATEGORY</option>
+                            <option value="Shirt">SHIRT</option>
+                            <option value="Trousers">TROUSERS</option>
+                        </select>
+                    </div>
+                    <div>
+                        <textarea name="description" placeholder="ENTER LUXURY DESCRIPTION" rows="3" required></textarea>
+                        <label style="font-size: 0.75rem; color: #d4af37; display: block; margin-bottom: 5px; letter-spacing: 1px;">UPLOAD PRODUCT IMAGE:</label>
+                        <input type="file" name="image" style="border: none; padding: 5px 0;">
+                    </div>
+                </div>
+                <button type="submit" class="btn-gold" style="width: 100%; padding: 18px; margin-top: 15px; font-size: 0.9rem; letter-spacing: 3px; border: 1px solid #d4af37; background: transparent; color: #d4af37; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#d4af37'; this.style.color='#000';" onmouseout="this.style.background='transparent'; this.style.color='#d4af37';">
+                    UPLOAD TO DATABASE
+                </button>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <h2 class="brand" style="font-size: 1.2rem;">Current Inventory</h2>
+            {% if products %}
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">Visual</th>
+                        <th>Nomenclature</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td>
+                            <img src="{{ url_for('static', filename='images/' + (p.image_filename or 'placeholder.svg')) }}" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #333; background: #050505;">
+                        </td>
+                        <td>
+                            <strong style="color: #e0e0e0;">{{ p.name }}</strong><br>
+                            <span style="font-size: 0.7rem; color: #888; text-transform: uppercase;">{{ p.category }}</span>
+                        </td>
+                        <td style="color: #d4af37; font-weight: 600;">{{ p.price }} UAH</td>
+                        <td>
+                            <a href="{{ url_for('admin_delete_product', product_id=p.id) }}" class="btn-del" onclick="return confirm('Are you sure you want to delete this creation?')">DELETE</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p style="color: #555; margin-top: 20px;">The archive is currently empty.</p>
+            {% endif %}
         </div>
 
         <div class="admin-card">
@@ -84,7 +153,7 @@
             {% endif %}
         </div>
         
-        <a href="/" class="btn-gold" style="font-size: 0.7rem; padding: 10px 20px;">BACK TO FRONTEND</a>
+        <a href="/" class="btn-gold" style="font-size: 0.7rem; padding: 10px 20px; display: inline-block;">BACK TO FRONTEND</a>
     </div>
 </body>
 </html>
