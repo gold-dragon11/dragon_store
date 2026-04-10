@@ -400,7 +400,12 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Відео заповнить увесь простір без деформації */
-    opacity: 0.5; /* Затемнюємо відео для читабельності тексту */
+    opacity: 0.5; 
+    transition: opacity 1.5s ease;
+}
+.about-grid, .legend-content {
+    position: relative;
+    z-index: 2; /* Текст завжди зверху */
 }
 
 .legend-content {
