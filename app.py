@@ -213,6 +213,15 @@ def admin_delete_product(product_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
     db.session.delete(Product.query.get_or_404(product_id))
     db.session.commit(); return redirect(url_for("admin_panel"))
+    return redirect(url_for("admin_panel"))
+
+@app.route("/admin/order/delete/<int:order_id>")
+def admin_delete_order(order_id):
+    if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
+    order = Order.query.get_or_404(order_id)
+    db.session.delete(order)
+    db.session.commit()
+    return redirect(url_for("admin_panel"))
 
 @app.route("/admin/logout")
 def admin_logout():

@@ -106,7 +106,7 @@
                         <th>Items</th>
                         <th>Total</th>
                         <th>Status</th>
-                    </tr>
+                        <th>Action</th> </tr>
                 </thead>
                 <tbody>
                     {% for order in orders %}
@@ -120,6 +120,9 @@
                         <td class="items-list">{{ order.items_summary }}</td>
                         <td style="color: #d4af37; font-weight: 600;">{{ order.total_price }} UAH</td>
                         <td><span class="status-badge">{{ order.status }}</span></td>
+                        <td>
+                            <a href="{{ url_for('admin_delete_order', order_id=order.id) }}" class="btn-del" onclick="return confirm('Are you sure you want to delete this order?')">DELETE</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
