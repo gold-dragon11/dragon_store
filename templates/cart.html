@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Archive - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=22.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif;">
@@ -12,41 +12,42 @@
         <nav class="nav">
             <div class="container nav-row" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
                 <a href="/" style="text-decoration: none;"><h1 style="color: #d4af37; font-family: 'Cinzel'; font-size: 1.2rem;">Shadow of the Dragon</h1></a>
-                <a href="/" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 1px;">BACK TO COLLECTION</a>
+                <a href="/#collection" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase;">BACK TO COLLECTION</a>
             </div>
         </nav>
 
         <section style="padding-top: 120px; max-width: 800px; margin: 0 auto; padding-left: 20px; padding-right: 20px;">
-            <h2 style="font-family: 'Cinzel'; color: #d4af37; text-transform: uppercase;">Your Selection</h2>
+            <h2 style="font-family: 'Cinzel'; color: #d4af37; text-transform: uppercase; letter-spacing: 3px;">Your Selection</h2>
+            <div style="background: #d4af37; height: 1px; width: 50px; margin-bottom: 30px;"></div>
             
             {% if cart_items %}
                 {% for item in cart_items %}
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 20px 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding: 25px 0;">
                     <div style="display: flex; gap: 20px; align-items: center;">
-                        <img src="{{ url_for('static', filename='images/' + item.image) }}" style="width: 60px; border: 1px solid #d4af37;">
+                        <img src="{{ url_for('static', filename='images/' + item.image) }}" style="width: 70px; border: 1px solid #d4af37;">
                         <div>
-                            <p style="margin: 0; color: #d4af37; font-weight: 600;">{{ item.name }}</p>
-                            <p style="margin: 0; font-size: 0.8rem; color: #888;">Size: {{ item.size }}</p>
+                            <p style="margin: 0; color: #d4af37; font-weight: 600; text-transform: uppercase;">{{ item.name }}</p>
+                            <p style="margin: 5px 0 0; font-size: 0.8rem; color: #888;">Size: {{ item.size }}</p>
                         </div>
                     </div>
                     <div style="text-align: right;">
                         <p style="margin: 0; color: #d4af37;">{{ "%.2f"|format(item.price) }} UAH</p>
                         <form action="{{ url_for('remove_from_cart', index=loop.index0) }}" method="post">
-                            <button type="submit" style="background: none; border: none; color: #ff4444; cursor: pointer; font-size: 0.7rem; margin-top: 10px;">REMOVE</button>
+                            <button type="submit" style="background: none; border: none; color: #ff4444; cursor: pointer; font-size: 0.65rem; margin-top: 10px; letter-spacing: 1px;">REMOVE</button>
                         </form>
                     </div>
                 </div>
                 {% endfor %}
 
-                <div style="margin-top: 40px; text-align: right;">
+                <div style="margin-top: 50px; text-align: right;">
                     <p style="font-size: 1.4rem;">Total: <span style="color: #d4af37;">{{ "%.2f"|format(total) }} UAH</span></p>
-                    <form action="{{ url_for('checkout_demo') }}" method="post">
-                        <button type="submit" style="background: #d4af37; color: #000; border: none; padding: 15px 40px; font-family: 'Cinzel'; font-weight: 700; cursor: pointer; width: 100%; max-width: 300px;">SECURE CHECKOUT</button>
+                    <form action="{{ url_for('checkout_demo') }}" method="post" style="margin-top: 20px;">
+                        <button type="submit" style="background: #d4af37; color: #000; border: none; padding: 18px 50px; font-family: 'Cinzel'; font-weight: 700; cursor: pointer; letter-spacing: 2px;">SECURE CHECKOUT</button>
                     </form>
                 </div>
             {% else %}
-                <p style="color: #888; margin-top: 40px;">The archive is empty.</p>
-                <a href="/" style="color: #d4af37; text-decoration: underline;">Return to Collection</a>
+                <p style="color: #888; margin-top: 40px; font-weight: 300;">The archive is empty. Choose your destiny in the collection.</p>
+                <a href="/#collection" style="color: #d4af37; text-decoration: none; font-size: 0.85rem; letter-spacing: 2px; border: 1px solid #d4af37; padding: 10px 20px; display: inline-block; margin-top: 20px;">RETURN TO COLLECTION</a>
             {% endif %}
         </section>
     </div>
