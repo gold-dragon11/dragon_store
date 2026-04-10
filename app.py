@@ -62,6 +62,9 @@ class Lead(db.Model):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def is_valid_email(email: str) -> bool:
+    return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email))
+
 def send_telegram_message(message: str) -> None:
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     try:
@@ -143,6 +146,18 @@ def checkout():
 
     return render_template("checkout.html", total=total)
 
+# ВІДНОВЛЕНО: Функція підписки
+@app.route("/subscribe", methods=["POST"])
+def subscribe():
+    email = request.form.get("email", "").strip().lower()
+    if email and is_valid_email(email):
+        if not Lead.query.filter_by(email=email).first():
+            db.session.add(Lead(email=email))
+            db.session.commit()
+            send_telegram_message(f"👤 New Waitlist Member: {email}")
+            return redirect(url_for("success"))
+    return redirect(url_for("index"))
+
 @app.route("/success")
 def success():
     return render_template("success.html")
@@ -178,7 +193,6 @@ def admin_add_product():
     filename = None
     
     if file and allowed_file(file.filename):
-        # Робимо унікальне ім'я файлу
         ext = file.filename.rsplit('.', 1)[1].lower()
         filename = f"{uuid4().hex}.{ext}"
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
@@ -192,7 +206,6 @@ def admin_add_product():
 def admin_delete_product(product_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
     product = Product.query.get_or_404(product_id)
-    # Можна також видалити сам файл з сервера, але для початку просто видалимо з бази
     db.session.delete(product)
     db.session.commit()
     return redirect(url_for("admin_panel"))
