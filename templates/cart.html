@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Archive - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=22.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=24.0">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif;">
@@ -41,9 +41,7 @@
 
                 <div style="margin-top: 50px; text-align: right;">
                     <p style="font-size: 1.4rem;">Total: <span style="color: #d4af37;">{{ "%.2f"|format(total) }} UAH</span></p>
-                    <form action="{{ url_for('checkout_demo') }}" method="post" style="margin-top: 20px;">
-                        <button type="submit" style="background: #d4af37; color: #000; border: none; padding: 18px 50px; font-family: 'Cinzel'; font-weight: 700; cursor: pointer; letter-spacing: 2px;">SECURE CHECKOUT</button>
-                    </form>
+                    <a href="{{ url_for('checkout') }}" style="display: inline-block; margin-top: 20px; background: #d4af37; color: #000; text-decoration: none; padding: 18px 50px; font-family: 'Cinzel'; font-weight: 700; letter-spacing: 2px;">SECURE CHECKOUT</a>
                 </div>
             {% else %}
                 <p style="color: #888; margin-top: 40px; font-weight: 300;">The archive is empty. Choose your destiny in the collection.</p>
