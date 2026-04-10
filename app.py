@@ -24,7 +24,6 @@ ADMIN_PASSWORD = "dragon2026"
 IMAGE_UPLOAD_DIR = Path(app.static_folder) / "images"
 ALLOWED_IMAGE_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "gif", "svg"}
 
-# Розмірна сітка (Англійська логіка)
 SIZE_GUIDE = {
     "shirt": ["S", "M", "L", "XL"],
     "trousers": ["S", "M", "L", "XL"],
@@ -32,7 +31,6 @@ SIZE_GUIDE = {
 
 TELEGRAM_BOT_TOKEN = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ".strip("[] ")
 TELEGRAM_CHAT_ID = "1682786328".strip("[] ")
-
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,7 +41,6 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False, default="")
     image_filename = db.Column(db.String(255), nullable=True)
 
-
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(120), nullable=False)
@@ -53,15 +50,12 @@ class Order(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     product = db.relationship("Product", backref=db.backref("orders", lazy=True))
 
-
 class Lead(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-
 def seed_products() -> None:
-    """Заповнюємо базу даних преміальними товарами. Image filenames set to None for placeholders."""
     if Product.query.count() == 0:
         demo_items = [
             Product(
@@ -70,7 +64,7 @@ def seed_products() -> None:
                 price=3300.0,
                 stock=13,
                 description="A digital masterpiece born from 40,000 stitches of gold-threaded contouring. High-grade silk meets liquid gold logic. Strictly Made-to-Order.",
-                image_filename=None # No real image yet
+                image_filename=None
             ),
             Product(
                 name="Void Wave Trousers",
@@ -78,7 +72,7 @@ def seed_products() -> None:
                 price=3000.0,
                 stock=13,
                 description="Structural minimalism designed by algorithms. Premium black wool-blend with delicate gold wave embroidery, symbolizing the fluidity of power.",
-                image_filename=None # No real image yet
+                image_filename=None
             ),
             Product(
                 name="Minimalist Gold Thread",
@@ -86,110 +80,66 @@ def seed_products() -> None:
                 price=2500.0,
                 stock=13,
                 description="Elegant simplicity meets high-tech luxury. Subtle gold line work creates understated sophistication for the discerning digital collector.",
-                image_filename=None # No real image yet
+                image_filename=None
             ),
         ]
         db.session.add_all(demo_items)
         db.session.commit()
 
-
-def is_allowed_image(filename: str) -> bool:
-    if "." not in filename:
-        return False
-    return filename.rsplit(".", 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS
-
-
 def is_valid_email(email: str) -> bool:
     return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email))
 
-
 def normalize_category(category: str) -> str | None:
     category_value = (category or "").strip().lower()
-    if category_value in {"shirt", "shirts", "сорочка", "сорочки"}:
-        return "shirt"
-    if category_value in {"trousers", "pants", "штани"}:
-        return "trousers"
+    if category_value in {"shirt", "shirts", "сорочка", "сорочки"}: return "shirt"
+    if category_value in {"trousers", "pants", "штани"}: return "trousers"
     return None
-
 
 def get_cart() -> list[dict]:
     cart = session.get("cart")
-    if isinstance(cart, list):
-        return cart
-    return []
-
+    return cart if isinstance(cart, list) else []
 
 def save_cart(cart: list[dict]) -> None:
     session["cart"] = cart
 
-
 def send_telegram_message(message: str) -> None:
-    telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    try:
-        requests.post(telegram_url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, timeout=8)
-    except Exception:
-        pass
-
-
-def initialize_app_data() -> None:
-    IMAGE_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-    db.create_all()
-    seed_products()
-
-
-with app.app_context():
-    initialize_app_data()
-
-
-# --- ROUTES ---
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+    try: requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, timeout=8)
+    except: pass
 
 @app.route("/")
 def index():
     products = Product.query.order_by(Product.id.desc()).all()
-    return render_template("index.html", products=products, size_guide=SIZE_GUIDE)
-
+    return render_template("index.html", products=products)
 
 @app.route("/product/<int:product_id>")
 def product_detail(product_id):
     product = Product.query.get_or_404(product_id)
-    return render_template("product_detail.html", product=product, size_guide=SIZE_GUIDE)
-
+    return render_template("product_detail.html", product=product)
 
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
-    product_id = request.form.get("product_id", "").strip()
-    size = request.form.get("size", "").strip()
-    
-    if not product_id.isdigit():
-        flash("Invalid product.", "danger")
-        return redirect(url_for("index"))
-
-    product = Product.query.get_or_404(int(product_id))
-    category_key = normalize_category(product.category)
-    
-    if not category_key or size not in SIZE_GUIDE.get(category_key, []):
-        flash("Please select a valid size.", "danger")
-        return redirect(url_for("product_detail", product_id=product.id))
-
+    p_id = request.form.get("product_id", "")
+    size = request.form.get("size", "")
+    if not p_id.isdigit(): return redirect(url_for("index"))
+    product = Product.query.get_or_404(int(p_id))
     cart = get_cart()
     cart.append({
         "id": product.id,
         "name": product.name,
         "price": float(product.price),
         "size": size,
-        "image": product.image_filename or "placeholder.svg", # Use placeholder if no image
+        "image": product.image_filename or "placeholder.svg",
     })
     save_cart(cart)
-    send_telegram_message(f"🔥 New Item in Cart: {product.name} (Size: {size})")
+    send_telegram_message(f"🔥 Added: {product.name} ({size})")
     return redirect(url_for("success"))
-
 
 @app.route("/cart")
 def cart():
     cart_items = get_cart()
     total = sum(item.get("price", 0) for item in cart_items)
     return render_template("cart.html", cart_items=cart_items, total=total)
-
 
 @app.post("/remove_from_cart/<int:index>")
 def remove_from_cart(index: int):
@@ -199,6 +149,10 @@ def remove_from_cart(index: int):
         save_cart(cart)
     return redirect(url_for("cart"))
 
+@app.post("/cart/checkout")
+def checkout_demo():
+    flash("Demo Mode: Checkout disabled.", "info")
+    return redirect(url_for("cart"))
 
 @app.route("/subscribe", methods=["POST"])
 def subscribe():
@@ -207,43 +161,25 @@ def subscribe():
         if not Lead.query.filter_by(email=email).first():
             db.session.add(Lead(email=email))
             db.session.commit()
-            send_telegram_message(f"👤 New Legend Member: {email}")
-            flash("Access Granted. You are now in the shadows.", "success")
+            send_telegram_message(f"👤 New Member: {email}")
             return redirect(url_for("success"))
-    flash("Invalid digital identity.", "danger")
     return redirect(url_for("index"))
-
 
 @app.route("/success")
 def success():
     return render_template("success.html")
 
-
 @app.context_processor
 def inject_cart_count():
     return {"cart_count": len(get_cart())}
-    @app.post("/cart/checkout")
-def checkout_demo():
-    flash("Thank you for testing! Checkout is disabled in demo mode.", "info")
-    return redirect(url_for("cart"))
 
-# --- ADMIN ROUTES ---
-@app.route("/admin/login", methods=["GET", "POST"])
-def admin_login():
-    if session.get("admin_logged_in"): return redirect(url_for("admin_panel"))
-    if request.method == "POST":
-        if request.form.get("password") == ADMIN_PASSWORD:
-            session["admin_logged_in"] = True
-            return redirect(url_for("admin_panel"))
-    return render_template("admin_login.html")
+def initialize():
+    IMAGE_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    db.create_all()
+    seed_products()
 
-@app.route("/admin")
-def admin_panel():
-    if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
-    return render_template("admin.html", 
-                           products=Product.query.all(), 
-                           orders=Order.query.all(), 
-                           leads=Lead.query.all())
+with app.app_context():
+    initialize()
 
 if __name__ == "__main__":
     app.run(debug=True)
