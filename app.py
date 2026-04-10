@@ -41,14 +41,17 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False, default="")
     image_filename = db.Column(db.String(255), nullable=True)
 
+# ОНОВЛЕНА БАЗА ЗАМОВЛЕНЬ (ПІБ, Телефон, Місто, Нова Пошта)
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(120), nullable=False)
-    customer_email = db.Column(db.String(120), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey("product.id"), nullable=False)
+    customer_phone = db.Column(db.String(50), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    nova_poshta = db.Column(db.String(255), nullable=False)
+    items_summary = db.Column(db.Text, nullable=False)
+    total_price = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False, default="Новий")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    product = db.relationship("Product", backref=db.backref("orders", lazy=True))
 
 class Lead(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,30 +61,9 @@ class Lead(db.Model):
 def seed_products() -> None:
     if Product.query.count() == 0:
         demo_items = [
-            Product(
-                name="Imperial Gold Dragon",
-                category="Shirt",
-                price=3300.0,
-                stock=13,
-                description="A digital masterpiece born from 40,000 stitches of gold-threaded contouring. High-grade silk meets liquid gold logic. Strictly Made-to-Order.",
-                image_filename=None
-            ),
-            Product(
-                name="Void Wave Trousers",
-                category="Trousers",
-                price=3000.0,
-                stock=13,
-                description="Structural minimalism designed by algorithms. Premium black wool-blend with delicate gold wave embroidery, symbolizing the fluidity of power.",
-                image_filename=None
-            ),
-            Product(
-                name="Minimalist Gold Thread",
-                category="Shirt",
-                price=2500.0,
-                stock=13,
-                description="Elegant simplicity meets high-tech luxury. Subtle gold line work creates understated sophistication for the discerning digital collector.",
-                image_filename=None
-            ),
+            Product(name="Imperial Gold Dragon", category="Shirt", price=3300.0, stock=13, description="A digital masterpiece born from 40,000 stitches of gold-threaded contouring. High-grade silk meets liquid gold logic. Strictly Made-to-Order.", image_filename=None),
+            Product(name="Void Wave Trousers", category="Trousers", price=3000.0, stock=13, description="Structural minimalism designed by algorithms. Premium black wool-blend with delicate gold wave embroidery, symbolizing the fluidity of power.", image_filename=None),
+            Product(name="Minimalist Gold Thread", category="Shirt", price=2500.0, stock=13, description="Elegant simplicity meets high-tech luxury. Subtle gold line work creates understated sophistication for the discerning digital collector.", image_filename=None),
         ]
         db.session.add_all(demo_items)
         db.session.commit()
@@ -124,16 +106,9 @@ def add_to_cart():
     if not p_id.isdigit(): return redirect(url_for("index"))
     product = Product.query.get_or_404(int(p_id))
     cart = get_cart()
-    cart.append({
-        "id": product.id,
-        "name": product.name,
-        "price": float(product.price),
-        "size": size,
-        "image": product.image_filename or "placeholder.svg",
-    })
+    cart.append({"id": product.id, "name": product.name, "price": float(product.price), "size": size, "image": product.image_filename or "placeholder.svg"})
     save_cart(cart)
-    send_telegram_message(f"🔥 Added: {product.name} ({size})")
-    return redirect(url_for("success"))
+    return redirect(url_for("cart"))
 
 @app.route("/cart")
 def cart():
@@ -149,10 +124,49 @@ def remove_from_cart(index: int):
         save_cart(cart)
     return redirect(url_for("cart"))
 
-@app.post("/cart/checkout")
-def checkout_demo():
-    flash("Demo Mode: Checkout disabled.", "info")
-    return redirect(url_for("cart"))
+# НОВА ФУНКЦІЯ ОФОРМЛЕННЯ ЗАМОВЛЕННЯ
+@app.route("/checkout", methods=["GET", "POST"])
+def checkout():
+    cart_items = get_cart()
+    if not cart_items:
+        return redirect(url_for("cart"))
+    
+    total = sum(item.get("price", 0) for item in cart_items)
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        phone = request.form.get("phone", "").strip()
+        city = request.form.get("city", "").strip()
+        nova_poshta = request.form.get("nova_poshta", "").strip()
+
+        if not all([name, phone, city, nova_poshta]):
+            flash("All fields are required.", "danger")
+            return redirect(url_for("checkout"))
+
+        # Генеруємо список товарів для бази і Телеграму
+        items_summary = "\n".join([f"- {item['name']} (Size: {item['size']})" for item in cart_items])
+
+        # Зберігаємо в базу даних
+        new_order = Order(
+            customer_name=name,
+            customer_phone=phone,
+            city=city,
+            nova_poshta=nova_poshta,
+            items_summary=items_summary,
+            total_price=total
+        )
+        db.session.add(new_order)
+        db.session.commit()
+
+        # Відправляємо гарне повідомлення в Telegram
+        tg_msg = f"🔥 НОВЕ ЗАМОВЛЕННЯ 🔥\n\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {nova_poshta}\n\n🛍 Товари:\n{items_summary}\n\n💰 Сума: {total} UAH"
+        send_telegram_message(tg_msg)
+
+        # Очищаємо кошик після успішного замовлення
+        session.pop("cart", None)
+        return redirect(url_for("success"))
+
+    return render_template("checkout.html", total=total)
 
 @app.route("/subscribe", methods=["POST"])
 def subscribe():

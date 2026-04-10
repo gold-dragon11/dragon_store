@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Shadow of the Dragon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=24.0">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif;">
+    <div class="site-wrap">
+        <nav class="nav">
+            <div class="container nav-row" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
+                <a href="/" style="text-decoration: none;"><h1 style="color: #d4af37; font-family: 'Cinzel'; font-size: 1.2rem;">Shadow of the Dragon</h1></a>
+                <a href="{{ url_for('cart') }}" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">BACK TO CART</a>
+            </div>
+        </nav>
+
+        <section style="padding-top: 120px; max-width: 600px; margin: 0 auto; padding-left: 20px; padding-right: 20px; padding-bottom: 50px;">
+            <h2 style="font-family: 'Cinzel'; color: #d4af37; text-transform: uppercase; letter-spacing: 3px; text-align: center;">Delivery Details</h2>
+            <div style="background: #d4af37; height: 1px; width: 50px; margin: 0 auto 40px;"></div>
+
+            <form action="{{ url_for('checkout') }}" method="post" style="display: flex; flex-direction: column; gap: 20px;">
+                
+                <div>
+                    <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Full Name</label>
+                    <input type="text" name="name" required style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; padding: 15px 0; font-size: 1rem; outline: none; font-family: 'Montserrat';">
+                </div>
+
+                <div>
+                    <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Phone Number</label>
+                    <input type="tel" name="phone" required placeholder="+380" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; padding: 15px 0; font-size: 1rem; outline: none; font-family: 'Montserrat';">
+                </div>
+
+                <div>
+                    <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">City</label>
+                    <input type="text" name="city" required style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; padding: 15px 0; font-size: 1rem; outline: none; font-family: 'Montserrat';">
+                </div>
+
+                <div>
+                    <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Nova Poshta Branch / Locker</label>
+                    <input type="text" name="nova_poshta" required placeholder="e.g. Branch #14" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; padding: 15px 0; font-size: 1rem; outline: none; font-family: 'Montserrat';">
+                </div>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <p style="font-size: 1.2rem; color: #e0e0e0; margin-bottom: 20px;">Total to pay: <span style="color: #d4af37;">{{ "%.2f"|format(total) }} UAH</span></p>
+                    <button type="submit" class="btn-gold" style="width: 100%; padding: 20px; font-size: 1rem; letter-spacing: 2px;">CONFIRM ORDER</button>
+                    <p style="color: #555; font-size: 0.75rem; margin-top: 15px;">Payment is processed upon delivery.</p>
+                </div>
+            </form>
+        </section>
+    </div>
+</body>
+</html>
