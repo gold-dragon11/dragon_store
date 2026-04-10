@@ -74,9 +74,24 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def send_telegram_message(message):
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-    try: requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, timeout=8)
-    except: pass
+    token = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ"
+    chat_id = "1682786328"
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    
+    # Налаштування проксі для безкоштовних акаунтів PythonAnywhere
+    proxies = {
+        'http': 'http://proxy.server:3128',
+        'https': 'http://proxy.server:3128',
+    }
+    
+    try:
+        # Додаємо proxies=proxies у запит
+        response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=10)
+        # Якщо хочеш бачити помилку в логах, якщо щось не так:
+        if response.status_code != 200:
+            print(f"Telegram Error: {response.text}")
+    except Exception as e:
+        print(f"Connection Error: {e}")
 
 def get_cart():
     return session.get("cart", [])
