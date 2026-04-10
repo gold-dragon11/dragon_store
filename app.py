@@ -86,9 +86,9 @@ def send_telegram_message(message):
     }
     
     # Робимо 3 спроби відправити повідомлення з інтервалом в 1 секунду
-    for attempt in range(3):
+    for attempt in range(2):
         try:
-            response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=10)
+            response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=5)
             if response.status_code == 200:
                 break  # Успіх! Повідомлення доставлено, виходимо з циклу
             else:
