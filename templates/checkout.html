@@ -20,7 +20,7 @@
             <h2 style="font-family: 'Cinzel'; color: #d4af37; text-transform: uppercase; letter-spacing: 3px; text-align: center;">Delivery Details</h2>
             <div style="background: #d4af37; height: 1px; width: 50px; margin: 0 auto 40px;"></div>
 
-            <form action="{{ url_for('checkout') }}" method="post" style="display: flex; flex-direction: column; gap: 20px;">
+            <form id="order-form" action="{{ url_for('checkout') }}" method="post" style="display: flex; flex-direction: column; gap: 20px;" onsubmit="disableSubmitButton()">
                 
                 <div>
                     <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Full Name</label>
@@ -44,11 +44,24 @@
 
                 <div style="margin-top: 30px; text-align: center;">
                     <p style="font-size: 1.2rem; color: #e0e0e0; margin-bottom: 20px;">Total to pay: <span style="color: #d4af37;">{{ "%.2f"|format(total) }} UAH</span></p>
-                    <button type="submit" class="btn-gold" style="width: 100%; padding: 20px; font-size: 1rem; letter-spacing: 2px;">CONFIRM ORDER</button>
+                    <button type="submit" id="submit-order-btn" class="btn-gold" style="width: 100%; padding: 20px; font-size: 1rem; letter-spacing: 2px;">
+                        CONFIRM ORDER
+                    </button>
                     <p style="color: #555; font-size: 0.75rem; margin-top: 15px;">Payment is processed upon delivery.</p>
                 </div>
             </form>
         </section>
     </div>
+    <script>
+        function disableSubmitButton() {
+            const btn = document.getElementById('submit-order-btn');
+            // Блокуємо кнопку миттєво після натискання
+            btn.disabled = true;
+            btn.innerText = "WEAVING THE DRAGON..."; // Можна додати брендового стилю замість PROCESSING
+            btn.style.opacity = "0.5";
+            btn.style.cursor = "not-allowed";
+            return true;
+        }
+        </script>
 </body>
 </html>
