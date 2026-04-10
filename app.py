@@ -12,9 +12,9 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = "dragon_secret_shield_2026_key"
 
-# Налаштування шляхів
+# НОВА НАЗВА БАЗИ - щоб точно уникнути старих помилок
 BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "app.db"
+DB_PATH = BASE_DIR / "dragon_v2.db"
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DB_PATH}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -42,6 +42,8 @@ class Product(db.Model):
     image_filename = db.Column(db.String(255), nullable=True)
 
 class Order(db.Model):
+    # ПЕРЕЙМЕНОВУЄМО ТАБЛИЦЮ, щоб змусити SQL створити її заново
+    __tablename__ = 'orders_v2'
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(120), nullable=False)
     customer_phone = db.Column(db.String(50), nullable=False)
@@ -74,9 +76,6 @@ def get_cart() -> list[dict]:
     cart = session.get("cart")
     return cart if isinstance(cart, list) else []
 
-def save_cart(cart: list[dict]) -> None:
-    session["cart"] = cart
-
 # --- МАРШРУТИ МАГАЗИНУ ---
 
 @app.route("/")
@@ -97,13 +96,10 @@ def add_to_cart():
     product = Product.query.get_or_404(int(p_id))
     cart = get_cart()
     cart.append({
-        "id": product.id, 
-        "name": product.name, 
-        "price": float(product.price), 
-        "size": size, 
-        "image": product.image_filename or "placeholder.svg"
+        "id": product.id, "name": product.name, "price": float(product.price), 
+        "size": size, "image": product.image_filename or "placeholder.svg"
     })
-    save_cart(cart)
+    session["cart"] = cart
     return redirect(url_for("cart"))
 
 @app.route("/cart")
@@ -117,7 +113,7 @@ def remove_from_cart(index: int):
     cart = get_cart()
     if 0 <= index < len(cart):
         cart.pop(index)
-        save_cart(cart)
+        session["cart"] = cart
     return redirect(url_for("cart"))
 
 @app.route("/checkout", methods=["GET", "POST"])
@@ -133,18 +129,17 @@ def checkout():
             city = request.form.get("city", "").strip()
             np = request.form.get("nova_poshta", "").strip()
 
-            items_summary = "\n".join([f"- {i.get('name')} (Size: {i.get('size')})" for i in cart_items])
-            new_order = Order(customer_name=name, customer_phone=phone, city=city, nova_poshta=np, items_summary=items_summary, total_price=total)
+            summary = "\n".join([f"- {i.get('name')} (Size: {i.get('size')})" for i in cart_items])
+            new_order = Order(customer_name=name, customer_phone=phone, city=city, nova_poshta=np, items_summary=summary, total_price=total)
             
             db.session.add(new_order)
             db.session.commit()
 
-            send_telegram_message(f"🔥 ЗАМОВЛЕННЯ 🔥\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {np}\n🛍 Товари:\n{items_summary}\n💰 {total} UAH")
+            send_telegram_message(f"🔥 ЗАМОВЛЕННЯ 🔥\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {np}\n🛍 Товари:\n{summary}\n💰 {total} UAH")
             session.pop("cart", None)
             return redirect(url_for("success"))
         except Exception as e:
-            # РАДАР ПОМИЛОК: Виведе помилку прямо на екран
-            return f"<div style='background:#000; color:#ff4444; padding:50px; font-family:monospace;'><h2>CRITICAL SYSTEM ERROR:</h2><p>{str(e)}</p><p>Please send this exact text to the assistant.</p></div>"
+            return f"<div style='background:#000; color:#ff4444; padding:50px; font-family:monospace;'><h2>DATABASE RESET ERROR:</h2><p>{str(e)}</p></div>"
 
     return render_template("checkout.html", total=total)
 
@@ -160,8 +155,7 @@ def subscribe():
     return redirect(url_for("index"))
 
 @app.route("/success")
-def success():
-    return render_template("success.html")
+def success(): return render_template("success.html")
 
 # --- АДМІН-МАРШРУТИ ---
 
@@ -184,43 +178,37 @@ def admin_panel():
 @app.route("/admin/product/add", methods=["POST"])
 def admin_add_product():
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
-    
     name = request.form.get("name")
     category = request.form.get("category")
     price = float(request.form.get("price", 0))
     description = request.form.get("description")
-    
     file = request.files.get("image")
     filename = None
-    
     if file and allowed_file(file.filename):
-        ext = file.filename.rsplit('.', 1)[1].lower()
-        filename = f"{uuid4().hex}.{ext}"
+        filename = f"{uuid4().hex}.{file.filename.rsplit('.', 1)[1].lower()}"
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-    
     new_product = Product(name=name, category=category, price=price, description=description, image_filename=filename)
-    db.session.add(new_product)
-    db.session.commit()
+    db.session.add(new_product); db.session.commit()
     return redirect(url_for("admin_panel"))
 
 @app.route("/admin/product/delete/<int:product_id>")
 def admin_delete_product(product_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
     product = Product.query.get_or_404(product_id)
-    db.session.delete(product)
-    db.session.commit()
+    db.session.delete(product); db.session.commit()
     return redirect(url_for("admin_panel"))
 
 @app.route("/admin/logout")
 def admin_logout():
-    session.pop("admin_logged_in", None)
-    return redirect(url_for("admin_login"))
+    session.pop("admin_logged_in", None); return redirect(url_for("admin_login"))
 
 @app.context_processor
 def inject_cart_count():
-    return {"cart_count": len(get_cart())}
+    cart = session.get("cart")
+    count = len(cart) if isinstance(cart, list) else 0
+    return {"cart_count": count}
 
-# --- ЗАПУСК ---
+# --- ЗАПУСК (ПРАВИЛЬНИЙ ДЛЯ WSGI) ---
 with app.app_context():
     UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
     db.create_all()
