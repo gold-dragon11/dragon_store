@@ -3,23 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Success | Shadow of the Dragon</title>
+    <title>In the Shadows - Shadow of the Dragon</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=21.0">
 </head>
-<body>
-    <div class="site-wrap">
-        <div class="dev-banner">DEVELOPMENT MODE: This is a demo store. Real orders are not processed.</div>
-        <section class="success-section">
-            <div class="success-card fade-in-up">
-                <div class="success-icon" aria-hidden="true">✓</div>
-                <h1>YOU ARE IN THE SHADOWS</h1>
-                <p>Your request has been processed. Our masters are preparing something special for you.</p>
-                <a href="{{ url_for('index') }}#collection" class="btn-premium">Return to Collection</a>
+<body style="background: #000; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden;">
+    
+    <div class="site-wrap" style="text-align: center; padding: 20px;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
+
+        <div data-aos="fade-up">
+            <div style="width: 80px; height: 80px; border: 1px solid #d4af37; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center; transform: rotate(45deg);">
+                <div style="transform: rotate(-45deg); font-family: 'Cinzel'; color: #d4af37; font-size: 2rem;">S</div>
             </div>
-        </section>
+
+            <h1 class="brand" style="font-size: clamp(1.8rem, 5vw, 3rem); color: #d4af37; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px;">
+                You are in the Shadows
+            </h1>
+            
+            <div class="line" style="margin: 0 auto 30px; background: #d4af37; height: 1px; width: 60px;"></div>
+            
+            <p style="font-family: 'Montserrat', sans-serif; color: #e0e0e0; font-weight: 300; max-width: 500px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 1px;">
+                Your request has been digitally processed. Our master tailors and AI agents are preparing something exceptional for your archive. Expect the silence to be broken soon.
+            </p>
+
+            <a href="/" class="btn-gold" style="padding: 18px 45px; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">
+                RETURN TO COLLECTION
+            </a>
+        </div>
+
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
     </div>
+
 </body>
 </html>
