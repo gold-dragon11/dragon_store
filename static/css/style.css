@@ -414,28 +414,25 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     text-align: center;
     padding: 20px;
 }
-/* 1. Контейнер, який буде обрізати зум */
+/* 1. Контейнер з правильними пропорціями для вертикальних фото */
 .product-image-wrap {
     width: 100%;
-    overflow: hidden; /* Це не дасть фото "вилізти" за межі картки */
+    height: 450px;      /* Фіксована висота, щоб картки були однаковими */
+    overflow: hidden;   /* Тримаємо зум всередині */
     position: relative;
-    background: #0a0a0a; /* Фон на випадок затримки завантаження */
+    background: #0a0a0a;
 }
 
-/* 2. Саме фото товару */
+/* 2. Налаштування фото: фокус на верхній частині */
 .product-image-wrap img {
-    display: block;
     width: 100%;
-    height: auto;
-    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Плавний люксовий перехід */
+    height: 100%;
+    object-fit: cover;    /* Заповнює блок */
+    object-position: top; /* КРИТИЧНО: фокусуємося на комірці/верху виробу, а не на пупку */
+    transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* 3. Ефект зуму при наведенні на ВСЮ картку */
+/* 3. Зум, який не "з'їдає" деталі */
 .product-card:hover .product-image-wrap img {
-    transform: scale(1.15); /* Збільшуємо на 15% */
-}
-
-/* Додатково: легке затемнення фону під фото для глибини */
-.product-card:hover .product-image-wrap {
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+    transform: scale(1.1); /* Зменшили зум до 10%, щоб менше обрізало краї при наближенні */
 }
