@@ -535,69 +535,48 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     background: #d4af37;
     border-radius: 10px;
 }
-/* Універсальне виправлення під твій HTML */
 @media (max-width: 768px) {
-    /* 1. Налаштовуємо всю картку */
     .product-card.mobile-fix {
         display: flex !important;
         flex-direction: column !important;
-        height: 600px !important; /* Фіксована висота, щоб сорочки й штани були в рядку рівні */
-        background: #000 !important;
-        margin-bottom: 20px !important;
-        border: 1px solid #111;
+        height: auto !important; /* Прибираємо жорстку висоту */
+        background: #0a0a0a !important;
+        margin: 0 10px 30px 10px !important; /* Додаємо невеликі відступи з боків картки */
+        border: 1px solid #1a1a1a;
+        overflow: hidden;
     }
 
-    /* 2. Налаштовуємо фото (щоб не обрізало сорочки) */
     .product-image-wrap {
-        height: 350px !important; /* Вікно для фото */
-        overflow: hidden;
+        height: 500px !important; /* Робимо вікно фото вищим для сорочок */
+        width: 100% !important;
         background: #000;
     }
 
     .product-image-wrap img {
-        height: 100% !important;
         width: 100% !important;
-        object-fit: contain !important; /* Сорочка влізе повністю */
+        height: 100% !important;
+        /* ФОКУС: заповнюємо ширину, але рівняємо по верхньому краю */
+        object-fit: cover !important; 
+        object-position: center top !important; 
     }
 
-    /* 3. Налаштовуємо текстовий блок */
     .product-body {
-        display: flex !important;
-        flex-direction: column !important;
-        flex-grow: 1 !important; /* Заповнює простір */
-        padding: 15px !important;
+        padding: 20px 15px !important;
     }
 
     .product-body h3 {
-        font-size: 1rem !important;
-        margin-bottom: 5px !important;
-        min-height: 2.4rem; /* Місце для назви */
+        font-size: 1.1rem !important;
+        margin-bottom: 10px !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
-    .product-description {
-        font-size: 0.8rem !important;
-        line-height: 1.3;
-        color: #666;
-        margin-bottom: 15px !important;
-    }
-
-    /* 4. Притискаємо ціну та кнопку до низу */
     .product-foot {
-        margin-top: auto !important; 
+        margin-top: 15px !important;
+        padding-top: 15px !important;
+        border-top: 1px solid #111;
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
-        padding-top: 10px !important;
-        border-top: 1px solid #1a1a1a;
-    }
-
-    .price {
-        font-size: 0.9rem !important;
-        color: #d4af37 !important;
-    }
-
-    .btn-gold {
-        padding: 8px 15px !important;
-        font-size: 0.75rem !important;
     }
 }
