@@ -42,9 +42,14 @@
                     <div id="city-dropdown" class="autocomplete-dropdown"></div>
                 </div>  
 
-                <div>
+                <div style="position: relative; margin-bottom: 20px;">
                     <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Nova Poshta Branch / Locker</label>
-                    <input type="text" name="nova_poshta" required placeholder="e.g. Branch #14" style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; padding: 15px 0; font-size: 1rem; outline: none; font-family: 'Montserrat';">
+                    
+                    <input type="text" id="warehouse-input" name="nova_poshta" required autocomplete="off" 
+                           placeholder="Select city first..." disabled
+                           style="width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; padding: 15px 0; font-size: 1rem; outline: none; font-family: 'Montserrat'; opacity: 0.5; transition: all 0.3s ease;">
+                    
+                    <div id="warehouse-dropdown" class="autocomplete-dropdown"></div>
                 </div>
 
                 <div style="margin-top: 30px; text-align: center;">
