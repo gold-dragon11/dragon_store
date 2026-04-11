@@ -535,3 +535,22 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     background: #d4af37;
     border-radius: 10px;
 }
+/* Виправляємо відображення товарів на мобільних пристроях */
+@media (max-width: 768px) {
+    .product-card img {
+        /* Замість фіксованої висоти робимо її автоматичною */
+        height: auto !important;
+        /* Contain дозволяє бачити всю картинку без обрізки */
+        object-fit: contain !important; 
+        /* Додаємо трохи фону, якщо картинка вужча за екран */
+        background-color: #000;
+        /* Гарантуємо, що картинка не буде занадто маленькою */
+        min-height: 450px; 
+    }
+
+    .product-card {
+        /* Прибираємо жорсткі рамки висоти, щоб картка підлаштовувалася під контент */
+        height: auto !important;
+        margin-bottom: 30px;
+    }
+}
