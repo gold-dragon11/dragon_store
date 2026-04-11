@@ -535,22 +535,59 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     background: #d4af37;
     border-radius: 10px;
 }
-/* Виправляємо відображення товарів на мобільних пристроях */
+/* Покращена мобільна версія для карток товарів */
 @media (max-width: 768px) {
-    .product-card img {
-        /* Замість фіксованої висоти робимо її автоматичною */
+    .product-card {
+        display: flex;
+        flex-direction: column;
         height: auto !important;
-        /* Contain дозволяє бачити всю картинку без обрізки */
-        object-fit: contain !important; 
-        /* Додаємо трохи фону, якщо картинка вужча за екран */
-        background-color: #000;
-        /* Гарантуємо, що картинка не буде занадто маленькою */
-        min-height: 450px; 
+        margin-bottom: 40px;
+        background: #000;
+        border: 1px solid #1a1a1a; /* Легка рамка, щоб відокремити картки */
     }
 
-    .product-card {
-        /* Прибираємо жорсткі рамки висоти, щоб картка підлаштовувалася під контент */
-        height: auto !important;
-        margin-bottom: 30px;
+    .product-card img {
+        height: 400px !important; /* Фіксуємо висоту, щоб текст не стрибав */
+        object-fit: contain !important;
+        background-color: #000;
+        padding-top: 10px;
+    }
+
+    /* Налаштування блоку з текстом */
+    .product-info {
+        padding: 15px !important;
+        text-align: left; /* Можна спробувати center, якщо хочеш більше симетрії */
+    }
+
+    .product-info h3 {
+        font-size: 1.1rem !important;
+        margin-bottom: 8px !important;
+        line-height: 1.2;
+    }
+
+    .product-info p {
+        font-size: 0.85rem !important;
+        margin-bottom: 15px !important;
+        color: #888;
+        line-height: 1.4;
+    }
+
+    /* Блок з ціною та кнопкою */
+    .price-action {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto; /* Притискає ціну до низу, але в межах компактної картки */
+        padding-top: 10px;
+        border-top: 1px solid #111;
+    }
+
+    .price {
+        font-size: 0.95rem !important;
+    }
+
+    .btn-details {
+        padding: 8px 20px !important;
+        font-size: 0.8rem !important;
     }
 }
