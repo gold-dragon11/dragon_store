@@ -69,51 +69,105 @@
         }
         </script>
         <script>
-            // Список міст (можеш доповнити його або пізніше підключити до API)
-            const cities = [
-                "Київ", "Львів", "Одеса", "Харків", "Дніпро", "Запоріжжя", 
-                "Івано-Франківськ", "Вінниця", "Тернопіль", "Луцьк", 
-                "Рівне", "Полтава", "Чернігів", "Черкаси", "Хмельницький",
-                "Чернівці", "Житомир", "Суми", "Кропивницький", "Миколаїв", "'Сокаль", "Шептицький"
-            ];
+            const API_KEY = '189dad8305ca06f92281f2d5811ec4c2'; // Впиши ключ до кінця
             
             const cityInput = document.getElementById('city-input');
             const cityDropdown = document.getElementById('city-dropdown');
+            const warehouseInput = document.getElementById('warehouse-input');
+            const warehouseDropdown = document.getElementById('warehouse-dropdown');
             
-            cityInput.addEventListener('input', function() {
-                const val = this.value.toLowerCase();
-                cityDropdown.innerHTML = '';
-                
-                if (!val) {
+            let selectedCityRef = ""; // Тут зберігатиметься ID міста для пошуку відділень
+            
+            // --- 1. ПОШУК МІСТА ЧЕРЕЗ API ---
+            cityInput.addEventListener('input', async function() {
+                const val = this.value;
+                if (val.length < 2) {
                     cityDropdown.style.display = 'none';
                     return;
                 }
             
-                // Фільтруємо міста за введеними літерами
-                const filtered = cities.filter(city => city.toLowerCase().includes(val));
-            
-                if (filtered.length > 0) {
-                    filtered.forEach(city => {
-                        const div = document.createElement('div');
-                        div.classList.add('autocomplete-item');
-                        div.innerHTML = city;
-                        div.addEventListener('click', function() {
-                            cityInput.value = city;
-                            cityDropdown.style.display = 'none';
-                        });
-                        cityDropdown.appendChild(div);
+                try {
+                    const response = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            "apiKey": API_KEY,
+                            "modelName": "Address",
+                            "calledMethod": "getCities",
+                            "methodProperties": { "FindByString": val }
+                        })
                     });
-                    cityDropdown.style.display = 'block';
-                } else {
-                    cityDropdown.style.display = 'none';
+                    
+                    const res = await response.json();
+                    cityDropdown.innerHTML = '';
+                    
+                    if (res.success && res.data.length > 0) {
+                        res.data.forEach(city => {
+                            const div = document.createElement('div');
+                            div.className = 'autocomplete-item';
+                            div.innerHTML = city.Description;
+                            div.onclick = () => {
+                                cityInput.value = city.Description;
+                                selectedCityRef = city.Ref; // Отримуємо Ref для наступного кроку
+                                cityDropdown.style.display = 'none';
+                                
+                                // Активуємо поле відділень
+                                warehouseInput.disabled = false;
+                                warehouseInput.style.opacity = "1";
+                                warehouseInput.placeholder = "Branch number or street...";
+                            };
+                            cityDropdown.appendChild(div);
+                        });
+                        cityDropdown.style.display = 'block';
+                    }
+                } catch (e) {
+                    console.error("Помилка API міст:", e);
                 }
             });
             
-            // Закриваємо список, якщо клікнули поза ним
-            document.addEventListener('click', function (e) {
-                if (e.target !== cityInput) {
-                    cityDropdown.style.display = 'none';
+            // --- 2. ПОШУК ВІДДІЛЕННЯ ЧЕРЕЗ API ---
+            warehouseInput.addEventListener('input', async function() {
+                const val = this.value;
+                if (!selectedCityRef) return;
+            
+                try {
+                    const response = await fetch('https://api.novaposhta.ua/v2.0/json/', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            "apiKey": API_KEY,
+                            "modelName": "Address",
+                            "calledMethod": "getWarehouses",
+                            "methodProperties": {
+                                "CityRef": selectedCityRef,
+                                "FindByString": val
+                            }
+                        })
+                    });
+                    
+                    const res = await response.json();
+                    warehouseDropdown.innerHTML = '';
+                    
+                    if (res.success && res.data.length > 0) {
+                        res.data.forEach(wh => {
+                            const div = document.createElement('div');
+                            div.className = 'autocomplete-item';
+                            div.innerHTML = wh.Description;
+                            div.onclick = () => {
+                                warehouseInput.value = wh.Description;
+                                warehouseDropdown.style.display = 'none';
+                            };
+                            warehouseDropdown.appendChild(div);
+                        });
+                        warehouseDropdown.style.display = 'block';
+                    }
+                } catch (e) {
+                    console.error("Помилка API відділень:", e);
                 }
+            });
+            
+            // Закриття списків, якщо клікнули десь поруч
+            document.addEventListener('click', (e) => {
+                if (!cityInput.contains(e.target)) cityDropdown.style.display = 'none';
+                if (!warehouseInput.contains(e.target)) warehouseDropdown.style.display = 'none';
             });
             </script>
 </body>

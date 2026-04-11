@@ -487,41 +487,51 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
 .admin-status-select option[value="CANCELLED"] {
     color: #ff4444;
 }
-/* Контейнер випадаючого списку */
+/* 1. Контейнер випадаючого списку (для міст та відділень) */
 .autocomplete-dropdown {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: #111;      /* Темний фон */
-    border: 1px solid #d4af37; /* Золота рамка */
+    background: #0a0a0a;      /* Ще глибший чорний */
+    border: 1px solid rgba(212, 175, 55, 0.5); /* Напівпрозоре золото */
     border-top: none;
-    max-height: 200px;
+    max-height: 250px;         /* Трохи вище, щоб зручніше гортати відділення */
     overflow-y: auto;
-    z-index: 1000;
-    display: none;         /* Схований за замовчуванням */
+    z-index: 9999;             /* Максимальний пріоритет, щоб не перекривалося кнопками */
+    display: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8); /* Тінь для ефекту глибини */
 }
 
-/* Кожен елемент списку (місто) */
+/* 2. Кожен елемент списку */
 .autocomplete-item {
-    padding: 12px 15px;
+    padding: 14px 15px;        /* Трохи більше простору для пальців (Mobile First) */
     cursor: pointer;
-    color: #fff;
-    font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
-    border-bottom: 1px solid #222;
-    transition: background 0.2s;
+    color: #ccc;               /* Світло-сірий текст за замовчуванням */
+    font-family: 'Montserrat', sans-serif; /* Чистіший шрифт для адрес */
+    font-size: 0.85rem;
+    border-bottom: 1px solid #1a1a1a;
+    transition: all 0.2s ease;
 }
 
 .autocomplete-item:hover {
-    background: #1a1a1a;
-    color: #d4af37; /* Золотий при наведенні */
+    background: #111;
+    color: #d4af37;            /* Золотий акцент при наведенні */
+    padding-left: 20px;        /* Ефектний зсув праворуч при наведенні */
 }
 
-/* Стилізація скроллбару */
+/* 3. Стиль для поля, яке чекає на обрання міста (Disabled state) */
+#warehouse-input:disabled {
+    cursor: not-allowed;
+    color: #444;
+    border-bottom-color: #222 !important;
+}
+
+/* 4. Стилізація скроллбару (щоб не був стандартним синім) */
 .autocomplete-dropdown::-webkit-scrollbar {
-    width: 5px;
+    width: 4px;
 }
 .autocomplete-dropdown::-webkit-scrollbar-thumb {
     background: #d4af37;
+    border-radius: 10px;
 }
