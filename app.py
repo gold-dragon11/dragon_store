@@ -85,6 +85,13 @@ def send_telegram_message(message):
         'https': 'http://proxy.server:3128',
     }
     
+    try:
+        response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=10)
+        if response.status_code != 200:
+            print(f"Telegram Error: {response.text}")
+    except Exception as e:
+        print(f"Connection Error: {e}")
+    
     # Робимо 3 спроби відправити повідомлення з інтервалом в 1 секунду
     for attempt in range(2):
         try:
@@ -192,27 +199,33 @@ def checkout():
 
 @app.route("/subscribe", methods=["POST"])
 def subscribe():
+    # 1. Захист від подвійного кліку (кулдаун 5 секунд)
+    current_time = time.time()
+    last_sub = session.get('last_sub_time', 0)
+    
+    if current_time - last_sub < 5:
+        return redirect(url_for("success", reason="subscribe"))
+        
+    session['last_sub_time'] = current_time
+
     email = request.form.get("email", "").strip().lower()
     if email:
-        if not Lead.query.filter_by(email=email).first():
-            db.session.add(Lead(email=email)); db.session.commit()
+        # 2. Перевіряємо, чи є вже така пошта в базі
+        existing_lead = Lead.query.filter_by(email=email).first()
+        
+        if not existing_lead:
+            # Якщо пошти немає - додаємо і шлемо ТГ
+            db.session.add(Lead(email=email))
+            db.session.commit()
             send_telegram_message(f"👤 New Waitlist Member: {email}")
+        else:
+            # Якщо пошта вже є - просто логуємо це для себе (опціонально)
+            print(f"Email {email} already exists. Skipping Telegram.")
+
+        # У будь-якому випадку показуємо сторінку успіху
         return redirect(url_for("success", reason="subscribe"))
+        
     return redirect(url_for("index"))
-
-@app.route("/success")
-def success():
-    # Отримуємо причину з посилання, за замовчуванням 'order'
-    reason = request.args.get('reason', 'order')
-    return render_template("success.html", reason=reason)
-
-@app.route("/admin/login", methods=["GET", "POST"])
-def admin_login():
-    if request.method == "POST":
-        if request.form.get("password") == ADMIN_PASSWORD:
-            session["admin_logged_in"] = True
-            return redirect(url_for("admin_panel"))
-    return render_template("admin_login.html")
 
 @app.route("/admin")
 def admin_panel():
