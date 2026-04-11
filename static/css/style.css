@@ -487,3 +487,41 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
 .admin-status-select option[value="CANCELLED"] {
     color: #ff4444;
 }
+/* Контейнер випадаючого списку */
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #111;      /* Темний фон */
+    border: 1px solid #d4af37; /* Золота рамка */
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;         /* Схований за замовчуванням */
+}
+
+/* Кожен елемент списку (місто) */
+.autocomplete-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #222;
+    transition: background 0.2s;
+}
+
+.autocomplete-item:hover {
+    background: #1a1a1a;
+    color: #d4af37; /* Золотий при наведенні */
+}
+
+/* Стилізація скроллбару */
+.autocomplete-dropdown::-webkit-scrollbar {
+    width: 5px;
+}
+.autocomplete-dropdown::-webkit-scrollbar-thumb {
+    background: #d4af37;
+}
