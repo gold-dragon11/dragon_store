@@ -190,5 +190,21 @@
                 if (!warehouseInput.contains(e.target)) warehouseDropdown.style.display = 'none';
             });
             </script>
+            <script>
+                document.getElementById('order-form').onsubmit = function() {
+                    // 1. Знаходимо твою золоту кнопку за ID
+                    const btn = document.getElementById('submit-order-btn');
+                    
+                    // 2. Вимикаємо її відразу після кліку
+                    btn.disabled = true;
+                    
+                    // 3. Змінюємо дизайн, щоб було зрозуміло, що йде відправка
+                    btn.innerText = "PROCESSING...";
+                    btn.style.opacity = "0.6";
+                    btn.style.cursor = "not-allowed";
+                    
+                    // Форма відправиться автоматично один раз
+                };
+                </script>
 </body>
 </html>
