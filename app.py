@@ -92,20 +92,6 @@ def send_telegram_message(message):
     except Exception as e:
         print(f"Connection Error: {e}")
     
-    # Робимо 3 спроби відправити повідомлення з інтервалом в 1 секунду
-    for attempt in range(2):
-        try:
-            response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=5)
-            if response.status_code == 200:
-                break  # Успіх! Повідомлення доставлено, виходимо з циклу
-            else:
-                print(f"Telegram Error (Спроба {attempt + 1}): {response.text}")
-        except Exception as e:
-            print(f"Connection Error (Спроба {attempt + 1}): {e}")
-        
-        # Якщо сталася помилка, чекаємо 1 секунду перед наступною спробою
-        time.sleep(1)
-    
     # Налаштування проксі для безкоштовних акаунтів PythonAnywhere
     proxies = {
         'http': 'http://proxy.server:3128',
@@ -226,7 +212,19 @@ def subscribe():
         return redirect(url_for("success", reason="subscribe"))
         
     return redirect(url_for("index"))
+@app.route("/success")
+def success():
+    # Отримуємо причину з посилання, за замовчуванням 'order'
+    reason = request.args.get('reason', 'order')
+    return render_template("success.html", reason=reason)
 
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        if request.form.get("password") == ADMIN_PASSWORD:
+            session["admin_logged_in"] = True
+            return redirect(url_for("admin_panel"))
+    return render_template("admin_login.html")
 @app.route("/admin")
 def admin_panel():
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
