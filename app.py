@@ -159,6 +159,13 @@ def checkout():
     if not cart_items: return redirect(url_for("cart"))
     total = sum(item.get("price", 0) for item in cart_items)
     if request.method == "POST":
+        current_time = time.time()
+        last_submit = session.get('last_submit_time', 0)
+        if current_time - last_submit < 5:
+            print("Зловлено дубль! Блокуємо друге повідомлення в ТГ.")
+            session.pop("cart", None) # Очищуємо кошик
+            return redirect(url_for("success"))
+        session['last_submit_time'] = current_time
         try:
             name, phone = request.form.get("name"), request.form.get("phone")
             city, np = request.form.get("city"), request.form.get("nova_poshta")
