@@ -440,3 +440,50 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     /* Легкий зум 10% - зберігає більше деталей, ніж 15%, і менше обрізає низ */
     transform: scale(1.1); 
 }
+/* Робимо селектор частиною нашого бренду */
+.admin-status-select {
+    background-color: #0f0f0f; /* Глибокий чорний фон */
+    color: #d4af37;           /* Наш фірмовий золотий текст */
+    border: 1px solid #333;    /* Тонка, майже непомітна рамка */
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: 'Cinzel', serif; /* Той самий шрифт, що і на всьому сайті */
+    font-size: 0.75rem;
+    letter-spacing: 1px;       /* Додаємо простору між літерами для читабельності */
+    cursor: pointer;
+    outline: none;             /* Прибираємо синю рамку від браузера при кліку */
+    transition: all 0.3s ease; /* Плавна реакція на дії користувача */
+}
+
+/* Ефект при наведенні мишки */
+.admin-status-select:hover {
+    border-color: #d4af37;     /* Рамка стає золотою */
+    background-color: #1a1a1a; /* Фон стає трохи світлішим */
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); /* Легке золоте сяйво */
+}
+/* Стилізація окремих пунктів у списку */
+.admin-status-select option {
+    background: #0f0f0f;
+    color: #fff;
+}
+
+/* NEW — нейтральний, щоб не відволікати від роботи */
+.admin-status-select option[value="Новий"] {
+    color: #888;
+}
+
+/* WEAVING — золотий, це серце твого бізнесу, зараз створюється магія */
+.admin-status-select option[value="WEAVING"] {
+    color: #d4af37;
+    font-weight: bold;
+}
+
+/* SHIPPED — зелений, успіх, замовлення виконане, гроші зароблені */
+.admin-status-select option[value="SHIPPED"] {
+    color: #00ff88;
+}
+
+/* CANCELLED — червоний, увага, щось пішло не так */
+.admin-status-select option[value="CANCELLED"] {
+    color: #ff4444;
+}

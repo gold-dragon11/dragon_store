@@ -52,7 +52,7 @@ class Order(db.Model):
     nova_poshta = db.Column(db.String(255), nullable=False)
     items_summary = db.Column(db.Text, nullable=False)
     total_price = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(50), nullable=False, default="Новий")
+    status = db.Column(db.String(50), nullable=False, default="New")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 class Lead(db.Model):
@@ -246,6 +246,26 @@ with app.app_context():
     UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
     db.create_all()
     seed_products() # ОЦЕ ПОВЕРНЕ ТВОЮ КОЛЕКЦІЮ
-
+@app.route('/admin/update_status/<int:order_id>', methods=['POST'])
+def update_status(order_id):
+    # 1. Отримуємо дані з "випадаючого списку" (select) в адмінці
+    new_status = request.form.get('status')
+    
+    # 2. Шукаємо в базі даних замовлення саме за цим номером (id)
+    order = Order.query.get(order_id)
+    
+    # 3. Перевірка: якщо таке замовлення існує
+    if order:
+        # Змінюємо старий статус на той, який ми обрали
+        order.status = new_status
+        
+        # Записуємо зміни в базу (фінальне "Зберегти")
+        db.session.commit()
+        
+        # Лог для тебе в консоль PythonAnywhere (щоб ти бачив, що все ок)
+        print(f"Status for Order #{order_id} updated to {new_status}")
+    
+    # 4. Повертаємо тебе назад на сторінку адмінки, щоб не було білого екрану
+    return redirect(url_for('admin_panel'))
 if __name__ == "__main__":
     app.run(debug=True)
