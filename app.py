@@ -158,25 +158,36 @@ def checkout():
     cart_items = get_cart()
     if not cart_items: return redirect(url_for("cart"))
     total = sum(item.get("price", 0) for item in cart_items)
+    
     if request.method == "POST":
         current_time = time.time()
         last_submit = session.get('last_submit_time', 0)
+        
         if current_time - last_submit < 5:
             print("Зловлено дубль! Блокуємо друге повідомлення в ТГ.")
-            session.pop("cart", None) # Очищуємо кошик
-            return redirect(url_for("success"))
+            session.pop("cart", None) 
+            return redirect(url_for("success", reason="order")) # Тут залишаємо один чіткий редірект
+            
         session['last_submit_time'] = current_time
+        
         try:
             name, phone = request.form.get("name"), request.form.get("phone")
             city, np = request.form.get("city"), request.form.get("nova_poshta")
             summary = "\n".join([f"- {i.get('name')} ({i.get('size')})" for i in cart_items])
+            
             order = Order(customer_name=name, customer_phone=phone, city=city, nova_poshta=np, items_summary=summary, total_price=total)
-            db.session.add(order); db.session.commit()
+            db.session.add(order)
+            db.session.commit()
+            
             send_telegram_message(f"🔥 ЗАМОВЛЕННЯ 🔥\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {np}\n🛍 Товари:\n{summary}\n💰 {total} UAH")
+            
             session.pop("cart", None)
-            return redirect(url_for("success"))
+            # Додаємо reason="order" сюди:
+            return redirect(url_for("success", reason="order"))
+            
         except Exception as e:
             return f"<div style='background:#000; color:#ff4444; padding:50px;'><h2>ERROR:</h2><p>{str(e)}</p></div>"
+            
     return render_template("checkout.html", total=total)
 
 @app.route("/subscribe", methods=["POST"])
@@ -186,11 +197,14 @@ def subscribe():
         if not Lead.query.filter_by(email=email).first():
             db.session.add(Lead(email=email)); db.session.commit()
             send_telegram_message(f"👤 New Waitlist Member: {email}")
-        return redirect(url_for("success"))
+        return redirect(url_for("success", reason="subscribe"))
     return redirect(url_for("index"))
 
 @app.route("/success")
-def success(): return render_template("success.html")
+def success():
+    # Отримуємо причину з посилання, за замовчуванням 'order'
+    reason = request.args.get('reason', 'order')
+    return render_template("success.html", reason=reason)
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>In the Shadows - Shadow of the Dragon</title>
+    <title>Success - Shadow of the Dragon</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,16 +21,28 @@
                 <div style="transform: rotate(-45deg); font-family: 'Cinzel', serif; color: #d4af37; font-size: 2.2rem; font-weight: 700;">S</div>
             </div>
 
-            <h1 class="brand" style="font-size: clamp(1.8rem, 5vw, 3rem); color: #d4af37; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);">
-                You are in the Shadows
-            </h1>
-            
-            <div style="margin: 0 auto 30px; background: #d4af37; height: 1px; width: 60px;"></div>
-            
-            <p style="color: #e0e0e0; font-weight: 300; max-width: 540px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 1px; font-size: 0.95rem;">
-                Your request has been digitally processed. Our master tailors and AI agents are preparing something exceptional for your archive. Expect the silence to be broken soon.
-            </p>
+            {% if reason == 'subscribe' %}
+                <h1 style="font-size: clamp(1.8rem, 5vw, 3rem); color: #d4af37; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 0 15px rgba(212, 175, 55, 0.3); font-family: 'Cinzel', serif;">
+                    Connection Established
+                </h1>
+                
+                <div style="margin: 0 auto 30px; background: #d4af37; height: 1px; width: 60px;"></div>
+                
+                <p style="color: #e0e0e0; font-weight: 300; max-width: 540px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 1px; font-size: 0.95rem;">
+                    Your presence has been recorded in the shadows. We will break the silence only when a new artifact emerges from the void. You are now first in line for the next drop.
+                </p>
 
+            {% else %}
+                <h1 style="font-size: clamp(1.8rem, 5vw, 3rem); color: #d4af37; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; text-shadow: 0 0 15px rgba(212, 175, 55, 0.3); font-family: 'Cinzel', serif;">
+                    You are in the Shadows
+                </h1>
+                
+                <div style="margin: 0 auto 30px; background: #d4af37; height: 1px; width: 60px;"></div>
+                
+                <p style="color: #e0e0e0; font-weight: 300; max-width: 540px; margin: 0 auto 40px; line-height: 1.8; letter-spacing: 1px; font-size: 0.95rem;">
+                    Your acquisition has been digitally processed. Our master tailors and AI agents are crafting your piece with precision. Expect the silence to be broken soon.
+                </p>
+            {% endif %}
             <a href="/#collection" class="btn-gold" style="padding: 18px 45px; text-decoration: none; display: inline-block;">
                 RETURN TO COLLECTION
             </a>
