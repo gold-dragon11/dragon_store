@@ -414,3 +414,28 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     text-align: center;
     padding: 20px;
 }
+/* 1. Контейнер, який буде обрізати зум */
+.product-image-wrap {
+    width: 100%;
+    overflow: hidden; /* Це не дасть фото "вилізти" за межі картки */
+    position: relative;
+    background: #0a0a0a; /* Фон на випадок затримки завантаження */
+}
+
+/* 2. Саме фото товару */
+.product-image-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* Плавний люксовий перехід */
+}
+
+/* 3. Ефект зуму при наведенні на ВСЮ картку */
+.product-card:hover .product-image-wrap img {
+    transform: scale(1.15); /* Збільшуємо на 15% */
+}
+
+/* Додатково: легке затемнення фону під фото для глибини */
+.product-card:hover .product-image-wrap {
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+}
