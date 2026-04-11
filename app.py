@@ -80,33 +80,25 @@ def send_telegram_message(message):
     global SENT_MESSAGES
     now = time.time()
     
-    # ПЕРЕВІРКА: якщо таке повідомлення вже було в останні 10 секунд - ігноруємо
-    if message in SENT_MESSAGES and (now - SENT_MESSAGES[message]) < 10:
-        print(f"Duplicate prevented for: {message[:30]}...")
+    # ПЕРЕВІРКА: 3 секунди достатньо, щоб відсікти технічний дубль
+    if message in SENT_MESSAGES and (now - SENT_MESSAGES[message]) < 3:
+        print(f"--- [DEBUG] Дубль ігнорується ---")
         return
     
-    # Запам'ятовуємо це повідомлення і час його відправки
     SENT_MESSAGES[message] = now
     
-    # Чистимо старі записи в пам'яті (щоб не роздувати словник)
-    if len(SENT_MESSAGES) > 50:
-        SENT_MESSAGES.clear()
-
     token = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ"
     chat_id = "1682786328"
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     
-    proxies = {
-        'http': 'http://proxy.server:3128',
-        'https': 'http://proxy.server:3128',
-    }
+    proxies = {'http': 'http://proxy.server:3128', 'https': 'http://proxy.server:3128'}
     
     try:
-        response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=10)
-        if response.status_code != 200:
-            print(f"Telegram Error: {response.text}")
+        # Додав розширений timeout, щоб сервер не "висів"
+        response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=15)
+        print(f"--- [DEBUG] Telegram Status: {response.status_code} ---")
     except Exception as e:
-        print(f"Connection Error: {e}")
+        print(f"--- [DEBUG] Telegram Error: {e} ---")
 
 def get_cart():
     return session.get("cart", [])
@@ -186,30 +178,26 @@ def checkout():
 
 @app.route("/subscribe", methods=["POST"])
 def subscribe():
-    # 1. Захист від подвійного кліку (кулдаун 5 секунд)
     current_time = time.time()
     last_sub = session.get('last_sub_time', 0)
     
-    if current_time - last_sub < 5:
+    if current_time - last_sub < 3:
         return redirect(url_for("success", reason="subscribe"))
         
     session['last_sub_time'] = current_time
-
     email = request.form.get("email", "").strip().lower()
+    
     if email:
-        # 2. Перевіряємо, чи є вже така пошта в базі
         existing_lead = Lead.query.filter_by(email=email).first()
         
         if not existing_lead:
-            # Якщо пошти немає - додаємо і шлемо ТГ
             db.session.add(Lead(email=email))
             db.session.commit()
             send_telegram_message(f"👤 New Waitlist Member: {email}")
         else:
-            # Якщо пошта вже є - просто логуємо це для себе (опціонально)
-            print(f"Email {email} already exists. Skipping Telegram.")
+            # Спеціально для твоїх тестів: шлемо сигнал, що клієнт "повернувся"
+            send_telegram_message(f"👤 Returning Waitlist Member: {email}")
 
-        # У будь-якому випадку показуємо сторінку успіху
         return redirect(url_for("success", reason="subscribe"))
         
     return redirect(url_for("index"))
