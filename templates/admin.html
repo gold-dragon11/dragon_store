@@ -33,7 +33,25 @@
             <h1 class="brand" style="margin: 0;">Control Center</h1>
             <a href="{{ url_for('admin_logout') }}" class="btn-logout">TERMINATE SESSION</a>
         </div>
-
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 50px; margin-top: 20px;">
+    
+            <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid #d4af37; padding: 25px; text-align: center; border-radius: 2px;">
+                <h4 style="color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Total Revenue</h4>
+                <div style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 1.8rem;">{{ "%.2f"|format(total_revenue) }} <span style="font-size: 0.9rem;">UAH</span></div>
+            </div>
+        
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid #1a1a1a; padding: 25px; text-align: center; border-radius: 2px;">
+                <h4 style="color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Successful Orders</h4>
+                <div style="font-family: 'Cinzel', serif; color: #fff; font-size: 1.8rem;">{{ order_count }}</div>
+            </div>
+        
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid #1a1a1a; padding: 25px; text-align: center; border-radius: 2px;">
+                <h4 style="color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Average Order Value</h4>
+                <div style="font-family: 'Cinzel', serif; color: #fff; font-size: 1.8rem;">{{ "%.2f"|format(avg_check) }} <span style="font-size: 0.9rem;">UAH</span></div>
+            </div>
+        
+        </div>
+        <hr style="border: 0; border-top: 1px solid #111; margin-bottom: 50px; opacity: 0.3;">
         <div class="admin-card">
             <h2 class="brand" style="font-size: 1.2rem; margin-bottom: 20px;">Deploy New Creation</h2>
             <form action="{{ url_for('admin_add_product') }}" method="post" enctype="multipart/form-data">
