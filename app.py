@@ -52,7 +52,7 @@ class Order(db.Model):
     nova_poshta = db.Column(db.String(255), nullable=False)
     items_summary = db.Column(db.Text, nullable=False)
     total_price = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(50), nullable=False, default="New")
+    status = db.Column(db.String(50), nullable=False, default="NEW")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 class Lead(db.Model):

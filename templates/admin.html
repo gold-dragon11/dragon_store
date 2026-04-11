@@ -122,7 +122,7 @@
                         <td>
                             <form action="{{ url_for('update_status', order_id=order.id) }}" method="POST" style="margin: 0;">
                                 <select name="status" onchange="this.form.submit()" class="admin-status-select">
-                                    <option value="Новий" {% if order.status == 'Новий' %}selected{% endif %}>Новий</option>
+                                    <option value="NEW" {% if order.status == 'NEW' %}selected{% endif %}>NEW</option>
                                     <option value="WEAVING" {% if order.status == 'WEAVING' %}selected{% endif %}>WEAVING</option>
                                     <option value="SHIPPED" {% if order.status == 'SHIPPED' %}selected{% endif %}>SHIPPED</option>
                                     <option value="CANCELLED" {% if order.status == 'CANCELLED' %}selected{% endif %}>CANCELLED</option>
