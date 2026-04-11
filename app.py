@@ -214,10 +214,29 @@ def admin_login():
             session["admin_logged_in"] = True
             return redirect(url_for("admin_panel"))
     return render_template("admin_login.html")
+
 @app.route("/admin")
 def admin_panel():
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
-    return render_template("admin.html", orders=Order.query.all(), leads=Lead.query.all(), products=Product.query.all())
+    
+    # Отримуємо всі дані
+    orders = Order.query.all()
+    leads = Lead.query.all()
+    products = Product.query.all()
+    
+    # Економічні розрахунки
+    total_revenue = sum(order.total_price for order in orders)
+    order_count = len(orders)
+    # Середній чек (уникаємо ділення на нуль)
+    avg_check = total_revenue / order_count if order_count > 0 else 0
+    
+    return render_template("admin.html", 
+                           orders=orders, 
+                           leads=leads, 
+                           products=products,
+                           total_revenue=total_revenue,
+                           order_count=order_count,
+                           avg_check=avg_check)
 
 @app.route("/admin/product/add", methods=["POST"])
 def admin_add_product():
