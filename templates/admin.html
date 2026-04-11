@@ -130,7 +130,7 @@
                             </form>
                         </td>
                         <td>
-                            <a href="{{ url_for('admin_delete_order', order_id=order.id) }}" class="btn-del">DELETE</a>
+                            <a href="{{ url_for('admin_delete_order', order_id=order.id) }}" class="btn-del ajax-delete">DELETE</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -157,7 +157,7 @@
                         <td style="color: #d4af37;">{{ lead.email }}</td>
                         <td style="color: #666;">{{ lead.created_at.strftime('%Y-%m-%d') }}</td>
                         <td>
-                            <a href="{{ url_for('admin_delete_lead', lead_id=lead.id) }}" class="btn-del">DELETE</a>
+                            <a href="{{ url_for('admin_delete_lead', lead_id=lead.id) }}" class="btn-del ajax-delete">DELETE</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -170,5 +170,40 @@
         
         <a href="/" class="btn-gold" style="font-size: 0.7rem; padding: 10px 20px; display: inline-block;">BACK TO FRONTEND</a>
     </div>
+    <script>
+        document.querySelectorAll('.ajax-delete').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // Зупиняємо звичайний перехід по посиланню
+                
+                const url = this.getAttribute('href');
+                const row = this.closest('tr'); // Знаходимо рядок таблиці, в якому лежить кнопка
+        
+                // Робимо рядок напівпрозорим, щоб було видно, що процес пішов
+                row.style.opacity = '0.3';
+                row.style.pointerEvents = 'none';
+        
+                // Відправляємо запит на сервер у фоні
+                fetch(url, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        // Якщо сервер видалив — плавно прибираємо рядок
+                        row.style.transition = 'all 0.4s ease';
+                        row.style.transform = 'translateX(20px)';
+                        row.style.opacity = '0';
+                        setTimeout(() => row.remove(), 400);
+                    } else {
+                        alert('Error deleting item');
+                        row.style.opacity = '1';
+                        row.style.pointerEvents = 'auto';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    row.style.opacity = '1';
+                    row.style.pointerEvents = 'auto';
+                });
+            });
+        });
+        </script>
 </body>
 </html>
