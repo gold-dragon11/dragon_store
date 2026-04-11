@@ -10,6 +10,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
+SENT_MESSAGES = {}
 
 app = Flask(__name__)
 app.secret_key = "dragon_secret_shield_2026_key"
@@ -76,6 +77,21 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def send_telegram_message(message):
+    global SENT_MESSAGES
+    now = time.time()
+    
+    # ПЕРЕВІРКА: якщо таке повідомлення вже було в останні 10 секунд - ігноруємо
+    if message in SENT_MESSAGES and (now - SENT_MESSAGES[message]) < 10:
+        print(f"Duplicate prevented for: {message[:30]}...")
+        return
+    
+    # Запам'ятовуємо це повідомлення і час його відправки
+    SENT_MESSAGES[message] = now
+    
+    # Чистимо старі записи в пам'яті (щоб не роздувати словник)
+    if len(SENT_MESSAGES) > 50:
+        SENT_MESSAGES.clear()
+
     token = "8522017239:AAG2ckKbL3VAoeSZpdZqa-fB_26H3F413XQ"
     chat_id = "1682786328"
     url = f"https://api.telegram.org/bot{token}/sendMessage"
@@ -87,21 +103,6 @@ def send_telegram_message(message):
     
     try:
         response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=10)
-        if response.status_code != 200:
-            print(f"Telegram Error: {response.text}")
-    except Exception as e:
-        print(f"Connection Error: {e}")
-    
-    # Налаштування проксі для безкоштовних акаунтів PythonAnywhere
-    proxies = {
-        'http': 'http://proxy.server:3128',
-        'https': 'http://proxy.server:3128',
-    }
-    
-    try:
-        # Додаємо proxies=proxies у запит
-        response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=10)
-        # Якщо хочеш бачити помилку в логах, якщо щось не так:
         if response.status_code != 200:
             print(f"Telegram Error: {response.text}")
     except Exception as e:
