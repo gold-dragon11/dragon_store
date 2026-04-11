@@ -20,7 +20,7 @@
             <h2 style="font-family: 'Cinzel'; color: #d4af37; text-transform: uppercase; letter-spacing: 3px; text-align: center;">Delivery Details</h2>
             <div style="background: #d4af37; height: 1px; width: 50px; margin: 0 auto 40px;"></div>
 
-            <form id="order-form" action="{{ url_for('checkout') }}" method="post" style="display: flex; flex-direction: column; gap: 20px;" onsubmit="disableSubmitButton()">
+            <form id="order-form" action="{{ url_for('checkout') }}" method="post" style="display: flex; flex-direction: column; gap: 20px;">
                 
                 <div>
                     <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">Full Name</label>
@@ -62,17 +62,7 @@
             </form>
         </section>
     </div>
-    <script>
-        function disableSubmitButton() {
-            const btn = document.getElementById('submit-order-btn');
-            // Блокуємо кнопку миттєво після натискання
-            btn.disabled = true;
-            btn.innerText = "WEAVING THE DRAGON..."; // Можна додати брендового стилю замість PROCESSING
-            btn.style.opacity = "0.5";
-            btn.style.cursor = "not-allowed";
-            return true;
-        }
-        </script>
+
         <script>
             const API_KEY = '189dad8305ca06f92281f2d5811ec4c2'; // Впиши ключ до кінця
             
@@ -206,5 +196,29 @@
                     // Форма відправиться автоматично один раз
                 };
                 </script>
+            <script>
+                let isSubmitting = false; // Прапорець-запобіжник
+            
+                document.getElementById('order-form').onsubmit = function(e) {
+                    // Якщо форма вже в процесі відправки - блокуємо наступні спроби
+                    if (isSubmitting) {
+                        e.preventDefault(); 
+                        return false;
+                    }
+                    
+                    isSubmitting = true; 
+                    const btn = document.getElementById('submit-order-btn');
+                    
+                    // Змінюємо візуал кнопки
+                    btn.innerText = "WEAVING THE DRAGON...";
+                    btn.style.opacity = "0.6";
+                    
+                    // Використовуємо pointer-events замість disabled, 
+                    // щоб Android не переривав відправку форми
+                    btn.style.pointerEvents = "none"; 
+                    
+                    return true;
+                };
+            </script>
 </body>
 </html>
