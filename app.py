@@ -6,14 +6,17 @@ from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
+from dotenv import load_dotenv
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
+
+load_dotenv()
 SENT_MESSAGES = {}
 
 app = Flask(__name__)
-app.secret_key = "***REMOVED_SECRET***"
+app.secret_key = os.environ.get("SECRET_KEY", "fallback-dev-key-change-me")
 
 # Налаштування бази (V2 для стабільності)
 BASE_DIR = Path(__file__).resolve().parent
@@ -29,9 +32,9 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 db = SQLAlchemy(app)
 
 # Дані
-ADMIN_PASSWORD = "***REMOVED***"
-TELEGRAM_BOT_TOKEN = "***REMOVED_TOKEN***"
-TELEGRAM_CHAT_ID = "1682786328"
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 
 # --- МОДЕЛІ ---
 
@@ -87,15 +90,13 @@ def send_telegram_message(message):
     
     SENT_MESSAGES[message] = now
     
-    token = "***REMOVED_TOKEN***"
-    chat_id = "1682786328"
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     
     proxies = {'http': 'http://proxy.server:3128', 'https': 'http://proxy.server:3128'}
     
     try:
         # Додав розширений timeout, щоб сервер не "висів"
-        response = requests.post(url, data={"chat_id": chat_id, "text": message}, proxies=proxies, timeout=15)
+        response = requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, proxies=proxies, timeout=15)
         print(f"--- [DEBUG] Telegram Status: {response.status_code} ---")
     except Exception as e:
         print(f"--- [DEBUG] Telegram Error: {e} ---")
