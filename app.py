@@ -12,7 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent / '.env')
 SENT_MESSAGES = {}
 
 app = Flask(__name__)
