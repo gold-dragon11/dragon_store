@@ -92,11 +92,9 @@ def send_telegram_message(message):
     
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     
-    proxies = {'http': 'http://proxy.server:3128', 'https': 'http://proxy.server:3128'}
-    
     try:
         # Додав розширений timeout, щоб сервер не "висів"
-        response = requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, proxies=proxies, timeout=15)
+        response = requests.post(url, data={"chat_id": TELEGRAM_CHAT_ID, "text": message}, timeout=15)
         print(f"--- [DEBUG] Telegram Status: {response.status_code} ---")
     except Exception as e:
         print(f"--- [DEBUG] Telegram Error: {e} ---")
