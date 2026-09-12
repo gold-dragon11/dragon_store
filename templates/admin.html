@@ -1,61 +1,106 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=31.0">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - Shadow of the Dragon{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block head %}
     <style>
         body { background: #050505; }
-        .admin-container { padding: 120px 20px 50px; max-width: 1200px; margin: 0 auto; }
+        .admin-container { padding: 40px 20px 50px; max-width: 1200px; margin: 0 auto; }
         .admin-card { background: #0a0a0a; border: 1px solid rgba(212, 175, 55, 0.2); padding: 30px; margin-bottom: 40px; }
+        .admin-table-wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
         th { text-align: left; color: #d4af37; border-bottom: 1px solid #d4af37; padding: 15px 10px; text-transform: uppercase; }
         td { padding: 15px 10px; border-bottom: 1px solid #222; vertical-align: middle; }
-        .status-badge { background: #d4af37; color: #000; padding: 3px 8px; font-size: 0.7rem; font-weight: 700; }
         .items-list { font-size: 0.8rem; color: #888; white-space: pre-line; }
         .btn-logout { font-size: 0.7rem; color: #ff4444; text-decoration: underline; }
-        
-        /* Додаткові стилі для нової форми та списку товарів */
         input, textarea, select { 
             background: #000; border: 1px solid #d4af37; color: #e0e0e0; 
             padding: 12px; width: 100%; margin-bottom: 15px; 
             font-family: 'Montserrat', sans-serif; box-sizing: border-box; outline: none;
         }
-        .btn-del { color: #ff4444; font-size: 0.75rem; text-decoration: underline; cursor: pointer; letter-spacing: 1px; }
+        .btn-del { 
+            color: #ff4444; font-size: 0.75rem; text-decoration: underline; 
+            cursor: pointer; letter-spacing: 1px; background: none; border: none;
+            font-family: 'Montserrat', sans-serif;
+        }
         .btn-del:hover { color: #ff0000; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            padding: 25px;
+            text-align: center;
+            border-radius: 2px;
+        }
+        .stat-card--gold {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid #d4af37;
+        }
+        .stat-card--dark {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #1a1a1a;
+        }
+        .stat-label {
+            color: #888;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+        }
+        .stat-value--gold { color: #d4af37; }
+        .stat-value--white { color: #fff; }
+        .admin-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) {
+            .admin-form-grid { grid-template-columns: 1fr; }
+        }
     </style>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <div class="admin-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h1 class="brand" style="margin: 0;">Control Center</h1>
             <a href="{{ url_for('admin_logout') }}" class="btn-logout">TERMINATE SESSION</a>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 50px; margin-top: 20px;">
-    
-            <div style="background: rgba(212, 175, 55, 0.05); border: 1px solid #d4af37; padding: 25px; text-align: center; border-radius: 2px;">
-                <h4 style="color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Total Revenue</h4>
-                <div style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 1.8rem;">{{ "%.2f"|format(total_revenue) }} <span style="font-size: 0.9rem;">UAH</span></div>
+
+        <!-- Dashboard Stats -->
+        <div class="stats-grid">
+            <div class="stat-card stat-card--gold">
+                <h4 class="stat-label">Total Revenue</h4>
+                <div class="stat-value stat-value--gold">{{ "%.2f"|format(total_revenue) }} <span style="font-size: 0.9rem;">UAH</span></div>
             </div>
-        
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid #1a1a1a; padding: 25px; text-align: center; border-radius: 2px;">
-                <h4 style="color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Successful Orders</h4>
-                <div style="font-family: 'Cinzel', serif; color: #fff; font-size: 1.8rem;">{{ order_count }}</div>
+            <div class="stat-card stat-card--dark">
+                <h4 class="stat-label">Successful Orders</h4>
+                <div class="stat-value stat-value--white">{{ order_count }}</div>
             </div>
-        
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid #1a1a1a; padding: 25px; text-align: center; border-radius: 2px;">
-                <h4 style="color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Average Order Value</h4>
-                <div style="font-family: 'Cinzel', serif; color: #fff; font-size: 1.8rem;">{{ "%.2f"|format(avg_check) }} <span style="font-size: 0.9rem;">UAH</span></div>
+            <div class="stat-card stat-card--dark">
+                <h4 class="stat-label">Average Order Value</h4>
+                <div class="stat-value stat-value--white">{{ "%.2f"|format(avg_check) }} <span style="font-size: 0.9rem;">UAH</span></div>
             </div>
-        
         </div>
+
         <hr style="border: 0; border-top: 1px solid #111; margin-bottom: 50px; opacity: 0.3;">
+
+        <!-- Add Product Form -->
         <div class="admin-card">
             <h2 class="brand" style="font-size: 1.2rem; margin-bottom: 20px;">Deploy New Creation</h2>
             <form action="{{ url_for('admin_add_product') }}" method="post" enctype="multipart/form-data">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div class="admin-form-grid">
                     <div>
                         <input type="text" name="name" placeholder="PRODUCT NAME" required>
                         <input type="number" step="0.01" name="price" placeholder="PRICE (UAH)" required>
@@ -71,116 +116,133 @@
                         <input type="file" name="image" style="border: none; padding: 5px 0;">
                     </div>
                 </div>
-                <button type="submit" class="btn-gold" style="width: 100%; padding: 18px; margin-top: 15px; font-size: 0.9rem; letter-spacing: 3px; border: 1px solid #d4af37; background: transparent; color: #d4af37; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#d4af37'; this.style.color='#000';" onmouseout="this.style.background='transparent'; this.style.color='#d4af37';">
+                <button type="submit" class="btn-gold" style="width: 100%; padding: 18px; margin-top: 15px; font-size: 0.9rem; letter-spacing: 3px;">
                     UPLOAD TO DATABASE
                 </button>
             </form>
         </div>
 
+        <!-- Product Inventory -->
         <div class="admin-card">
             <h2 class="brand" style="font-size: 1.2rem;">Current Inventory</h2>
             {% if products %}
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 80px;">Visual</th>
-                        <th>Nomenclature</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for p in products %}
-                    <tr>
-                        <td>
-                            <img src="{{ url_for('static', filename='images/' + (p.image_filename or 'placeholder.svg')) }}" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #333; background: #050505;">
-                        </td>
-                        <td>
-                            <strong style="color: #e0e0e0;">{{ p.name }}</strong><br>
-                            <span style="font-size: 0.7rem; color: #888; text-transform: uppercase;">{{ p.category }}</span>
-                        </td>
-                        <td style="color: #d4af37; font-weight: 600;">{{ p.price }} UAH</td>
-                        <td>
-                            <a href="{{ url_for('admin_delete_product', product_id=p.id) }}" class="btn-del" onclick="return confirm('Are you sure you want to delete this creation?')">DELETE</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="admin-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Visual</th>
+                            <th>Nomenclature</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in products %}
+                        <tr>
+                            <td>
+                                <img src="{{ url_for('static', filename='images/' + (p.image_filename or 'placeholder.svg')) }}" style="width: 60px; height: 60px; object-fit: contain; border: 1px solid #333; background: #050505;">
+                            </td>
+                            <td>
+                                <strong style="color: #e0e0e0;">{{ p.name }}</strong><br>
+                                <span style="font-size: 0.7rem; color: #888; text-transform: uppercase;">{{ p.category }}</span>
+                            </td>
+                            <td style="color: #d4af37; font-weight: 600;">{{ p.price }} UAH</td>
+                            <td>
+                                <form action="{{ url_for('admin_delete_product', product_id=p.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this creation?')">
+                                    <button type="submit" class="btn-del">DELETE</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
                 <p style="color: #555; margin-top: 20px;">The archive is currently empty.</p>
             {% endif %}
         </div>
 
+        <!-- Orders -->
         <div class="admin-card">
             <h2 class="brand" style="font-size: 1.2rem;">Incoming Orders</h2>
             {% if orders %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th>Contact & Shipping</th>
-                        <th>Items</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Action</th> </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                    <tr>
-                        <td style="color: #666;">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                        <td><strong>{{ order.customer_name }}</strong></td>
-                        <td>
-                            <div style="color: #d4af37;">{{ order.customer_phone }}</div>
-                            <div style="font-size: 0.75rem;">{{ order.city }}, {{ order.nova_poshta }}</div>
-                        </td>
-                        <td class="items-list">{{ order.items_summary }}</td>
-                        <td style="color: #d4af37; font-weight: 600;">{{ order.total_price }} UAH</td>
-                        <td>
-                            <form action="{{ url_for('update_status', order_id=order.id) }}" method="POST" style="margin: 0;">
-                                <select name="status" onchange="this.form.submit()" class="admin-status-select">
-                                    <option value="NEW" {% if order.status == 'NEW' %}selected{% endif %}>NEW</option>
-                                    <option value="WEAVING" {% if order.status == 'WEAVING' %}selected{% endif %}>WEAVING</option>
-                                    <option value="SHIPPED" {% if order.status == 'SHIPPED' %}selected{% endif %}>SHIPPED</option>
-                                    <option value="CANCELLED" {% if order.status == 'CANCELLED' %}selected{% endif %}>CANCELLED</option>
-                                </select>
-                            </form>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('admin_delete_order', order_id=order.id) }}" class="btn-del ajax-delete">DELETE</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="admin-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Contact & Shipping</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td style="color: #666;">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td><strong>{{ order.customer_name }}</strong></td>
+                            <td>
+                                <div style="color: #d4af37;">{{ order.customer_phone }}</div>
+                                <div style="font-size: 0.75rem;">{{ order.city }}, {{ order.nova_poshta }}</div>
+                            </td>
+                            <td class="items-list">{{ order.items_summary }}</td>
+                            <td style="color: #d4af37; font-weight: 600;">{{ order.total_price }} UAH</td>
+                            <td>
+                                <form action="{{ url_for('update_status', order_id=order.id) }}" method="POST" style="margin: 0;">
+                                    <select name="status" onchange="this.form.submit()" class="admin-status-select">
+                                        <option value="NEW" {% if order.status == 'NEW' %}selected{% endif %}>NEW</option>
+                                        <option value="WEAVING" {% if order.status == 'WEAVING' %}selected{% endif %}>WEAVING</option>
+                                        <option value="SHIPPED" {% if order.status == 'SHIPPED' %}selected{% endif %}>SHIPPED</option>
+                                        <option value="CANCELLED" {% if order.status == 'CANCELLED' %}selected{% endif %}>CANCELLED</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="{{ url_for('admin_delete_order', order_id=order.id) }}" method="post" class="ajax-delete-form">
+                                    <button type="submit" class="btn-del">DELETE</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
                 <p style="color: #555; margin-top: 20px;">No orders found in the archive.</p>
             {% endif %}
         </div>
 
+        <!-- Waitlist -->
         <div class="admin-card">
             <h2 class="brand" style="font-size: 1.2rem;">Waitlist Members</h2>
             {% if leads %}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Email Identity</th>
-                        <th>Joined Date</th>
-                        <th>Action</th> </tr>
-                </thead>
-                <tbody>
-                    {% for lead in leads %}
-                    <tr>
-                        <td style="color: #d4af37;">{{ lead.email }}</td>
-                        <td style="color: #666;">{{ lead.created_at.strftime('%Y-%m-%d') }}</td>
-                        <td>
-                            <a href="{{ url_for('admin_delete_lead', lead_id=lead.id) }}" class="btn-del ajax-delete">DELETE</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="admin-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email Identity</th>
+                            <th>Joined Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in leads %}
+                        <tr>
+                            <td style="color: #d4af37;">{{ lead.email }}</td>
+                            <td style="color: #666;">{{ lead.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <form action="{{ url_for('admin_delete_lead', lead_id=lead.id) }}" method="post" class="ajax-delete-form">
+                                    <button type="submit" class="btn-del">DELETE</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
                 <p style="color: #555; margin-top: 20px;">The waitlist is currently empty.</p>
             {% endif %}
@@ -188,23 +250,25 @@
         
         <a href="/" class="btn-gold" style="font-size: 0.7rem; padding: 10px 20px; display: inline-block;">BACK TO FRONTEND</a>
     </div>
+{% endblock %}
+
+{% block scripts %}
     <script>
-        document.querySelectorAll('.ajax-delete').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault(); // Зупиняємо звичайний перехід по посиланню
+        document.querySelectorAll('.ajax-delete-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
                 
-                const url = this.getAttribute('href');
-                const row = this.closest('tr'); // Знаходимо рядок таблиці, в якому лежить кнопка
+                if (!confirm('Are you sure you want to delete this?')) return;
+                
+                const row = this.closest('tr');
+                const url = this.getAttribute('action');
         
-                // Робимо рядок напівпрозорим, щоб було видно, що процес пішов
                 row.style.opacity = '0.3';
                 row.style.pointerEvents = 'none';
         
-                // Відправляємо запит на сервер у фоні
-                fetch(url, { method: 'GET' })
+                fetch(url, { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
-                        // Якщо сервер видалив — плавно прибираємо рядок
                         row.style.transition = 'all 0.4s ease';
                         row.style.transform = 'translateX(20px)';
                         row.style.opacity = '0';
@@ -222,6 +286,5 @@
                 });
             });
         });
-        </script>
-</body>
-</html>
+    </script>
+{% endblock %}

@@ -1,14 +1,15 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Guardians Entry - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=25.0">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
-</head>
-<body style="background: #000; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;">
+{% extends "base.html" %}
+
+{% block title %}Guardians Entry - Shadow of the Dragon{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body_attrs %} style="background: #000; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;"{% endblock %}
+
+{% block content %}
     <div style="text-align: center; border: 1px solid #d4af37; padding: 40px; background: #0a0a0a;">
-        <h2 style="font-family: 'Cinzel'; color: #d4af37; letter-spacing: 3px; margin-bottom: 30px;">ADMIN ACCESS</h2>
+        <h2 style="font-family: 'Cinzel', serif; color: #d4af37; letter-spacing: 3px; margin-bottom: 30px;">ADMIN ACCESS</h2>
         
         {% with messages = get_flashed_messages() %}
           {% if messages %}
@@ -26,5 +27,4 @@
         </form>
         <a href="/" style="color: #555; display: block; margin-top: 20px; font-size: 0.7rem;">RETURN TO SHADOWS</a>
     </div>
-</body>
-</html>
+{% endblock %}

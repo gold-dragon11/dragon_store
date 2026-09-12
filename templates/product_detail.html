@@ -1,12 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product.name }} - Shadow of the Dragon</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=28.0">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Shadow of the Dragon{% endblock %}
+
+{% block head %}
     <style>
         .armor-layout {
             display: flex;
@@ -17,19 +13,17 @@
         }
         .armor-left {
             flex: 1 1 45%;
-            min-width: 320px;
+            min-width: 280px;
         }
         .armor-right {
             flex: 1 1 45%;
-            min-width: 320px;
+            min-width: 280px;
         }
         .armor-left img {
             width: 100%;
             border: 1px solid rgba(212, 175, 55, 0.3);
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
-        
-        /* СТИЛЬ СЕЛЕКТОРА: Тепер з центруванням */
         .select-premium {
             width: 100%; 
             background: #0a0a0a; 
@@ -42,12 +36,10 @@
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
-            /* ЦЕНТРУВАННЯ ТЕКСТУ */
             text-align: center;
             text-align-last: center; 
-            appearance: none; /* Прибираємо стандартну стрілку для кращого центрування */
+            appearance: none;
         }
-        
         .btn-craft {
             width: 100%; 
             background: transparent; 
@@ -67,45 +59,83 @@
             background: #d4af37;
             color: #000;
         }
+        .product-detail-section {
+            padding-top: 140px;
+            padding-bottom: 80px;
+        }
+        .atelier-box {
+            background: rgba(212, 175, 55, 0.05);
+            border-left: 3px solid #d4af37;
+            padding: 20px;
+            margin-bottom: 35px;
+        }
+        .atelier-box h4 {
+            font-family: 'Cinzel', serif;
+            color: #d4af37;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin: 0 0 10px 0;
+        }
+        .atelier-box p {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin: 0;
+            line-height: 1.6;
+        }
+        .product-price-large {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: #d4af37;
+            font-weight: 700;
+            margin: 0 0 30px 0;
+        }
+        .product-title-large {
+            font-family: 'Cinzel', serif;
+            font-size: 2.8rem;
+            color: #d4af37;
+            margin: 0 0 10px 0;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+        .return-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .return-link:hover {
+            color: #d4af37;
+        }
     </style>
-</head>
-<body style="background: #000; color: #e0e0e0; font-family: 'Montserrat', sans-serif; margin: 0;">
-    <div class="site-wrap">
-        
-        <nav class="nav" style="position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); border-bottom: 1px solid #222; z-index: 100;">
-            <div class="container nav-row" style="max-width: 1240px; margin: 0 auto; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <a href="/" style="text-decoration: none;">
-                    <h1 class="brand" style="color: #d4af37; font-family: 'Cinzel', serif; font-size: 1.2rem; margin: 0; white-space: nowrap;">SHADOW OF THE DRAGON</h1>
-                </a>
-                <div class="nav-links" style="display: flex; gap: 20px;">
-                    <a href="/#collection" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">COLLECTION</a>
-                    <a href="{{ url_for('cart') }}" style="color: #d4af37; text-decoration: none; font-size: 0.8rem; letter-spacing: 2px;">CART ({{ cart_count }})</a>
-                </div>
-            </div>
-        </nav>
+{% endblock %}
 
-        <section style="padding-top: 140px; padding-bottom: 80px;">
-            <div class="container" style="max-width: 1240px; margin: 0 auto; padding: 0 20px;">
-                
+{% block nav_links %}
+    <a href="/#collection">COLLECTION</a>
+    <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block content %}
+        <section class="product-detail-section">
+            <div class="container">
                 <div class="armor-layout">
-                    
                     <div class="armor-left">
                         <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
                     </div>
 
                     <div class="armor-right">
-                        <h1 style="font-family: 'Cinzel', serif; font-size: 2.8rem; color: #d4af37; margin: 0 0 10px 0; line-height: 1.2; text-transform: uppercase;">{{ product.name }}</h1>
-                        <div style="width: 80px; height: 2px; background: #d4af37; margin-bottom: 25px;"></div>
+                        <h1 class="product-title-large">{{ product.name }}</h1>
+                        <div class="line"></div>
                         
-                        <p style="font-family: 'Cinzel', serif; font-size: 1.8rem; color: #d4af37; font-weight: 700; margin: 0 0 30px 0;">
-                            {{ "%.2f"|format(product.price) }} UAH
-                        </p>
+                        <p class="product-price-large">{{ "%.2f"|format(product.price) }} UAH</p>
                         
-                        <div style="background: rgba(212, 175, 55, 0.05); border-left: 3px solid #d4af37; padding: 20px; margin-bottom: 35px;">
-                            <h4 style="font-family: 'Cinzel', serif; color: #d4af37; font-size: 0.85rem; letter-spacing: 2px; margin: 0 0 10px 0;">DIGITAL-TO-ORDER ATELIER</h4>
-                            <p style="font-size: 0.85rem; color: #aaa; margin: 0; line-height: 1.6;">
-                                This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.
-                            </p>
+                        <div class="atelier-box">
+                            <h4>DIGITAL-TO-ORDER ATELIER</h4>
+                            <p>This garment is a digital masterpiece. We create its physical manifestation exclusively upon your order to ensure peak craftsmanship and uniqueness.</p>
                         </div>
 
                         <p style="font-size: 0.95rem; line-height: 1.8; color: #ccc; margin-bottom: 45px; font-weight: 300;">
@@ -128,19 +158,12 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn-craft">
-                                START CRAFTING AND ORDER
-                            </button>
+                            <button type="submit" class="btn-craft">START CRAFTING AND ORDER</button>
                         </form>
 
-                        <a href="/#collection" style="display: inline-block; margin-top: 40px; color: #666; font-size: 0.75rem; letter-spacing: 1px; text-decoration: none; transition: 0.3s;" onmouseover="this.style.color='#d4af37'" onmouseout="this.style.color='#666'">
-                            ← RETURN TO COLLECTION
-                        </a>
+                        <a href="/#collection" class="return-link">← RETURN TO COLLECTION</a>
                     </div>
                 </div>
-                
             </div>
         </section>
-    </div>
-</body>
-</html>
+{% endblock %}

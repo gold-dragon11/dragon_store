@@ -1,39 +1,16 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow of the Dragon | Digital-to-Order Atelier</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
+{% extends "base.html" %}
+
+{% block title %}Shadow of the Dragon | Digital-to-Order Atelier{% endblock %}
+
+{% block head %}
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=35.0">
     <style>
-        body { margin: 0; }
         .nav { top: 0 !important; }
         .site-wrap { padding-top: 0; }
     </style>
-</head>
-<body>
-    <div class="site-wrap">
+{% endblock %}
 
-        
-        <nav class="nav">
-            <div class="container nav-row">
-                <a href="/" style="text-decoration: none;"><h1 class="brand accent-glow">Shadow of the Dragon</h1></a>
-                <div class="nav-links">
-                    <a href="#collection">COLLECTION</a>
-                    <a href="#about">THE LEGEND</a>
-                    <a href="#contact">WAITLIST</a>
-                    <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
-                </div>
-            </div>
-        </nav>
-
+{% block content %}
         <section class="hero">
             <div class="hero-bg">
                 <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663493750158/KSEGtrZgNbWrVFZykRiS8V/hero-background-kY7WYL5xyymwR5eW4qyDgE.webp" alt="Hero Background">
@@ -44,7 +21,7 @@
                     <h2 class="hero-title">Where Digital Precision Meets Ancestral Power</h2>
                     <div class="line"></div>
                     <p>
-                        Our garments are algorithms of elegance, crafted for those who don’t seek attention, but command it. 
+                        Our garments are algorithms of elegance, crafted for those who don't seek attention, but command it. 
                         Every thread is a calculated masterpiece, merging dark luxury with the sterile accuracy of AI. 
                         Welcome to the era of the Digital-to-Order Atelier.
                     </p>
@@ -87,12 +64,6 @@
         <div class="divider-silver"></div>
 
         <section id="about" class="section legend-section" style="position: relative; overflow: hidden; background: #000; padding: 100px 0;">
-    
-            <div class="video-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
-                <video id="dragonVideo" autoplay muted playsinline style="width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: opacity 1.5s ease;">
-                    <source src="{{ url_for('static', filename='videos/dragon_weave.mp4') }}" type="video/mp4">
-                </video>
-            </div>
             <div class="container about-grid">
                 <div class="about-image">
                     <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663493750158/KSEGtrZgNbWrVFZykRiS8V/pasted_file_rvatV3_image_c020f487.png" 
@@ -103,7 +74,7 @@
                     <h2>The Shadow Legend</h2>
                     <div class="line"></div>
                     <p>
-                        Shadow of the Dragon is not a brand; it’s a silent revolution. We use proprietary AI agents to calculate 
+                        Shadow of the Dragon is not a brand; it's a silent revolution. We use proprietary AI agents to calculate 
                         the perfect silhouette, inspired by the fluid strength of the imperial dragon. 
                     </p>
                     <p>
@@ -136,34 +107,9 @@
                 </form>
             </div>
         </section>
+{% endblock %}
 
-        <footer class="footer">
-            <div class="container footer-grid">
-                <div>
-                    <h3 style="font-size: 1.2rem;">SHADOW OF THE DRAGON</h3>
-                    <p class="muted">Digital precision. Ancestral soul. Premium menswear crafted for the elite.</p>
-                </div>
-                <div>
-                    <h4>THE ARCHIVE</h4>
-                    <ul>
-                        <li><a href="#collection">Collection</a></li>
-                        <li><a href="#about">Legend</a></li>
-                        <li><a href="#contact">Waitlist</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4>FOLLOW THE SHADOW</h4>
-                    <div class="social-icons">
-                        <a href="#" aria-label="Instagram">IG</a>
-                        <a href="#" aria-label="Facebook">FB</a>
-                        <a href="#" aria-label="Twitter">TW</a>
-                        <a href="#" aria-label="Email">EM</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
-
+{% block scripts %}
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
       AOS.init({
@@ -172,20 +118,4 @@
         offset: 100
       });
     </script>
-    <script>
-        const video = document.getElementById('dragonVideo');
-        
-        if (video) {
-            video.onended = function() {
-                // Робимо відео прозорим
-                video.style.opacity = '0';
-                
-                // Через 1.5 секунди (після завершення анімації) повністю його видаляємо
-                setTimeout(() => {
-                    video.style.display = 'none';
-                }, 1500);
-            };
-        }
-    </script>
-</body>
-</html>
+{% endblock %}

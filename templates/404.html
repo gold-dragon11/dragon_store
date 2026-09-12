@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}404 - Shadow of the Dragon{% endblock %}
+
+{% block body_attrs %} style="display: flex; align-items: center; justify-content: center; min-height: 100vh;"{% endblock %}
+
+{% block head %}
+<style>
+    .site-wrap {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block content %}
+<div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px 20px;">
+    <div class="error-card" style="position: relative; max-width: 560px; width: 100%; padding: clamp(35px, 6vw, 60px) clamp(20px, 5vw, 45px); background: #0a0a0a; border: 1px solid rgba(212, 175, 55, 0.2); text-align: center; box-shadow: 0 0 35px rgba(212, 175, 55, 0.08);">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
+
+        <h1 style="font-size: clamp(3.5rem, 10vw, 6rem); letter-spacing: 6px; margin: 0 0 10px; line-height: 1; text-shadow: 0 0 20px rgba(212, 175, 55, 0.3); font-family: 'Cinzel', serif;">404</h1>
+
+        <div style="margin: 20px auto 25px; background: #d4af37; height: 1px; width: 60px;"></div>
+
+        <h2 style="font-size: clamp(1.1rem, 3vw, 1.4rem); letter-spacing: 3px; margin-bottom: 20px; font-family: 'Cinzel', serif;">Lost in the Shadows</h2>
+
+        <p class="muted" style="max-width: 440px; margin: 0 auto 35px; line-height: 1.8; font-size: 0.95rem; letter-spacing: 0.5px;">
+            The artifact you seek has dissolved into the void. Perhaps it was never meant to be found.
+        </p>
+
+        <a href="/" class="btn-gold" style="padding: 16px 36px; display: inline-block;">
+            RETURN TO COLLECTION
+        </a>
+
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

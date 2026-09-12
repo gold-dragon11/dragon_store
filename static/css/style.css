@@ -363,9 +363,8 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
         margin: 0 !important; /* Прибираємо старий margin-left */
     }
 
-    /* Опускаємо весь контент сайту вниз, щоб шапка його не перекривала */
-    .site-wrap section:first-of-type, 
-    section {
+    /* Опускаємо контент під шапку */
+    .site-wrap section:first-of-type {
         padding-top: 150px !important; 
     }
     
@@ -468,7 +467,7 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
 }
 
 /* NEW — нейтральний, щоб не відволікати від роботи */
-.admin-status-select option[value="Новий"] {
+.admin-status-select option[value="NEW"] {
     color: #888;
 }
 

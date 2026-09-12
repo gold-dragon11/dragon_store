@@ -35,6 +35,7 @@ db = SQLAlchemy(app)
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+NOVA_POSHTA_API_KEY = os.environ.get("NOVA_POSHTA_API_KEY", "")
 
 # --- МОДЕЛІ ---
 
@@ -151,15 +152,27 @@ def checkout():
         last_submit = session.get('last_submit_time', 0)
         
         if current_time - last_submit < 5:
-            print("Зловлено дубль! Блокуємо друге повідомлення в ТГ.")
             session.pop("cart", None) 
-            return redirect(url_for("success", reason="order")) # Тут залишаємо один чіткий редірект
+            return redirect(url_for("success", reason="order"))
             
         session['last_submit_time'] = current_time
         
         try:
-            name, phone = request.form.get("name"), request.form.get("phone")
-            city, np = request.form.get("city"), request.form.get("nova_poshta")
+            name = request.form.get("name", "").strip()
+            phone = request.form.get("phone", "").strip()
+            city = request.form.get("city", "").strip()
+            np = request.form.get("nova_poshta", "").strip()
+            
+            # Серверна валідація
+            if not name or len(name) < 2 or len(name) > 120:
+                return redirect(url_for("checkout"))
+            if not phone or len(phone) < 10 or len(phone) > 20:
+                return redirect(url_for("checkout"))
+            if not city or len(city) < 2:
+                return redirect(url_for("checkout"))
+            if not np or len(np) < 3:
+                return redirect(url_for("checkout"))
+            
             summary = "\n".join([f"- {i.get('name')} ({i.get('size')})" for i in cart_items])
             
             order = Order(customer_name=name, customer_phone=phone, city=city, nova_poshta=np, items_summary=summary, total_price=total)
@@ -169,15 +182,14 @@ def checkout():
             send_telegram_message(f"🔥 ЗАМОВЛЕННЯ 🔥\n👤 {name}\n📞 {phone}\n🏙 {city}\n📦 НП: {np}\n🛍 Товари:\n{summary}\n💰 {total} UAH")
             
             session.pop("cart", None)
-            # Додаємо reason="order" сюди:
             return redirect(url_for("success", reason="order"))
             
         except Exception as e:
-            return f"<div style='background:#000; color:#ff4444; padding:50px;'><h2>ERROR:</h2><p>{str(e)}</p></div>"
             print(f"[ERROR] Checkout exception: {e}")
             return redirect(url_for("index"))
             
-    return render_template("checkout.html", total=total)
+    return render_template("checkout.html", total=total, nova_poshta_api_key=NOVA_POSHTA_API_KEY)
+
 
 @app.route("/subscribe", methods=["POST"])
 def subscribe():
@@ -190,7 +202,8 @@ def subscribe():
     session['last_sub_time'] = current_time
     email = request.form.get("email", "").strip().lower()
     
-    if email:
+    # Валідація email формату
+    if email and re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
         existing_lead = Lead.query.filter_by(email=email).first()
         
         if not existing_lead:
@@ -287,6 +300,10 @@ def admin_logout():
 def inject_cart_count():
     cart = session.get("cart", [])
     return {"cart_count": len(cart)}
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
 
 # --- СТАРТ ---
 with app.app_context():
