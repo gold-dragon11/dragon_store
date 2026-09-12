@@ -174,6 +174,8 @@ def checkout():
             
         except Exception as e:
             return f"<div style='background:#000; color:#ff4444; padding:50px;'><h2>ERROR:</h2><p>{str(e)}</p></div>"
+            print(f"[ERROR] Checkout exception: {e}")
+            return redirect(url_for("index"))
             
     return render_template("checkout.html", total=total)
 
@@ -251,13 +253,16 @@ def admin_add_product():
     db.session.commit(); return redirect(url_for("admin_panel"))
 
 @app.route("/admin/product/delete/<int:product_id>")
+@app.route("/admin/product/delete/<int:product_id>", methods=["POST"])
 def admin_delete_product(product_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
     db.session.delete(Product.query.get_or_404(product_id))
     db.session.commit(); return redirect(url_for("admin_panel"))
+    db.session.commit()
     return redirect(url_for("admin_panel"))
 
 @app.route("/admin/order/delete/<int:order_id>")
+@app.route("/admin/order/delete/<int:order_id>", methods=["POST"])
 def admin_delete_order(order_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
     order = Order.query.get_or_404(order_id)
@@ -266,6 +271,7 @@ def admin_delete_order(order_id):
     return redirect(url_for("admin_panel"))
 
 @app.route("/admin/lead/delete/<int:lead_id>")
+@app.route("/admin/lead/delete/<int:lead_id>", methods=["POST"])
 def admin_delete_lead(lead_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
     lead = Lead.query.get_or_404(lead_id)
@@ -310,3 +316,4 @@ def update_status(order_id):
     return redirect(url_for('admin_panel'))
 if __name__ == "__main__":
     app.run(debug=True)
+    app.run(debug=False)
