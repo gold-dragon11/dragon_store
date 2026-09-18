@@ -47,6 +47,17 @@ class Product(db.Model):
     stock = db.Column(db.Integer, nullable=False, default=13)
     description = db.Column(db.Text, nullable=False, default="")
     image_filename = db.Column(db.String(255), nullable=True)
+    gallery_images = db.Column(db.Text, nullable=True)
+
+    @property
+    def all_images(self):
+        """Return list of all images: main + gallery extras."""
+        imgs = []
+        if self.image_filename:
+            imgs.append(self.image_filename)
+        if self.gallery_images:
+            imgs.extend([f.strip() for f in self.gallery_images.split(",") if f.strip()])
+        return imgs if imgs else ["placeholder.svg"]
 
 class Order(db.Model):
     __tablename__ = 'orders_v2'
@@ -69,9 +80,26 @@ class Lead(db.Model):
 def seed_products():
     if Product.query.count() == 0:
         items = [
-            Product(name="Imperial Gold Dragon", category="Shirt", price=3300.0, description="A digital masterpiece born from 40,000 stitches of gold-threaded contouring. High-grade silk meets liquid gold logic.", image_filename=None),
-            Product(name="Void Wave Trousers", category="Trousers", price=3000.0, description="Structural minimalism designed by algorithms. Premium black wool-blend with gold embroidery.", image_filename=None),
-            Product(name="Minimalist Gold Thread", category="Shirt", price=2500.0, description="Elegant simplicity meets high-tech luxury. Subtle gold line work.", image_filename=None),
+            Product(name="Imperial Gold Dragon", category="Shirt", price=3300.0,
+                    description="A digital masterpiece born from 40,000 stitches of gold-threaded contouring. High-grade silk meets liquid gold logic.",
+                    image_filename="2d919111834f45fea5bbeee5b5f86d6b.jpg",
+                    gallery_images="dragon_shirt_back.jpg,dragon_shirt_macro.jpg"),
+            Product(name="Minimalist Gold Thread", category="Shirt", price=2500.0,
+                    description="Elegant simplicity meets high-tech luxury. Subtle gold line work on pure black silk with a sculpted dragon collar pin.",
+                    image_filename="2c77430db4e345f49148f23e5df3b5ea.jpg",
+                    gallery_images="minimalist_shirt_back.jpg,minimalist_shirt_macro.jpg"),
+            Product(name="Void Wave Trousers", category="Trousers", price=3000.0,
+                    description="Structural minimalism designed by algorithms. Premium black wool-blend with fluid gold embroidery along the seam.",
+                    image_filename="3cc9a3a935ce4233b07ec112d06594d9.jpg",
+                    gallery_images="trousers_back.jpg,trousers_macro.jpg"),
+            Product(name="Blood Dragon", category="Shirt", price=3800.0,
+                    description="Three-headed dragon emblem in deep ruby crimson on midnight silk. A statement of ancestral power forged in metallic thread.",
+                    image_filename="blood_dragon_front.jpg",
+                    gallery_images="blood_dragon_back.jpg,blood_dragon_macro.jpg"),
+            Product(name="Solar Tri-Dragon", category="Shirt", price=3800.0,
+                    description="Three-headed dragon sigil in antique gold on obsidian silk. The ultimate fusion of heraldic art and digital-age precision.",
+                    image_filename="solar_dragon_front.jpg",
+                    gallery_images="solar_dragon_back.jpg,solar_dragon_macro.jpg"),
         ]
         db.session.add_all(items)
         db.session.commit()
@@ -115,7 +143,7 @@ def index():
 @app.route("/product/<int:product_id>")
 def product_detail(product_id):
     product = Product.query.get_or_404(product_id)
-    return render_template("product_detail.html", product=product)
+    return render_template("product_detail.html", product=product, images=product.all_images)
 
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
@@ -265,16 +293,13 @@ def admin_add_product():
     db.session.add(Product(name=name, price=price, description=desc, category=cat, image_filename=filename))
     db.session.commit(); return redirect(url_for("admin_panel"))
 
-@app.route("/admin/product/delete/<int:product_id>")
 @app.route("/admin/product/delete/<int:product_id>", methods=["POST"])
 def admin_delete_product(product_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
     db.session.delete(Product.query.get_or_404(product_id))
-    db.session.commit(); return redirect(url_for("admin_panel"))
     db.session.commit()
     return redirect(url_for("admin_panel"))
 
-@app.route("/admin/order/delete/<int:order_id>")
 @app.route("/admin/order/delete/<int:order_id>", methods=["POST"])
 def admin_delete_order(order_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
@@ -283,7 +308,6 @@ def admin_delete_order(order_id):
     db.session.commit()
     return redirect(url_for("admin_panel"))
 
-@app.route("/admin/lead/delete/<int:lead_id>")
 @app.route("/admin/lead/delete/<int:lead_id>", methods=["POST"])
 def admin_delete_lead(lead_id):
     if not session.get("admin_logged_in"): return redirect(url_for("admin_login"))
@@ -333,4 +357,3 @@ def update_status(order_id):
     return redirect(url_for('admin_panel'))
 if __name__ == "__main__":
     app.run(debug=True)
-    app.run(debug=False)

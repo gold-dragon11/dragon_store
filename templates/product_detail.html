@@ -19,11 +19,43 @@
             flex: 1 1 45%;
             min-width: 280px;
         }
-        .armor-left img {
+
+        /* --- Gallery --- */
+        .gallery-stage {
             width: 100%;
+            cursor: pointer;
             border: 1px solid rgba(212, 175, 55, 0.3);
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            overflow: hidden;
+            position: relative;
         }
+        .gallery-stage img {
+            width: 100%;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-thumbs {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .gallery-thumbs img {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.25s ease;
+        }
+        .gallery-thumbs img:hover {
+            opacity: 0.8;
+        }
+        .gallery-thumbs img.active {
+            border-color: #d4af37;
+            opacity: 1;
+        }
+
         .select-premium {
             width: 100%; 
             background: #0a0a0a; 
@@ -124,7 +156,22 @@
             <div class="container">
                 <div class="armor-layout">
                     <div class="armor-left">
-                        <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
+                        <!-- Gallery Stage -->
+                        <div class="gallery-stage" id="galleryStage">
+                            <img id="mainImage" src="{{ url_for('static', filename='images/' + images[0]) }}" alt="{{ product.name }}">
+                        </div>
+
+                        <!-- Thumbnails (only if more than 1 image) -->
+                        {% if images|length > 1 %}
+                        <div class="gallery-thumbs" id="galleryThumbs">
+                            {% for img in images %}
+                            <img src="{{ url_for('static', filename='images/' + img) }}"
+                                 alt="{{ product.name }} — angle {{ loop.index }}"
+                                 class="{% if loop.first %}active{% endif %}"
+                                 data-index="{{ loop.index0 }}">
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
 
                     <div class="armor-right">
@@ -166,4 +213,33 @@
                 </div>
             </div>
         </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const stage = document.getElementById('mainImage');
+    const thumbs = document.querySelectorAll('#galleryThumbs img');
+    if (!thumbs.length) return;
+
+    const images = Array.from(thumbs).map(t => t.src);
+    let current = 0;
+
+    function showImage(idx) {
+        current = idx;
+        stage.src = images[idx];
+        thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    }
+
+    // Click on thumbnail
+    thumbs.forEach(t => {
+        t.addEventListener('click', () => showImage(parseInt(t.dataset.index)));
+    });
+
+    // Click on main image → next
+    document.getElementById('galleryStage').addEventListener('click', () => {
+        showImage((current + 1) % images.length);
+    });
+})();
+</script>
 {% endblock %}
