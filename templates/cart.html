@@ -78,18 +78,52 @@
             margin-top: 40px;
             font-weight: 300;
         }
+
+        @media (max-width: 600px) {
+            .cart-section {
+                padding-top: 110px !important;
+                padding-bottom: 40px !important;
+            }
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .cart-item-right {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left !important;
+            }
+            .btn-remove {
+                margin-top: 0;
+            }
+            .cart-total {
+                text-align: center;
+                margin-top: 35px;
+            }
+            .btn-checkout {
+                display: block;
+                width: 100%;
+                text-align: center;
+                box-sizing: border-box;
+                padding: 16px 20px;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block nav_links %}
     <a href="/#collection">BACK TO COLLECTION</a>
+    <a href="{{ url_for('cart') }}">CART{% if cart_count %} ({{ cart_count }}){% endif %}</a>
 {% endblock %}
 
 {% block footer %}{% endblock %}
 
 {% block content %}
         <section class="cart-section">
-            <h2>Your Selection</h2>
+            <h2>Your Selected Artifacts</h2>
             <div class="line"></div>
             
             {% if cart_items %}
@@ -102,7 +136,7 @@
                             <p class="cart-item-size">Size: {{ item.size }}</p>
                         </div>
                     </div>
-                    <div style="text-align: right;">
+                    <div class="cart-item-right" style="text-align: right;">
                         <p class="cart-item-price">{{ "%.2f"|format(item.price) }} UAH</p>
                         <form action="{{ url_for('remove_from_cart', index=loop.index0) }}" method="post">
                             <button type="submit" class="btn-remove">REMOVE</button>

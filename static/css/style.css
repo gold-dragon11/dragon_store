@@ -168,6 +168,11 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     padding: 80px 0;
 }
 
+#collection.section {
+    padding-top: 50px;
+    padding-bottom: 30px;
+}
+
 .divider-silver {
     height: 1px;
     background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.3), transparent);
@@ -313,11 +318,18 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     margin-top: 60px;
 }
 
-/* --- АДАПТИВНІСТЬ --- */
+/* =========================================
+   АДАПТИВНІСТЬ ТА МОБІЛЬНА ОПТИМІЗАЦІЯ
+   ========================================= */
+
+/* --- Планшети (до 920px) --- */
 @media (max-width: 920px) {
-    .product-card { flex-basis: calc(50% - 15px); }
+    .product-card {
+        flex: 0 1 calc(50% - 15px) !important;
+        max-width: calc(50% - 15px) !important;
+    }
     .about-grid { 
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr !important; 
         text-align: center;
         gap: 35px;
     }
@@ -326,7 +338,7 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
         margin: 0 auto;
     }
     .legend-bg-img {
-        object-position: center top;
+        object-position: 70% 20%;
         opacity: 0.35;
     }
     .legend-overlay {
@@ -336,79 +348,212 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     }
 }
 
+/* --- Смартфони (до 768px) --- */
 @media (max-width: 768px) {
-    .newsletter-form {
-        flex-direction: column;
-        align-items: center;
+    /* Загальні відступи */
+    .container {
+        padding: 0 16px;
     }
-    .newsletter-form input {
-        width: 100%;
-        border-right: 1px solid #d4af37;
-        margin-bottom: 10px;
-    }
-    .newsletter-form button {
-        width: 100%;
-    }
-    .footer-grid { grid-template-columns: 1fr; text-align: center; }
-    .nav-row { flex-direction: column; gap: 15px; padding: 15px 0; }
-    .nav { top: 0; } /* На мобільних забираємо відступ від банера */
-}
-/* =========================================
-   МОБІЛЬНА АДАПТАЦІЯ (TELEPHONE OPTIMIZATION)
-   ========================================= */
-   @media (max-width: 768px) {
-    /* Робимо шапку компактною: елементи в стовпчик */
-    .nav .container, .nav-row {
-        flex-direction: column !important;
-        padding: 15px 10px !important;
-        gap: 12px !important;
+    .section {
+        padding: 60px 0;
     }
 
-    /* Логотип: зменшуємо шрифт і забороняємо переноситися на 2 рядки */
+    /* Навігація */
+    .nav {
+        top: 0 !important;
+        background: rgba(0, 0, 0, 0.95);
+    }
+    .nav .container, .nav-row {
+        flex-direction: column !important;
+        padding: 12px 10px !important;
+        gap: 8px !important;
+        min-height: auto !important;
+    }
     .nav h1, .nav .brand {
-        font-size: 1.1rem !important;
+        font-size: 1.05rem !important;
         letter-spacing: 2px !important;
         margin: 0 !important;
         text-align: center;
         white-space: nowrap !important;
     }
-
-    /* Посилання: вирівнюємо по центру, зменшуємо відступи */
     .nav-links {
         display: flex !important;
         justify-content: center !important;
         flex-wrap: wrap !important;
-        gap: 15px !important;
+        gap: 12px 16px !important;
     }
-
     .nav-links a {
-        font-size: 0.65rem !important;
+        font-size: 0.68rem !important;
         letter-spacing: 1.5px !important;
-        margin: 0 !important; /* Прибираємо старий margin-left */
+        margin: 0 !important;
+        padding: 2px 0;
     }
 
-    /* Опускаємо контент під шапку */
+    /* Відступ першої секції під фіксований nav */
     .site-wrap section:first-of-type {
-        padding-top: 150px !important; 
+        padding-top: 115px !important; 
     }
-    
-    /* Зменшуємо гігантський текст WHERE DIGITAL, щоб він гарно влазив у телефон */
-    h1 {
-        font-size: 2.2rem !important;
-        line-height: 1.3 !important;
+
+    /* Hero секція */
+    .hero {
+        min-height: calc(100vh - 60px);
+        display: flex;
+        align-items: center;
+        text-align: center;
+        padding: 115px 0 40px;
+    }
+    .hero-inner {
+        margin: 0 auto;
+    }
+    .hero-title, h1 {
+        font-size: clamp(1.7rem, 6.5vw, 2.4rem) !important;
+        line-height: 1.25 !important;
+    }
+    .hero .line {
+        margin: 0 auto 20px auto;
+    }
+    .hero p {
+        font-size: 0.88rem;
+        line-height: 1.65;
+        margin-bottom: 28px;
+    }
+    .hero .btn-premium {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 14px 20px;
+    }
+
+    /* Сітка товарів */
+    .products-grid {
+        margin-top: 25px !important;
+        gap: 20px !important;
+    }
+    .product-card, .product-card.mobile-fix {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 100% !important;
+        max-width: 440px !important;
+        width: 100% !important;
+        margin: 0 auto 10px auto !important;
+        border: 1px solid rgba(212, 175, 55, 0.15);
+        background: #0a0a0a !important;
+        height: auto !important;
+        overflow: hidden;
+    }
+    .product-image-wrap {
+        aspect-ratio: 3 / 4 !important;
+        height: auto !important;
+        width: 100% !important;
+        background: #050505 !important;
+    }
+    .product-image-wrap img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+    }
+    .product-body {
+        padding: 20px 16px !important;
+    }
+    .product-body h3 {
+        font-size: 1.1rem !important;
+        margin-bottom: 8px !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .product-foot {
+        margin-top: 15px !important;
+        padding-top: 15px !important;
+        border-top: 1px solid #1a1a1a;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    #collection.section {
+        padding-top: 35px !important;
+        padding-bottom: 20px !important;
+    }
+
+    /* Секція The Shadow Legend */
+    .legend-section {
+        min-height: auto !important;
+        padding: 45px 0 !important;
+    }
+    .about-grid {
+        grid-template-columns: 1fr !important;
+        text-align: center !important;
+        gap: 28px !important;
+    }
+    .about-image img {
+        max-width: 180px !important;
+        margin: 0 auto !important;
+    }
+    .legend-text .line {
+        margin: 0 auto 20px auto;
+    }
+    .legend-text p {
+        font-size: 0.92rem;
+        line-height: 1.7;
+        margin-bottom: 16px;
+    }
+
+    /* Форма підписки / Waitlist */
+    .newsletter-form {
+        flex-direction: column !important;
+        align-items: center !important;
+        max-width: 440px;
+        margin: 25px auto 0 !important;
+        width: 100%;
+    }
+    .newsletter-form input {
+        width: 100% !important;
+        height: 50px !important;
+        border: 1px solid #d4af37 !important;
+        margin-bottom: 10px !important;
+        font-size: 0.85rem !important;
+        text-align: center;
+    }
+    .newsletter-form button {
+        width: 100% !important;
+        height: 50px !important;
+        font-size: 0.8rem !important;
+        letter-spacing: 1.5px;
+    }
+}
+
+/* --- Вузькі телефони (до 420px: iPhone SE, iPhone mini) --- */
+@media (max-width: 420px) {
+    .nav h1, .nav .brand {
+        font-size: 0.95rem !important;
+        letter-spacing: 1.5px !important;
+    }
+    .nav-links {
+        gap: 8px 12px !important;
+    }
+    .nav-links a {
+        font-size: 0.62rem !important;
+        letter-spacing: 1px !important;
+    }
+    .hero-title, h1 {
+        font-size: 1.65rem !important;
+    }
+    .about-image img {
+        max-width: 150px !important;
     }
 }
 /* --- СЕКЦІЯ THE SHADOW LEGEND (ФОН ДРАКОНА ТА ІСКРИ) --- */
 .legend-section {
     position: relative;
     width: 100%;
-    min-height: 560px;
+    min-height: 420px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background: #000;
-    padding: 110px 0;
+    padding: 65px 0;
 }
 
 .legend-bg {
@@ -605,48 +750,4 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
 .autocomplete-dropdown::-webkit-scrollbar-thumb {
     background: #d4af37;
     border-radius: 10px;
-}
-@media (max-width: 768px) {
-    .product-card.mobile-fix {
-        display: flex !important;
-        flex-direction: column !important;
-        height: auto !important; /* Прибираємо жорстку висоту */
-        background: #0a0a0a !important;
-        margin: 0 10px 30px 10px !important; /* Додаємо невеликі відступи з боків картки */
-        border: 1px solid #1a1a1a;
-        overflow: hidden;
-    }
-
-    .product-image-wrap {
-        aspect-ratio: 3 / 4 !important;
-        height: auto !important;
-        width: 100% !important;
-        background: #050505 !important;
-    }
-
-    .product-image-wrap img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain !important;
-    }
-
-    .product-body {
-        padding: 20px 15px !important;
-    }
-
-    .product-body h3 {
-        font-size: 1.1rem !important;
-        margin-bottom: 10px !important;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .product-foot {
-        margin-top: 15px !important;
-        padding-top: 15px !important;
-        border-top: 1px solid #111;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-    }
 }

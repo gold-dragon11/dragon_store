@@ -141,6 +141,56 @@
         .return-link:hover {
             color: #d4af37;
         }
+
+        @media (max-width: 768px) {
+            .product-detail-section {
+                padding-top: 115px !important;
+                padding-bottom: 50px !important;
+            }
+            .armor-layout {
+                gap: 28px !important;
+            }
+            .armor-left, .armor-right {
+                flex: 1 1 100% !important;
+                min-width: 100% !important;
+            }
+            .product-title-large {
+                font-size: clamp(1.6rem, 5.5vw, 2.1rem) !important;
+                letter-spacing: 1.5px !important;
+                text-align: center;
+            }
+            .product-price-large {
+                font-size: 1.4rem !important;
+                text-align: center;
+                margin-bottom: 20px !important;
+            }
+            .gallery-thumbs {
+                justify-content: center !important;
+                gap: 8px !important;
+            }
+            .gallery-thumbs img {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            .select-premium {
+                padding: 15px !important;
+                font-size: 0.82rem !important;
+            }
+            .btn-craft {
+                padding: 18px !important;
+                font-size: 0.9rem !important;
+                letter-spacing: 2px !important;
+            }
+            .atelier-box {
+                padding: 16px !important;
+                margin-bottom: 25px !important;
+            }
+            .return-link {
+                display: block;
+                text-align: center;
+                margin-top: 30px;
+            }
+        }
     </style>
 {% endblock %}
 

@@ -37,6 +37,24 @@
             color: #000;
             border-color: #d4af37;
         }
+
+        @media (max-width: 600px) {
+            .filter-tabs {
+                display: flex;
+                gap: 6px;
+                margin: 25px auto 15px;
+                max-width: 440px;
+                width: 100%;
+                padding: 0 4px;
+            }
+            .filter-tab {
+                flex: 1;
+                padding: 11px 4px;
+                font-size: 0.68rem;
+                letter-spacing: 1.5px;
+                text-align: center;
+            }
+        }
     </style>
 {% endblock %}
 
@@ -76,7 +94,7 @@
 
                 <div class="products-grid" id="productsGrid">
                     {% for product in products %}
-                    <article class="product-card mobile-fix fade-in-up" data-aos="fade-up" data-category="{{ product.category }}">
+                    <article class="product-card mobile-fix" data-category="{{ product.category }}">
                         <a href="{{ url_for('product_detail', product_id=product.id) }}">
                             <div class="product-image-wrap">
                                 <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
@@ -108,12 +126,12 @@
             </div>
 
             <div class="container about-grid">
-                <div class="about-image" data-aos="fade-right">
+                <div class="about-image">
                     <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663493750158/KSEGtrZgNbWrVFZykRiS8V/pasted_file_rvatV3_image_c020f487.png" 
                          alt="Shadow of the Dragon Logo" 
                          style="mix-blend-mode: screen; filter: brightness(1.2) contrast(1.1);">
                 </div>
-                <div class="legend-text" data-aos="fade-left">
+                <div class="legend-text">
                     <h2>The Shadow Legend</h2>
                     <div class="line"></div>
                     <p>
@@ -168,7 +186,6 @@
 
           tabs.forEach(tab => {
               tab.addEventListener('click', () => {
-                  // Update active tab
                   tabs.forEach(t => t.classList.remove('active'));
                   tab.classList.add('active');
 
@@ -177,20 +194,22 @@
                   cards.forEach(card => {
                       const match = filter === 'all' || card.dataset.category === filter;
                       if (match) {
-                          card.style.display = '';
+                          card.style.display = 'flex';
                           card.style.opacity = '0';
-                          card.style.transform = 'translateY(20px)';
+                          card.style.transform = 'translateY(15px)';
                           requestAnimationFrame(() => {
-                              card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                              card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
                               card.style.opacity = '1';
                               card.style.transform = 'translateY(0)';
                           });
                       } else {
-                          card.style.transition = 'opacity 0.2s ease';
-                          card.style.opacity = '0';
-                          setTimeout(() => { card.style.display = 'none'; }, 200);
+                          card.style.display = 'none';
                       }
                   });
+
+                  if (window.AOS && typeof AOS.refresh === 'function') {
+                      setTimeout(() => { AOS.refresh(); }, 50);
+                  }
               });
           });
       })();
