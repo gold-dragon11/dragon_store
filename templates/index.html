@@ -7,6 +7,36 @@
     <style>
         .nav { top: 0 !important; }
         .site-wrap { padding-top: 0; }
+
+        /* Category Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 35px 0 10px;
+        }
+        .filter-tab {
+            background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            color: #666;
+            padding: 12px 32px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-tab:hover {
+            color: #d4af37;
+            border-color: #d4af37;
+        }
+        .filter-tab.active {
+            background: #d4af37;
+            color: #000;
+            border-color: #d4af37;
+        }
     </style>
 {% endblock %}
 
@@ -37,9 +67,16 @@
                 <h2>The Current Collection</h2>
                 <div class="line"></div>
 
-                <div class="products-grid">
+                <!-- Category Filter Tabs -->
+                <div class="filter-tabs" id="filterTabs">
+                    <button class="filter-tab active" data-filter="all">ALL</button>
+                    <button class="filter-tab" data-filter="Shirt">SHIRTS</button>
+                    <button class="filter-tab" data-filter="Trousers">TROUSERS</button>
+                </div>
+
+                <div class="products-grid" id="productsGrid">
                     {% for product in products %}
-                    <article class="product-card mobile-fix fade-in-up" data-aos="fade-up">
+                    <article class="product-card mobile-fix fade-in-up" data-aos="fade-up" data-category="{{ product.category }}">
                         <a href="{{ url_for('product_detail', product_id=product.id) }}">
                             <div class="product-image-wrap">
                                 <img src="{{ url_for('static', filename='images/' + (product.image_filename or 'placeholder.svg')) }}" alt="{{ product.name }}">
@@ -117,5 +154,39 @@
         once: true,
         offset: 100
       });
+
+      // Category filter tabs
+      (function() {
+          const tabs = document.querySelectorAll('.filter-tab');
+          const cards = document.querySelectorAll('.product-card[data-category]');
+
+          tabs.forEach(tab => {
+              tab.addEventListener('click', () => {
+                  // Update active tab
+                  tabs.forEach(t => t.classList.remove('active'));
+                  tab.classList.add('active');
+
+                  const filter = tab.dataset.filter;
+
+                  cards.forEach(card => {
+                      const match = filter === 'all' || card.dataset.category === filter;
+                      if (match) {
+                          card.style.display = '';
+                          card.style.opacity = '0';
+                          card.style.transform = 'translateY(20px)';
+                          requestAnimationFrame(() => {
+                              card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                              card.style.opacity = '1';
+                              card.style.transform = 'translateY(0)';
+                          });
+                      } else {
+                          card.style.transition = 'opacity 0.2s ease';
+                          card.style.opacity = '0';
+                          setTimeout(() => { card.style.display = 'none'; }, 200);
+                      }
+                  });
+              });
+          });
+      })();
     </script>
 {% endblock %}

@@ -202,6 +202,7 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    justify-content: center;
 }
 
 .product-card {
@@ -209,7 +210,8 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     border: 1px solid rgba(212, 175, 55, 0.1);
     display: flex;
     flex-direction: column;
-    flex: 1 1 calc(33.333% - 20px);
+    flex: 0 1 calc(33.333% - 20px);
+    max-width: calc(33.333% - 20px);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
