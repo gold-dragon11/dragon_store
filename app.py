@@ -100,6 +100,18 @@ def seed_products():
                     description="Three-headed dragon sigil in antique gold on obsidian silk. The ultimate fusion of heraldic art and digital-age precision.",
                     image_filename="solar_dragon_front.jpg",
                     gallery_images="solar_dragon_back.jpg,solar_dragon_macro.jpg"),
+            Product(name="Crimson Wave Trousers", category="Trousers", price=3200.0,
+                    description="Undulating fluid wave embroidery crafted in metallic ruby red thread along the tailored wool-blend silhouette. A dark luxury statement.",
+                    image_filename="crimson_wave_front.jpg",
+                    gallery_images="crimson_wave_back.jpg,crimson_wave_macro.jpg"),
+            Product(name="Imperial Dragon Trousers", category="Trousers", price=3500.0,
+                    description="Calligraphic dragon silhouette embroidered in fine gold thread along the right leg. Asymmetric bespoke tailoring in deep black wool-blend.",
+                    image_filename="imperial_dragon_trousers_front.jpg",
+                    gallery_images="imperial_dragon_trousers_back.jpg"),
+            Product(name="Blood Dragon Trousers", category="Trousers", price=3500.0,
+                    description="Minimalist dragon motif rendered in metallic crimson thread along the right leg. The definitive companion to the Blood Dragon shirt.",
+                    image_filename="blood_dragon_trousers_front.jpg",
+                    gallery_images="blood_dragon_trousers_back.jpg"),
         ]
         db.session.add_all(items)
         db.session.commit()
