@@ -751,3 +751,10 @@ h1, h2, h3, h4, .brand, .price, .price-large, .btn-gold, .hero-title {
     background: #d4af37;
     border-radius: 10px;
 }
+
+/* =========================================
+   FILTER HIDE — перебиває всі медіа-правила
+   ========================================= */
+.product-card.card-hidden {
+    display: none !important;
+}

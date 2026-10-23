@@ -55,6 +55,11 @@
                 text-align: center;
             }
         }
+
+        /* Filter hide — uses !important to override mobile CSS */
+        .product-card.card-hidden {
+            display: none !important;
+        }
     </style>
 {% endblock %}
 
@@ -194,7 +199,7 @@
                   cards.forEach(card => {
                       const match = filter === 'all' || card.dataset.category === filter;
                       if (match) {
-                          card.style.display = 'flex';
+                          card.classList.remove('card-hidden');
                           card.style.opacity = '0';
                           card.style.transform = 'translateY(15px)';
                           requestAnimationFrame(() => {
@@ -203,7 +208,10 @@
                               card.style.transform = 'translateY(0)';
                           });
                       } else {
-                          card.style.display = 'none';
+                          card.classList.add('card-hidden');
+                          card.style.opacity = '';
+                          card.style.transform = '';
+                          card.style.transition = '';
                       }
                   });
 
